@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import xgboost as xgb
 import numpy as np
-import joblib
+import json
 import os
 import math
 from typing import Dict, Any, Optional
@@ -27,8 +27,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 
 MODEL_PATH = os.path.join(MODELS_DIR, "xgboost_final_best.json")
-LABEL_ENCODER_PATH = os.path.join(MODELS_DIR, "label_encoder.joblib")
-FEATURE_NAMES_PATH = os.path.join(MODELS_DIR, "feature_names.joblib")
+CLASSES_PATH = os.path.join(MODELS_DIR, "classes.json")
+FEATURE_NAMES_PATH = os.path.join(MODELS_DIR, "feature_names.json")
 
 # Global variables for loaded model artifacts
 booster = None
@@ -51,13 +51,14 @@ def load_ml_artifacts():
             booster.load_model(MODEL_PATH)
             print(f"[ML Service] Model XGBoost successfully loaded from {MODEL_PATH}")
 
-        if os.path.exists(LABEL_ENCODER_PATH):
-            label_enc = joblib.load(LABEL_ENCODER_PATH)
-            classes_list = list(label_enc.classes_)
-            print(f"[ML Service] Label Encoder loaded with classes: {classes_list}")
+        if os.path.exists(CLASSES_PATH):
+            with open(CLASSES_PATH, "r", encoding="utf-8") as f:
+                classes_list = json.load(f)
+            print(f"[ML Service] Classes list loaded: {classes_list}")
 
         if os.path.exists(FEATURE_NAMES_PATH):
-            feature_names = joblib.load(FEATURE_NAMES_PATH)
+            with open(FEATURE_NAMES_PATH, "r", encoding="utf-8") as f:
+                feature_names = json.load(f)
             print(f"[ML Service] Feature Names loaded ({len(feature_names)} features)")
     except Exception as e:
         print(f"[ML Service ERROR] Failed to load model artifacts: {e}")
