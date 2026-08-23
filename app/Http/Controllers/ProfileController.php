@@ -68,8 +68,8 @@ class ProfileController extends Controller
                 }
             }
 
-            $path = $request->file('foto_profil')->store('avatars', 'public');
-            $validated['foto_profil'] = '/storage/' . $path;
+            $savedPath = $this->processAndStoreAvatar($request->file('foto_profil'));
+            $validated['foto_profil'] = '/storage/' . $savedPath;
         } elseif ($request->boolean('hapus_foto')) {
             if ($user->foto_profil && str_starts_with($user->foto_profil, '/storage/')) {
                 $oldPath = str_replace('/storage/', '', $user->foto_profil);
@@ -88,6 +88,59 @@ class ProfileController extends Controller
         $user->update($validated);
 
         return Redirect::back()->with('success', 'Data profil berhasil diperbarui.');
+    }
+
+    /**
+     * Resize, crop center, and compress avatar to WebP format.
+     */
+    private function processAndStoreAvatar(\Illuminate\Http\UploadedFile $file): string
+    {
+        $rawContent = file_get_contents($file->getRealPath());
+        $image = @imagecreatefromstring($rawContent);
+
+        if (!$image) {
+            // Fallback to standard storage if GD fails
+            return $file->store('avatars', 'public');
+        }
+
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $targetSize = 400;
+
+        // Crop square from center
+        $minDim = min($width, $height);
+        $srcX = (int) round(($width - $minDim) / 2);
+        $srcY = (int) round(($height - $minDim) / 2);
+
+        $resized = imagecreatetruecolor($targetSize, $targetSize);
+        imagealphablending($resized, false);
+        imagesavealpha($resized, true);
+
+        imagecopyresampled(
+            $resized,
+            $image,
+            0,
+            0,
+            $srcX,
+            $srcY,
+            $targetSize,
+            $targetSize,
+            $minDim,
+            $minDim
+        );
+
+        // Save as WebP to temporary file
+        $tempFile = tempnam(sys_get_temp_dir(), 'avatar_');
+        imagewebp($resized, $tempFile, 82);
+
+        imagedestroy($image);
+        imagedestroy($resized);
+
+        $filename = 'avatars/' . uniqid('avatar_', true) . '.webp';
+        Storage::disk('public')->put($filename, file_get_contents($tempFile));
+        @unlink($tempFile);
+
+        return $filename;
     }
 
     /**

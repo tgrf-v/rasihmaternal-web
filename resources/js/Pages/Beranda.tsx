@@ -184,7 +184,7 @@ export default function Beranda() {
                 {/* Left Side: Image with Ultra Smooth Fade Gradient Overlay into White Content */}
                 <div
                   className="md:col-span-5 relative h-56 md:h-auto w-full bg-cover bg-center overflow-hidden min-h-[240px]"
-                  style={{ backgroundImage: "url('/images/screening-banner.jpg?v=2')" }}
+                  style={{ backgroundImage: "url('/images/screening-banner.webp')" }}
                 >
                   {/* Floating Tag Overlay */}
                   <div className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-bold tracking-wide shadow-md">
