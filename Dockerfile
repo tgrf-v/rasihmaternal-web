@@ -69,6 +69,7 @@ RUN /opt/venv/bin/pip install --no-cache-dir --upgrade pip \
 COPY docker/nginx.conf /etc/nginx/sites-available/default
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/php.ini /usr/local/etc/php/conf.d/custom.ini
+COPY docker/php-fpm-pool.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
