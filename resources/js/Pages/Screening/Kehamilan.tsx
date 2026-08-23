@@ -14,6 +14,19 @@ import { FormStep1Identitas } from "./_FormStep1Identitas";
 import { FormStep2Kondisi } from "./_FormStep2Kondisi";
 import { FormStep3Gawat } from "./_FormStep3Gawat";
 
+const calculateAgeFromBirthDate = (birthDateString?: string | null): number => {
+  if (!birthDateString) return 27;
+  const birthDate = new Date(birthDateString);
+  if (isNaN(birthDate.getTime())) return 27;
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age >= 12 && age <= 60 ? age : 27;
+};
+
 export default function KehamilanScreening() {
   const {
     auth,
@@ -33,7 +46,7 @@ export default function KehamilanScreening() {
   const [formData, setFormData] = useState<ScreeningInput>({
     nama_pasien: auth?.user?.name || "",
     nik: auth?.user?.nik || "",
-    umur: 27,
+    umur: calculateAgeFromBirthDate(auth?.user?.tanggal_lahir),
     pekerjaan: auth?.user?.pekerjaan || "Ibu Rumah Tangga",
     pendidikan: auth?.user?.pendidikan || "SLTA",
     gravida: 1,

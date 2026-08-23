@@ -62,6 +62,19 @@ const PENAPISAN_PERSALINAN_LIST: PenapisanItem[] = [
   { id: "syok", no: 19, label: "Syok" },
 ];
 
+const calculateAgeFromBirthDate = (birthDateString?: string | null): number => {
+  if (!birthDateString) return 27;
+  const birthDate = new Date(birthDateString);
+  if (isNaN(birthDate.getTime())) return 27;
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age >= 12 && age <= 60 ? age : 27;
+};
+
 export default function PersalinanScreening() {
   const { auth } = usePage<PageProps>().props;
 
@@ -70,11 +83,11 @@ export default function PersalinanScreening() {
   const [hasScreened, setHasScreened] = useState<boolean>(false);
   const [rightPanelView, setRightPanelView] = useState<"summary" | "detail">("summary");
 
-  // State Form Identitas
+  // State Form Identitas (Pre-filled dari Profile)
   const [formData, setFormData] = useState({
     nama_pasien: auth?.user?.name || "",
     nik: auth?.user?.nik || "",
-    umur: 27,
+    umur: calculateAgeFromBirthDate(auth?.user?.tanggal_lahir),
     pekerjaan: auth?.user?.pekerjaan || "Ibu Rumah Tangga",
     pendidikan: auth?.user?.pendidikan || "SLTA",
     gravida: 1,
