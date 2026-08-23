@@ -80,6 +80,7 @@ export function FormStep1Identitas({
             value={formData.hpht}
             onChange={(val) => setFormData({ ...formData, hpht: val })}
             placeholder="Pilih Tanggal HPHT Bunda"
+            error={errors.hpht}
             className="mt-1"
           />
           {(gestationalInfo.weeks > 0 || gestationalInfo.days > 0) && (

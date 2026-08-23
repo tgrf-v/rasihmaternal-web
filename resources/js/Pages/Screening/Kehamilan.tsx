@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { router, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { Button } from "@/Components/ui/button";
+import { Alert, AlertTitle, AlertDescription } from "@/Components/ui/alert";
 import { AlertTriangle, ChevronRight, ChevronLeft, ArrowLeft } from "lucide-react";
 import { ScreeningInput, ScreeningResult } from "@/types/screening";
 import { calculateGestationalAge } from "@/lib/scoringEngine";
@@ -92,7 +93,19 @@ export default function KehamilanScreening() {
     if (!formData.hpht) errs.hpht = "Tanggal HPHT wajib dipilih";
     if ((formData.kehamilan_ke ?? 1) < 1) errs.kehamilan_ke = "Kehamilan ke- minimal 1";
     setErrors(errs);
-    return Object.keys(errs).length === 0;
+
+    const errKeys = Object.keys(errs);
+    if (errKeys.length > 0) {
+      setTimeout(() => {
+        const firstElement = document.getElementById(errKeys[0]);
+        if (firstElement) {
+          firstElement.scrollIntoView({ behavior: "smooth", block: "center" });
+          firstElement.focus();
+        }
+      }, 50);
+      return false;
+    }
+    return true;
   };
 
   const validateStep2 = (): boolean => { setErrors({}); return true; };
@@ -212,17 +225,19 @@ export default function KehamilanScreening() {
 
                       {/* Global Validation Error Banner */}
                       {Object.keys(errors).length > 0 && (
-                        <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-2.5 text-xs text-rose-700 animate-shake">
-                          <AlertTriangle className="h-4 w-4 shrink-0 text-rose-500 mt-0.5" />
-                          <div className="space-y-0.5">
-                            <span className="font-bold">Mohon lengkapi isian wajib:</span>
-                            <ul className="list-disc pl-4 space-y-0.5 text-[11px]">
-                              {Object.entries(errors).map(([key, err]) => (
-                                <li key={key}>{err}</li>
-                              ))}
-                            </ul>
+                        <Alert variant="destructive" className="rounded-2xl animate-shake">
+                          <AlertTriangle className="h-4 w-4" />
+                          <div className="flex-1 min-w-0 space-y-0.5">
+                            <AlertTitle>Mohon lengkapi isian wajib:</AlertTitle>
+                            <AlertDescription>
+                              <ul className="list-disc pl-4 space-y-0.5 text-[11px]">
+                                {Object.entries(errors).map(([key, err]) => (
+                                  <li key={key}>{err}</li>
+                                ))}
+                              </ul>
+                            </AlertDescription>
                           </div>
-                        </div>
+                        </Alert>
                       )}
 
                       {/* Multi-Step Form */}

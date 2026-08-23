@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Card } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
+import { Alert, AlertTitle, AlertDescription } from "@/Components/ui/alert";
 import { Label } from "@/Components/ui/label";
 import { Input } from "@/Components/ui/input";
 import { DatePicker } from "@/Components/ui/date-picker";
@@ -91,21 +92,27 @@ export function ProfilEditForm({
       <Card className="rounded-3xl border border-slate-100 bg-white p-6 sm:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.06)] space-y-5">
         <form onSubmit={onSubmit} className="space-y-5">
           {isSaved && (
-            <div className="p-3.5 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-2 animate-fadeIn">
-              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
-              <span>Data diri berhasil disimpan ke database!</span>
-            </div>
+            <Alert variant="success" className="rounded-2xl animate-fadeIn">
+              <CheckCircle2 className="h-4 w-4" />
+              <AlertTitle>Berhasil!</AlertTitle>
+              <AlertDescription className="text-emerald-800">
+                Data diri berhasil disimpan ke database!
+              </AlertDescription>
+            </Alert>
           )}
 
           {Object.keys(errors).length > 0 && (
-            <div className="p-3.5 rounded-2xl bg-rose-50 text-rose-800 border border-rose-200 text-xs font-medium space-y-1 animate-fadeIn">
-              {Object.values(errors).map((err, idx) => (
-                <p key={idx} className="flex items-center gap-1.5">
-                  <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-rose-500" />
-                  <span>{err}</span>
-                </p>
-              ))}
-            </div>
+            <Alert variant="destructive" className="rounded-2xl animate-fadeIn">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Terjadi kesalahan:</AlertTitle>
+              <AlertDescription>
+                <ul className="list-disc pl-4 space-y-0.5 text-[11px]">
+                  {Object.values(errors).map((err, idx) => (
+                    <li key={idx}>{err}</li>
+                  ))}
+                </ul>
+              </AlertDescription>
+            </Alert>
           )}
 
           {/* Section: Upload Foto Profil */}
