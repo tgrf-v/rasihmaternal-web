@@ -6,28 +6,47 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/Components/ui/accordion";
-import { RefreshCw, Heart } from "lucide-react";
+import { RefreshCw, Heart, Sparkles, Activity } from "lucide-react";
 import { PersalinanFormData } from "./_FormPersalinanStep1";
 import { PenapisanItem } from "./_FormPersalinanStep2";
+import { PersalinanClinicalData } from "./_FormPersalinanStep3";
+
+export interface MLPredictionResult {
+  primary_diagnosis: string;
+  confidence_score: number;
+  risk_category: "KRR" | "KRT" | "KRST";
+  risk_label: string;
+  map: number;
+  pulse_pressure: number;
+  leu_trombo_ratio: number;
+  probabilities?: Record<string, number>;
+}
 
 interface HasilPersalinanRingkasProps {
   formData: PersalinanFormData;
+  clinicalData: PersalinanClinicalData;
   isGawatDarurat: boolean;
   positiveFactors: PenapisanItem[];
+  mlResult: MLPredictionResult;
   onViewDetail: () => void;
   onRescreen: () => void;
 }
 
 export function HasilPersalinanRingkas({
   formData,
+  clinicalData,
   isGawatDarurat,
   positiveFactors,
+  mlResult,
   onViewDetail,
   onRescreen,
 }: HasilPersalinanRingkasProps) {
+  const isHighRisk = isGawatDarurat || mlResult.risk_category === "KRST";
+
   return (
-    <div className="space-y-5 animate-fadeIn">
-      <Card className="border border-slate-200/90 shadow-soft-xs bg-white rounded-3xl p-5 sm:p-6 space-y-3.5 text-center">
+    <div className="space-y-4 animate-fadeIn">
+      {/* Card 1: Hasil Penapisan & Status */}
+      <Card className="border border-slate-200/90 shadow-soft-xs bg-white rounded-3xl p-5 sm:p-6 space-y-3 text-center">
         <div>
           <p className="text-xs font-medium text-slate-500">
             Hasil Penapisan Pasien:{" "}
@@ -37,10 +56,10 @@ export function HasilPersalinanRingkas({
           </p>
           <h2
             className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
-              isGawatDarurat ? "text-rose-600" : "text-emerald-700"
+              isHighRisk ? "text-rose-600" : "text-emerald-700"
             }`}
           >
-            {isGawatDarurat
+            {isHighRisk
               ? "Komplikasi Gawat Darurat"
               : "Persalinan Fisiologis (Normal)"}
           </h2>
@@ -55,11 +74,18 @@ export function HasilPersalinanRingkas({
           </div>
           <div
             className="absolute bottom-0 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ease-out z-10"
-            style={{ left: isGawatDarurat ? "85%" : "15%" }}
+            style={{
+              left:
+                mlResult.risk_category === "KRST" || isGawatDarurat
+                  ? "85%"
+                  : mlResult.risk_category === "KRT"
+                  ? "50%"
+                  : "15%",
+            }}
           >
             <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-black -mb-0.5" />
             <div className="bg-black text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap">
-              {isGawatDarurat ? "Wajib Rujuk" : "Normal"}
+              {isHighRisk ? "Wajib Rujuk" : mlResult.risk_category === "KRT" ? "Risiko Tinggi" : "Normal"}
             </div>
           </div>
         </div>
@@ -68,9 +94,7 @@ export function HasilPersalinanRingkas({
           Total Indikator Bahaya:{" "}
           <strong
             className={
-              isGawatDarurat
-                ? "text-rose-600 font-bold"
-                : "text-emerald-700 font-bold"
+              isGawatDarurat ? "text-rose-600 font-bold" : "text-emerald-700 font-bold"
             }
           >
             {positiveFactors.length} dari 19 Parameter
@@ -83,7 +107,7 @@ export function HasilPersalinanRingkas({
             onClick={onViewDetail}
             className="font-bold text-rose-600 hover:text-rose-700 transition-colors"
           >
-            Lihat Rincian Penapisan &rarr;
+            Lihat Rincian &amp; Analisis ML &rarr;
           </button>
           <button
             type="button"
@@ -96,41 +120,69 @@ export function HasilPersalinanRingkas({
         </div>
       </Card>
 
-      {/* Card Rekomendasi Tempat & Penolong */}
+      {/* Card 2: Hasil Prediksi Machine Learning */}
+      <div className="p-4 sm:p-5 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-soft-xs space-y-2.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
+            <Sparkles className="h-4 w-4 text-emerald-700" />
+            <span>Prediksi Komplikasi Machine Learning (ML)</span>
+          </div>
+          <span
+            className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+              mlResult.risk_category === "KRST"
+                ? "bg-rose-100 text-rose-800 border border-rose-200"
+                : mlResult.risk_category === "KRT"
+                ? "bg-amber-100 text-amber-800 border border-amber-200"
+                : "bg-emerald-100 text-emerald-800 border border-emerald-200"
+            }`}
+          >
+            {mlResult.risk_category}
+          </span>
+        </div>
+
+        <div className="flex items-center justify-between bg-white p-3 rounded-2xl border border-slate-200/80">
+          <div>
+            <p className="text-[11px] text-slate-500 font-medium">Prediksi Komplikasi Utama</p>
+            <p className="text-sm font-bold text-slate-900">{mlResult.primary_diagnosis}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-[11px] text-slate-500 font-medium">Tingkat Keyakinan</p>
+            <p className="text-sm font-bold text-emerald-700">
+              {Math.round(mlResult.confidence_score * 100)}%
+            </p>
+          </div>
+        </div>
+
+        {/* Variabel Terhitung Otomatis */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+          <div className="p-2.5 rounded-2xl bg-white border border-slate-200/70 text-center">
+            <p className="text-[10px] text-slate-500 font-medium">MAP (Mean Arterial)</p>
+            <p className="text-xs font-bold text-slate-800">{mlResult.map} mmHg</p>
+          </div>
+          <div className="p-2.5 rounded-2xl bg-white border border-slate-200/70 text-center">
+            <p className="text-[10px] text-slate-500 font-medium">Pulse Pressure (PP)</p>
+            <p className="text-xs font-bold text-slate-800">{mlResult.pulse_pressure} mmHg</p>
+          </div>
+          <div className="p-2.5 rounded-2xl bg-white border border-slate-200/70 text-center col-span-2 sm:col-span-1">
+            <p className="text-[10px] text-slate-500 font-medium">Rasio Leu / Trombo</p>
+            <p className="text-xs font-bold text-slate-800">{mlResult.leu_trombo_ratio.toFixed(4)}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Card 3: Rekomendasi Tempat & Penolong */}
       <div className="p-4 sm:p-5 rounded-3xl bg-white border border-slate-200/90 shadow-soft-xs space-y-1">
         <h4 className="font-bold text-rose-700 text-xs sm:text-sm">
           Rekomendasi Tempat &amp; Penolong Persalinan
         </h4>
         <p className="text-xs sm:text-sm text-slate-700 font-semibold leading-relaxed">
-          {isGawatDarurat
+          {isHighRisk
             ? "Wajib segera dirujuk dan bersalin di Rumah Sakit dengan fasilitas PONEK 24 Jam bersama Dokter Spesialis Kebidanan & Kandungan (Sp.OG)."
             : "Dianjurkan bersalin di Praktek Mandiri Bidan (PMB) atau Puskesmas PONED bersama Bidan dan Dokter Umum."}
         </p>
       </div>
 
-      {/* Rincian Faktor Bahaya Terdeteksi */}
-      {isGawatDarurat && (
-        <div className="space-y-2.5">
-          <h4 className="font-bold text-slate-900 text-xs sm:text-sm">
-            Indikator Bahaya yang Terdeteksi:
-          </h4>
-          <div className="space-y-2">
-            {positiveFactors.map((item) => (
-              <div
-                key={item.id}
-                className="p-3.5 rounded-2xl bg-white border border-rose-200/90 shadow-soft-xs flex items-center justify-between text-xs sm:text-sm"
-              >
-                <span className="font-medium text-slate-800">
-                  {item.no}. {item.label}
-                </span>
-                <span className="font-bold text-rose-600 shrink-0">Bahaya</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Saran Terapi Komplementer Persalinan */}
+      {/* Card 4: Saran Terapi Komplementer */}
       <div className="space-y-2.5 pt-1">
         <div className="flex items-center gap-1.5 text-rose-600 font-bold text-xs sm:text-sm">
           <Heart className="h-4 w-4" />

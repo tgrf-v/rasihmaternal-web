@@ -8,29 +8,36 @@ import {
   ShieldCheck,
   Info,
   RefreshCw,
+  Sparkles,
 } from "lucide-react";
 import { PersalinanFormData } from "./_FormPersalinanStep1";
 import { PenapisanItem, PENAPISAN_PERSALINAN_LIST } from "./_FormPersalinanStep2";
+import { PersalinanClinicalData } from "./_FormPersalinanStep3";
+import { MLPredictionResult } from "./_HasilPersalinanRingkas";
 
 interface HasilPersalinanDetailProps {
   formData: PersalinanFormData;
+  clinicalData: PersalinanClinicalData;
   isGawatDarurat: boolean;
   positiveFactors: PenapisanItem[];
   penapisanAnswers: Record<string, boolean>;
+  mlResult: MLPredictionResult;
   onBackToSummary: () => void;
   onRescreen: () => void;
 }
 
 export function HasilPersalinanDetail({
   formData,
+  clinicalData,
   isGawatDarurat,
   positiveFactors,
   penapisanAnswers,
+  mlResult,
   onBackToSummary,
   onRescreen,
 }: HasilPersalinanDetailProps) {
   return (
-    <div className="space-y-5 animate-fadeIn">
+    <div className="space-y-4 animate-fadeIn">
       <button
         type="button"
         onClick={onBackToSummary}
@@ -40,28 +47,31 @@ export function HasilPersalinanDetail({
         <span>Kembali ke Hasil Ringkas</span>
       </button>
 
-      <Card className="border border-slate-200/90 shadow-soft-xs bg-white rounded-3xl p-5 sm:p-6 space-y-4 text-center">
+      {/* Header Card */}
+      <Card className="border border-slate-200/90 shadow-soft-xs bg-white rounded-3xl p-5 space-y-3 text-center">
         <div>
           <p className="text-xs font-medium text-slate-500">
-            Status Penapisan:{" "}
+            Analisis Detail:{" "}
             <span className="font-semibold text-slate-700">
               {formData.nama_pasien} ({formData.umur} thn)
             </span>
           </p>
           <h2
             className={`text-xl sm:text-2xl font-bold tracking-tight mt-1 ${
-              isGawatDarurat ? "text-rose-600" : "text-emerald-700"
+              isGawatDarurat || mlResult.risk_category === "KRST"
+                ? "text-rose-600"
+                : "text-emerald-700"
             }`}
           >
             {isGawatDarurat
-              ? "Terdeteksi Komplikasi Gawat Darurat"
-              : "Persalinan Fisiologis (Normal & Aman)"}
+              ? "Komplikasi Gawat Darurat Terdeteksi"
+              : "Persalinan Fisiologis Normal"}
           </h2>
         </div>
 
-        {/* Status Alert Badge */}
+        {/* Status Badge */}
         <div
-          className={`p-3.5 rounded-2xl border flex items-center justify-center gap-2 text-xs font-bold ${
+          className={`p-3 rounded-2xl border flex items-center justify-center gap-2 text-xs font-bold ${
             isGawatDarurat
               ? "bg-rose-50 border-rose-200 text-rose-700"
               : "bg-emerald-50 border-emerald-200 text-emerald-800"
@@ -74,52 +84,67 @@ export function HasilPersalinanDetail({
           )}
           <span>
             {isGawatDarurat
-              ? `${positiveFactors.length} Indikator Kegawatdaruratan Terdeteksi (Wajib Rujuk)`
-              : "Seluruh 19 Indikator Normal (Tidak Ada Gawat Darurat)"}
+              ? `${positiveFactors.length} Indikator Bahaya Terdeteksi (Wajib Rujuk)`
+              : "Semua 19 Indikator Penapisan Normal"}
           </span>
         </div>
       </Card>
 
-      {/* Cyan Banner Info */}
-      <div className="p-3.5 px-5 rounded-full bg-cyan-50 border border-cyan-100/80 flex items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2 text-cyan-900">
-          <Info className="h-4 w-4 text-cyan-600 shrink-0" />
-          <span className="text-[11px] sm:text-xs">
-            Gunakan hasil penapisan ini untuk rujukan persalinan terencana.
-          </span>
+      {/* Probabilitas Komplikasi Machine Learning */}
+      <div className="space-y-2.5 p-4 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-soft-xs">
+        <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+          <Sparkles className="h-4 w-4 text-emerald-700" />
+          <span>Probabilitas Prediksi Komplikasi (Machine Learning)</span>
         </div>
-        <button
-          type="button"
-          onClick={() => window.print()}
-          className="font-bold text-cyan-700 hover:text-cyan-900 hover:underline shrink-0 text-xs"
-        >
-          Cetak
-        </button>
+
+        <div className="space-y-2">
+          {mlResult.probabilities &&
+            Object.entries(mlResult.probabilities).map(([compName, probVal]) => {
+              const pct = Math.round((probVal as number) * 100);
+              const isTop = compName === mlResult.primary_diagnosis;
+              return (
+                <div key={compName} className="space-y-1">
+                  <div className="flex justify-between text-xs font-semibold">
+                    <span className={isTop ? "text-rose-600 font-bold" : "text-slate-700"}>
+                      {compName} {isTop && "(Prediksi Utama)"}
+                    </span>
+                    <span className="text-slate-600 font-bold">{pct}%</span>
+                  </div>
+                  <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        isTop ? "bg-rose-600" : "bg-emerald-600"
+                      }`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+        </div>
       </div>
 
-      {/* Rincian Seluruh 19 Indikator */}
-      <div className="space-y-2.5 pt-1">
+      {/* Rincian 19 Parameter Penapisan */}
+      <div className="space-y-2 pt-1">
         <h4 className="font-bold text-slate-900 text-xs sm:text-sm">
-          Rincian 19 Parameter Penapisan:
+          Rincian 19 Parameter Penapisan Ibu Bersalin:
         </h4>
-        <div className="space-y-2">
+        <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
           {PENAPISAN_PERSALINAN_LIST.map((item) => {
             const isPositive = penapisanAnswers[item.id] === true;
             return (
               <div
                 key={item.id}
-                className={`p-3 sm:p-3.5 rounded-2xl border flex items-center justify-between gap-3 text-xs sm:text-sm ${
+                className={`p-2.5 rounded-2xl border flex items-center justify-between gap-2 text-xs ${
                   isPositive
                     ? "bg-rose-50/50 border-rose-200/90 text-rose-900"
                     : "bg-white border-slate-200/80 text-slate-700 shadow-soft-xs"
                 }`}
               >
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2">
                   <span
-                    className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                      isPositive
-                        ? "bg-rose-600 text-white"
-                        : "bg-slate-100 text-slate-600"
+                    className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${
+                      isPositive ? "bg-rose-600 text-white" : "bg-slate-100 text-slate-600"
                     }`}
                   >
                     {item.no}
@@ -127,13 +152,11 @@ export function HasilPersalinanDetail({
                   <span className="font-medium">{item.label}</span>
                 </div>
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-bold shrink-0 ${
-                    isPositive
-                      ? "bg-rose-600 text-white"
-                      : "bg-slate-100 text-slate-600"
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold shrink-0 ${
+                    isPositive ? "bg-rose-600 text-white" : "bg-slate-100 text-slate-600"
                   }`}
                 >
-                  {isPositive ? "YA (Bahaya)" : "TIDAK"}
+                  {isPositive ? "YA" : "TIDAK"}
                 </span>
               </div>
             );
@@ -142,7 +165,7 @@ export function HasilPersalinanDetail({
       </div>
 
       {/* Tombol Aksi */}
-      <div className="pt-3 flex items-center gap-3">
+      <div className="pt-2 flex items-center gap-3">
         <Button
           type="button"
           variant="outline"
@@ -157,7 +180,7 @@ export function HasilPersalinanDetail({
           onClick={() => router.visit("/kamus")}
           className="flex-1 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold py-2.5"
         >
-          <span>Buka Kamus Terapi</span>
+          <span>Kamus Terapi</span>
         </Button>
       </div>
     </div>
