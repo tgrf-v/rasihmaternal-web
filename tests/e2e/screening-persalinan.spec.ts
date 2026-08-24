@@ -141,9 +141,9 @@ test.describe('Form Screening Persalinan & Prediksi Machine Learning (5 Skenario
   });
 
   // ─────────────────────────────────────────────────────────────
-  // SKENARIO 5: Komplikasi Infeksi / Demam Tinggi (KRT)
+  // SKENARIO 5: Komplikasi Infeksi Maternal & Detail Analisis ML
   // ─────────────────────────────────────────────────────────────
-  test('Skenario 5: Komplikasi Infeksi Maternal & Leukositosis Tinggi (KRT)', async ({ page }) => {
+  test('Skenario 5: Komplikasi Infeksi Maternal, Detail Rincian Klinis & Variabel Turunan ML', async ({ page }) => {
     await page.goto('/screening/persalinan');
 
     // STEP 1
@@ -172,6 +172,23 @@ test.describe('Form Screening Persalinan & Prediksi Machine Learning (5 Skenario
 
     // Cek tombol rincian detail ML
     await page.click('button:has-text("Lihat Rincian & Analisis ML")');
+
+    // VERIFIKASI DETAIL: Variabel Terhitung Otomatis
+    await expect(page.locator('text=Variabel Klinis Hasil Kalkulasi Otomatis')).toBeVisible();
+    await expect(page.locator('text=MAP (Mean Arterial Pressure)')).toBeVisible();
+    await expect(page.locator('text=93.33')).toBeVisible();
+    await expect(page.locator('text=Pulse Pressure (Tekanan Nadi)')).toBeVisible();
+    await expect(page.locator('text=40 mmHg')).toBeVisible();
+    await expect(page.locator('text=Rasio Leu / Trombo (LTR)')).toBeVisible();
+    await expect(page.locator('text=0.0771')).toBeVisible();
+
+    // VERIFIKASI DETAIL: Isian Parameter Form Persalinan
+    await expect(page.locator('text=Isian Parameter Form Persalinan & Fitur Maternal ML')).toBeVisible();
+    await expect(page.locator('text=120 / 80 mmHg')).toBeVisible();
+    await expect(page.locator('text=11 g/dL')).toBeVisible();
+    await expect(page.locator('text=18,500 /µL').or(page.locator('text=18.500 /µL'))).toBeVisible();
+
+    // VERIFIKASI DETAIL: Probabilitas ML
     await expect(page.locator('text=Probabilitas Prediksi Komplikasi (Machine Learning)')).toBeVisible();
     await expect(page.locator('span:has-text("Infeksi (Prediksi Utama)")')).toBeVisible();
   });

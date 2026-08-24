@@ -6,7 +6,6 @@ import {
   ChevronLeft,
   AlertTriangle,
   ShieldCheck,
-  Info,
   RefreshCw,
   Sparkles,
 } from "lucide-react";
@@ -14,6 +13,7 @@ import { PersalinanFormData } from "./_FormPersalinanStep1";
 import { PenapisanItem, PENAPISAN_PERSALINAN_LIST } from "./_FormPersalinanStep2";
 import { PersalinanClinicalData } from "./_FormPersalinanStep3";
 import { MLPredictionResult } from "./_HasilPersalinanRingkas";
+import { HasilPersalinanKlinisCard } from "./_HasilPersalinanKlinisCard";
 
 interface HasilPersalinanDetailProps {
   formData: PersalinanFormData;
@@ -90,8 +90,15 @@ export function HasilPersalinanDetail({
         </div>
       </Card>
 
+      {/* Card 1 & 2: Isian Parameter Form Persalinan & Variabel Terhitung Otomatis ML */}
+      <HasilPersalinanKlinisCard
+        formData={formData}
+        clinicalData={clinicalData}
+        mlResult={mlResult}
+      />
+
       {/* Probabilitas Komplikasi Machine Learning */}
-      <div className="space-y-2.5 p-4 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-soft-xs">
+      <div className="space-y-2.5 p-4 sm:p-5 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-soft-xs">
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
           <Sparkles className="h-4 w-4 text-emerald-700" />
           <span>Probabilitas Prediksi Komplikasi (Machine Learning)</span>
