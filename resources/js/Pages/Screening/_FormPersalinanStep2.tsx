@@ -87,6 +87,7 @@ export function FormPersalinanStep2({
               <div className="flex items-center gap-1.5 shrink-0">
                 <button
                   type="button"
+                  id={`penapisan_tidak_${item.id}`}
                   onClick={() => onToggle(item.id, false)}
                   className={`min-w-[60px] text-center px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                     !isPositive
@@ -98,6 +99,7 @@ export function FormPersalinanStep2({
                 </button>
                 <button
                   type="button"
+                  id={`penapisan_ya_${item.id}`}
                   onClick={() => onToggle(item.id, true)}
                   className={`min-w-[60px] text-center px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                     isPositive

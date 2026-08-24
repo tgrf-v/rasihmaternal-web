@@ -122,12 +122,12 @@ export default function PersalinanScreening() {
     const ltr = clinicalData.leokosit / Math.max(clinicalData.trombosit, 1);
 
     const isPreterm = clinicalData.umur_kehamilan === "Preterm";
-    const isPEB = penapisanAnswers.preklamsi_berat || clinicalData.sistolik >= 160 || clinicalData.diastolik >= 110;
+    const isPEB = penapisanAnswers.preeklamsi_berat || penapisanAnswers.preklamsi_berat || clinicalData.sistolik >= 160 || clinicalData.diastolik >= 110;
     const isHT = clinicalData.sistolik >= 140 || clinicalData.diastolik >= 90 || map >= 95;
-    const isKPD = penapisanAnswers.ketuban_pecah_mekonium || penapisanAnswers.ketuban_pecah_lama || penapisanAnswers.ketuban_pecah_preterm;
-    const isBled = penapisanAnswers.perdarahan || clinicalData.hb < 8.0;
-    const isInf = penapisanAnswers.demam || clinicalData.leokosit > 15000;
-    const isLama = penapisanAnswers.primi_fase_aktif || clinicalData.umur_kehamilan === "Postterm";
+    const isKPD = penapisanAnswers.ketuban_pecah_mekonium || penapisanAnswers.ketuban_pecah_lama || penapisanAnswers.ketuban_pecah_kurang_bulan || penapisanAnswers.ketuban_pecah_preterm;
+    const isBled = penapisanAnswers.perdarahan_pervaginam || penapisanAnswers.perdarahan || clinicalData.hb < 8.0;
+    const isInf = penapisanAnswers.demam_tinggi || penapisanAnswers.demam || clinicalData.leokosit > 15000;
+    const isLama = penapisanAnswers.palpasi_kepala_tinggi || penapisanAnswers.primi_fase_aktif || clinicalData.umur_kehamilan === "Postterm";
 
     let diag = "Persalinan Normal (Fisiologis)";
     let cat: "KRR" | "KRT" | "KRST" = "KRR";
