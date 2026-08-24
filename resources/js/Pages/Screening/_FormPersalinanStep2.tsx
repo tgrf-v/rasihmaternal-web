@@ -88,7 +88,7 @@ export function FormPersalinanStep2({
                 <button
                   type="button"
                   onClick={() => onToggle(item.id, false)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
+                  className={`min-w-[60px] text-center px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                     !isPositive
                       ? "bg-slate-800 text-white shadow-soft-xs"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -99,7 +99,7 @@ export function FormPersalinanStep2({
                 <button
                   type="button"
                   onClick={() => onToggle(item.id, true)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
+                  className={`min-w-[60px] text-center px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                     isPositive
                       ? "bg-rose-600 text-white shadow-soft-xs"
                       : "bg-slate-100 text-slate-600 hover:bg-rose-50 hover:text-rose-600"

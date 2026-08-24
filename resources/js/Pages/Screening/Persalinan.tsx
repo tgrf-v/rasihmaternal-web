@@ -196,10 +196,10 @@ export default function PersalinanScreening() {
                     <div className="mb-4">
                       <div className="flex items-center justify-between text-xs font-bold text-slate-600 mb-2">
                         <span className={currentStep >= 1 ? "text-emerald-700 font-bold" : ""}>
-                          1. Identitas Pasien
+                          Identitas Pasien
                         </span>
                         <span className={currentStep >= 2 ? "text-emerald-700 font-bold" : ""}>
-                          2. 19 Indikator Penapisan
+                          19 Indikator Penapisan
                         </span>
                       </div>
                       <Progress value={(currentStep / 2) * 100} variant="default" className="h-2" />
