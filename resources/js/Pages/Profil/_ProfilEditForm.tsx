@@ -29,11 +29,21 @@ interface ProfilEditFormProps {
 const PENDIDIKAN_OPTIONS = [
   { label: "Tidak / Belum Sekolah", value: "Tidak / Belum Sekolah" },
   { label: "SD / Sederajat", value: "SD" },
-  { label: "SMP / Sederajat", value: "SMP" },
-  { label: "SMA / SMK / Sederajat", value: "SMA/SMK" },
-  { label: "Diploma (D1 - D4)", value: "Diploma" },
-  { label: "Sarjana (S1)", value: "S1" },
-  { label: "Magister / Doktor (S2 / S3)", value: "S2/S3" },
+  { label: "SMP / Sederajat (SLTP)", value: "SLTP" },
+  { label: "SMA / SMK / Sederajat (SLTA)", value: "SLTA" },
+  { label: "Diploma (D1 - D4)", value: "DIPLOMA" },
+  { label: "Sarjana (S1)", value: "SARJANA" },
+  { label: "Magister / Doktor (S2 / S3)", value: "MAGISTER" },
+];
+
+const PEKERJAAN_OPTIONS = [
+  { label: "Ibu Rumah Tangga", value: "Ibu Rumah Tangga" },
+  { label: "Tenaga Kesehatan (Dokter / Bidan / Perawat)", value: "Tenaga Kesehatan" },
+  { label: "Karyawan Swasta", value: "Karyawan Swasta" },
+  { label: "PNS / ASN", value: "PNS" },
+  { label: "Wiraswasta / Usaha", value: "Wiraswasta" },
+  { label: "Buruh / Petani", value: "Petani/Buruh" },
+  { label: "Pelajar / Mahasiswa", value: "Pelajar/Mahasiswa" },
 ];
 
 export function ProfilEditForm({
@@ -276,20 +286,31 @@ export function ProfilEditForm({
             </div>
           </div>
 
-          {/* Baris 5: Pekerjaan */}
+          {/* Baris 5: Pekerjaan (Select) */}
           <div className="space-y-1.5">
             <Label htmlFor="profile-job" className="text-xs font-bold text-slate-700">
               Pekerjaan
             </Label>
-            <Input
-              id="profile-job"
-              type="text"
-              value={data.pekerjaan}
-              placeholder="Contoh: Ibu rumah tangga"
-              onChange={(e) => setData("pekerjaan", e.target.value)}
-              error={errors.pekerjaan}
-              className="rounded-full h-11 px-5 text-xs sm:text-sm text-slate-900"
-            />
+            <Select
+              value={data.pekerjaan || ""}
+              onValueChange={(val) => setData("pekerjaan", val)}
+            >
+              <SelectTrigger id="profile-job" className="rounded-full h-11 px-5 text-xs sm:text-sm text-slate-900 border-slate-200">
+                <SelectValue placeholder="Pilih status pekerjaan..." />
+              </SelectTrigger>
+              <SelectContent className="rounded-2xl border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.08)]">
+                {PEKERJAAN_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value} className="text-xs sm:text-sm rounded-xl">
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.pekerjaan && (
+              <p className="text-xs font-medium text-rose-600 animate-fadeIn pl-3">
+                {errors.pekerjaan}
+              </p>
+            )}
           </div>
 
           {/* Action Buttons */}

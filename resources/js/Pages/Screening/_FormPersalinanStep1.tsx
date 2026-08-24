@@ -88,6 +88,7 @@ export function FormPersalinanStep1({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Ibu Rumah Tangga">Ibu Rumah Tangga</SelectItem>
+                <SelectItem value="Tenaga Kesehatan">Tenaga Kesehatan (Dokter / Bidan / Perawat)</SelectItem>
                 <SelectItem value="Karyawan Swasta">Karyawan Swasta</SelectItem>
                 <SelectItem value="PNS">PNS / ASN</SelectItem>
                 <SelectItem value="Wiraswasta">Wiraswasta / Usaha</SelectItem>
