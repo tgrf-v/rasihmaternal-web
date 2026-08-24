@@ -74,6 +74,24 @@ export function BidanTable({
         },
       },
       {
+        accessorKey: "puskesmas_wilayah",
+        header: ({ column }) => (
+          <button
+            type="button"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="inline-flex items-center gap-1.5 text-slate-900 font-semibold text-xs sm:text-sm hover:text-slate-700 focus:outline-none transition-colors group"
+          >
+            <span>Lokasi Puskesmas</span>
+            <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          </button>
+        ),
+        cell: ({ row }) => (
+          <span className="text-xs text-slate-700 font-medium">
+            {row.original.puskesmas_wilayah || "-"}
+          </span>
+        ),
+      },
+      {
         accessorKey: "no_str",
         header: ({ column }) => (
           <button
@@ -215,15 +233,17 @@ export function BidanTable({
   const getColumnWidthClass = (id: string) => {
     switch (id) {
       case "name":
-        return "w-[32%]";
+        return "w-[24%]";
+      case "puskesmas_wilayah":
+        return "w-[22%]";
       case "no_str":
-        return "w-[22%]";
+        return "w-[18%]";
       case "no_telepon":
-        return "w-[22%]";
+        return "w-[18%]";
       case "is_active":
-        return "w-[16%]";
+        return "w-[12%]";
       case "actions":
-        return "w-[8%] text-right";
+        return "w-[6%] text-right";
       default:
         return "";
     }
