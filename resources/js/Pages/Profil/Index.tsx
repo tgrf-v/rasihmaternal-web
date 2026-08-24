@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { router, useForm, usePage } from "@inertiajs/react";
 import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
 import { ScreeningResult } from "@/types/screening";
@@ -37,6 +37,19 @@ export default function ProfilIndex() {
     foto_profil: null,
     hapus_foto: false,
   });
+
+  useEffect(() => {
+    form.setData({
+      name: user.name || "",
+      no_telepon: user.no_telepon || "",
+      nik: user.nik || "",
+      tanggal_lahir: user.tanggal_lahir || "",
+      pekerjaan: user.pekerjaan || "",
+      pendidikan: user.pendidikan || "",
+      foto_profil: null,
+      hapus_foto: false,
+    });
+  }, [user]);
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();

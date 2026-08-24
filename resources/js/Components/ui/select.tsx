@@ -9,6 +9,7 @@ interface SelectContextType {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   selectedLabel: string;
   setSelectedLabel: React.Dispatch<React.SetStateAction<string>>;
+  registerItem: (val: string, label: string) => void;
 }
 
 const SelectContext = React.createContext<SelectContextType | undefined>(undefined);
@@ -29,11 +30,24 @@ const Select: React.FC<SelectProps> = ({
   const [value, setValue] = React.useState<string | null>(controlledValue ?? null);
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [selectedLabel, setSelectedLabel] = React.useState<string>("");
+  const itemsMapRef = React.useRef<Record<string, string>>({});
   const containerRef = React.useRef<HTMLDivElement>(null);
+
+  const registerItem = React.useCallback((val: string, label: string) => {
+    itemsMapRef.current[val] = label;
+    if (value === val || controlledValue === val) {
+      setSelectedLabel(label);
+    }
+  }, [value, controlledValue]);
 
   React.useEffect(() => {
     if (controlledValue !== undefined) {
       setValue(controlledValue);
+      if (controlledValue && itemsMapRef.current[controlledValue]) {
+        setSelectedLabel(itemsMapRef.current[controlledValue]);
+      } else if (!controlledValue) {
+        setSelectedLabel("");
+      }
     }
   }, [controlledValue]);
 
@@ -51,6 +65,9 @@ const Select: React.FC<SelectProps> = ({
 
   const handleValueChange = (val: string) => {
     setValue(val);
+    if (itemsMapRef.current[val]) {
+      setSelectedLabel(itemsMapRef.current[val]);
+    }
     if (onValueChange) {
       onValueChange(val);
     }
@@ -66,6 +83,7 @@ const Select: React.FC<SelectProps> = ({
         setIsOpen,
         selectedLabel,
         setSelectedLabel,
+        registerItem,
       }}
     >
       <div className="relative w-full" ref={containerRef}>
@@ -131,13 +149,14 @@ export interface SelectContentProps extends React.HTMLAttributes<HTMLDivElement>
 const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps>(
   ({ className, children, ...props }, ref) => {
     const { isOpen } = useSelect();
-    if (!isOpen) return null;
 
     return (
       <div
         ref={ref}
         className={cn(
-          "absolute left-0 right-0 top-[calc(100%+6px)] z-50 max-h-60 overflow-auto rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft-lg animate-scaleUp",
+          "absolute left-0 right-0 top-[calc(100%+6px)] z-50 max-h-60 overflow-auto rounded-2xl border border-slate-100 bg-white p-1.5 shadow-soft-lg",
+          !isOpen && "hidden pointer-events-none select-none",
+          isOpen && "animate-scaleUp",
           className
         )}
         {...props}
@@ -173,14 +192,14 @@ export interface SelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
   ({ className, children, value: itemValue, ...props }, ref) => {
-    const { value, onValueChange, setSelectedLabel } = useSelect();
+    const { value, onValueChange, setSelectedLabel, registerItem } = useSelect();
     const isSelected = value === itemValue;
 
     React.useEffect(() => {
-      if (isSelected && typeof children === "string") {
-        setSelectedLabel(children);
+      if (typeof children === "string") {
+        registerItem(itemValue, children);
       }
-    }, [isSelected, children, setSelectedLabel]);
+    }, [itemValue, children, registerItem]);
 
     return (
       <div
