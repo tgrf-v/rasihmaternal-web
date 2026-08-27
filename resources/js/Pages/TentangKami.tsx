@@ -102,15 +102,15 @@ export default function TentangKami() {
                 </h2>
 
                 <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
-                  <strong className="font-bold text-slate-900">Kepakaran Kebidanan Bu Asih &amp; Nakes Wilayah</strong> menjadi fondasi utama dalam penyusunan rekomendasi medis, edukasi kamus kesehatan A-Z, dan panduan terapi komplementer non-obat yang dihadirkan di dalam platform.
+                  Kepakaran kebidanan <strong>Surtiningsih, S.ST., M. Kes</strong> yang didukung jejaring tenaga kesehatan di wilayah pelayanan primer menjadi landasan utama dalam pengembangan solusi kesehatan ibu dan bayi yang akurat, aplikatif, dan berbasis bukti. Pengalaman klinis dan akademik tersebut menjadi dasar dalam penyusunan edukasi kesehatan, rekomendasi awal, serta pengembangan sistem pendukung deteksi risiko maternal yang relevan dengan kebutuhan nyata di lapangan.
                 </p>
 
                 <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
-                  Visi kami adalah berkontribusi aktif dalam percepatan transformasi digital di bidang kesehatan ibu dan anak, dengan menghadirkan solusi teknologi yang menjawab permasalahan krusial kebidanan secara tepat dan berbasis bukti medis.
+                  Visi kami adalah mendorong transformasi digital dalam pelayanan kesehatan ibu dan anak melalui pemanfaatan teknologi yang tidak hanya inovatif, tetapi juga mudah digunakan, aman, dan sesuai dengan alur pelayanan kebidanan. Setiap pengembangan diarahkan untuk membantu tenaga kesehatan mengenali risiko lebih dini, meningkatkan ketepatan pengambilan keputusan dan memperkuat upaya pencegahan komplikasi maternal.
                 </p>
 
                 <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
-                  Moto kami yakni <em className="font-bold text-emerald-700">Inovasi Medis &amp; Kemanusiaan</em>. Kami meyakini bahwa inovasi digital hanya akan memberikan nilai dampak nyata jika mengedepankan keselamatan dan kenyamanan ibu hamil serta janinnya.
+                  Kami menjunjung prinsip <strong className="text-emerald-700">Inovasi, Keselamatan, dan Kemanusiaan</strong>. Teknologi kesehatan yang baik bukan sekadar canggih, tetapi harus mampu memberikan manfaat nyata, mendukung profesional kesehatan, serta tetap menempatkan keselamatan dan kenyamanan ibu serta janin sebagai prioritas utama.
                 </p>
               </div>
 
