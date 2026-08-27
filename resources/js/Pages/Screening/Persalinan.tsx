@@ -201,7 +201,7 @@ export default function PersalinanScreening() {
           <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
             {/* Image Col */}
             <div className="relative lg:col-span-6 h-[240px] lg:h-full overflow-hidden">
-              <img src="/images/persalinan-screening.webp" alt="Penapisan Ibu Bersalin" className="absolute inset-0 w-full h-full object-cover" />
+              <img src="/images/persalinan-screening.png" alt="Penapisan Ibu Bersalin" className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-white hidden lg:block" />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white lg:hidden" />
             </div>

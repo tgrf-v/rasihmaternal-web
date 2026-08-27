@@ -187,7 +187,7 @@ export default function KehamilanScreening() {
             {/* Kolom Kiri (Gambar Static - 50%) */}
             <div className="relative lg:col-span-6 h-[240px] lg:h-full overflow-hidden">
               <img
-                src="/images/pregnancy-screening.webp"
+                src="/images/pregnancy-screening.png"
                 alt="Screening Kehamilan"
                 className="absolute inset-0 w-full h-full object-cover"
               />
