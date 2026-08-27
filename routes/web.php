@@ -85,6 +85,17 @@ Route::middleware('auth')->group(function () {
     // Kamus Kesehatan & Terapi Komplementer (Publik)
     Route::get('/kamus', [KamusController::class, 'index'])->name('kamus.index');
 
+    // Partograf Digital (Fitur Pemantauan Persalinan Mandiri)
+    Route::get('/partograf', function () {
+        return Inertia::render('Partograf/Index');
+    })->name('partograf.index');
+
+    Route::get('/partograf/{id}', function ($id) {
+        return Inertia::render('Partograf/Show', [
+            'id' => $id,
+        ]);
+    })->name('partograf.show');
+
     // Global Search Endpoint
     Route::get('/api/search', [SearchController::class, 'search'])->name('api.search');
 

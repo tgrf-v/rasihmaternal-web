@@ -26,7 +26,7 @@ import { PageProps } from "@/types";
 
 interface LayoutProps {
   children: React.ReactNode;
-  activeNav?: "landing" | "beranda" | "kehamilan" | "persalinan" | "kamus" | "profil" | "tentang-kami" | "admin-bidan" | "admin-kamus";
+  activeNav?: "landing" | "beranda" | "kehamilan" | "persalinan" | "partograf" | "kamus" | "profil" | "tentang-kami" | "admin-bidan" | "admin-kamus";
 }
 
 export const BundaSehatLayout: React.FC<LayoutProps> = ({
@@ -151,6 +151,17 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+
+                <Link
+                  href="/partograf"
+                  className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
+                    activeNav === "partograf"
+                      ? "text-emerald-700 font-bold"
+                      : "text-slate-600 font-medium hover:text-slate-900"
+                  }`}
+                >
+                  Partograf
+                </Link>
 
                 <Link
                   href="/kamus"
