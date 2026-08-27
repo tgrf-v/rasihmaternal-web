@@ -8,7 +8,7 @@
         <link rel="icon" type="image/png" href="/bundasehat-logo.png?v=4" />
         <link rel="shortcut icon" href="/bundasehat-logo.png?v=4" />
 
-        <title inertia>{{ config('app.name', 'Skrining Kesehatan') }}</title>
+        <title inertia>{{ config('app.name', 'RASIH Maternal - Sistem Prediksi Risiko Komplikasi Kehamilan dan Persalinan') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

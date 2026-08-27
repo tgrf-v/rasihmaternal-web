@@ -49,7 +49,7 @@ export default function AdminKamusIndex() {
 
   return (
     <BundaSehatLayout activeNav="admin-kamus">
-      <Head title="Kelola Kamus Kesehatan & Edukasi - BundaSehat" />
+      <Head title="Kelola Kamus Kesehatan & Edukasi - RASIH Maternal" />
 
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-6 animate-fadeIn">
         {/* Flash Notification */}

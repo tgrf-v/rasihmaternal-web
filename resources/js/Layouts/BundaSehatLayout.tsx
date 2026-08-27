@@ -87,7 +87,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                   !isLoggedIn && !isScrolled ? "text-white" : "text-slate-800"
                 }`}
               >
-                BundaSehat
+                RASIH Maternal
               </span>
             </Link>
           </div>
@@ -330,9 +330,9 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             <div className="flex items-center gap-2">
               <ApplicationLogo className="h-5 w-5" />
               <span className="font-semibold text-slate-700">
-                Logo &copy; {new Date().getFullYear()}
+                RASIH Maternal &copy; {new Date().getFullYear()}
               </span>
-              <span>- Platform Screening Komplikasi Kehamilan & Persalinan Sehat</span>
+              <span>- Risk Assessment and Screening for Integrated Maternal Health</span>
             </div>
             <div className="flex items-center gap-4 font-medium">
               <Link href="/#fitur" className="hover:text-rose-600">

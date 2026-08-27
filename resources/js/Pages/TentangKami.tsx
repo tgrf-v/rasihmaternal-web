@@ -20,10 +20,10 @@ export default function TentangKami() {
 
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-2.5">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow-sm">
-              Tentang Kami
+              Tentang RASIH Maternal
             </h1>
             <p className="text-xs sm:text-sm md:text-base text-emerald-100 font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
-              Mengenal tujuan, latar belakang, dan peran BundaSehat dalam mendukung kesehatan ibu dan janin.
+              Risk Assessment and Screening for Integrated Maternal Health • Sistem Prediksi Risiko Komplikasi Kehamilan dan Persalinan.
             </p>
           </div>
         </section>
@@ -36,9 +36,12 @@ export default function TentangKami() {
               {/* Left Image Box */}
               <div className="md:col-span-5 flex justify-center">
                 <div className="w-full h-56 sm:h-72 rounded-3xl bg-slate-100/80 p-6 sm:p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
-                  <ApplicationLogo className="h-16 sm:h-20 w-16 sm:w-20 mb-2" />
+                  <ApplicationLogo className="h-20 sm:h-24 w-20 sm:w-24 mb-2" />
                   <span className="font-bold text-lg sm:text-xl text-slate-800 tracking-wide">
-                    Logo
+                    RASIH Maternal
+                  </span>
+                  <span className="text-xs text-slate-500 italic mt-0.5">
+                    &ldquo;Kenali Risiko, Lindungi Ibu dan Bayi&rdquo;
                   </span>
                 </div>
               </div>
@@ -46,15 +49,15 @@ export default function TentangKami() {
               {/* Right Text Content */}
               <div className="md:col-span-7 space-y-3.5 text-slate-700">
                 <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
-                  Aplikasi berbasis website ini dikembangkan khusus untuk mendukung pendampingan ibu hamil dalam melakukan deteksi dini faktor risiko tinggi (<em className="text-coral-600 font-semibold">Resti</em>) dan kesiapan persalinan sehat tanpa komplikasi.
+                  <strong>RASIH Maternal</strong> (<em>Risk Assessment and Screening for Integrated Maternal Health</em>) dikembangkan khusus untuk mendukung pendampingan ibu hamil dalam melakukan deteksi dini faktor risiko tinggi (<em className="text-coral-600 font-semibold">Resti</em>) dan pemantauan kesiapan persalinan sehat tanpa komplikasi.
                 </p>
 
                 <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
-                  Platform ini dirancang dengan mengintegrasikan standar medis nasional Kartu Skor Poedji Rochjati (KSPR), pemantauan usia kehamilan &amp; taksiran persalinan (HPL), serta rekomendasi penolong dan tempat persalinan yang aman.
+                  Platform ini mengintegrasikan instrumen skrining klinis kebidanan, partograf digital standar WHO/Kemenkes, pemantauan usia kehamilan &amp; HPL, serta rekomendasi penolong dan tempat persalinan yang aman.
                 </p>
 
                 <p className="text-xs sm:text-sm md:text-base leading-relaxed font-medium">
-                  Kami berkomitmen menjadikan platform pilihan utama ibu hamil dan bidan wilayah dalam mempercepat rujukan medis serta menekan angka komplikasi kehamilan secara digital dan transparan.
+                  Kami berkomitmen menjadi platform rujukan digital terpercaya bagi ibu hamil dan bidan wilayah dalam mempercepat deteksi dini serta menekan angka komplikasi maternal-neonatal.
                 </p>
               </div>
 
@@ -62,12 +65,12 @@ export default function TentangKami() {
           </div>
         </section>
 
-        {/* SECTION 2: MENGAPA BUNDASEHAT DIBUAT? (BACKGROUND ABU-ABU SANGAT LEMBUT) */}
+        {/* SECTION 2: MENGAPA RASIH MATERNAL DIKEMBANGKAN? (BACKGROUND ABU-ABU SANGAT LEMBUT) */}
         <section className="w-full bg-slate-50/90 py-8 sm:py-10 md:py-12 border-b border-slate-200/60">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto space-y-4 text-center">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
-                Mengapa BundaSehat Dibuat?
+                Mengapa RASIH Maternal Dikembangkan?
               </h2>
 
               <div className="space-y-3.5 text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed font-medium text-center">
@@ -80,7 +83,7 @@ export default function TentangKami() {
                 </p>
 
                 <p>
-                  BundaSehat dikembangkan sebagai pendamping digital yang menjembatani ibu hamil dengan standar klinis kebidanan terpercaya. Kami hadir untuk membantu mengenali tanda bahaya sedini mungkin, memberikan edukasi perawatan mandiri yang aman, dan mendukung pengambilan keputusan rujukan persalinan yang tepat waktu.
+                  <strong>RASIH Maternal</strong> hadir sebagai pendamping digital yang menjembatani ibu hamil dengan standar klinis kebidanan terpercaya. Kami hadir untuk membantu mengenali tanda bahaya sedini mungkin, memberikan edukasi perawatan mandiri yang aman, dan mendukung pengambilan keputusan rujukan persalinan yang tepat waktu.
                 </p>
               </div>
             </div>

@@ -1,22 +1,24 @@
 import React from 'react';
 
-interface LogoProps extends React.HTMLAttributes<HTMLDivElement> {
+interface LogoProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   variant?: "color" | "white";
 }
 
 export default function ApplicationLogo({
   className = "h-8 w-8",
   variant = "color",
+  alt = "RASIH Maternal Logo",
   ...props
 }: LogoProps) {
   return (
-    <div
-      className={`rounded-full aspect-square shrink-0 transition-all duration-300 ${
-        variant === "white"
-          ? "bg-white/30 border border-white/50"
-          : "bg-slate-300/90 border border-slate-400/70 shadow-soft-xs"
+    <img
+      src="/images/logo.png"
+      alt={alt}
+      className={`shrink-0 object-contain transition-all duration-300 ${
+        variant === "white" ? "brightness-0 invert drop-shadow-sm" : ""
       } ${className}`}
       {...props}
     />
   );
 }
+

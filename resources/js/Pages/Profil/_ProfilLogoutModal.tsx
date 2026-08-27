@@ -18,7 +18,7 @@ export function ProfilLogoutModal({
       isOpen={isOpen}
       onClose={onClose}
       title="Konfirmasi Keluar"
-      description="Apakah Anda yakin ingin keluar dari akun BundaSehat?"
+      description="Apakah Anda yakin ingin keluar dari akun RASIH Maternal?"
       className="max-w-md"
     >
       <div className="pt-2 space-y-4">

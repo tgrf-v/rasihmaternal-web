@@ -85,9 +85,17 @@ export default function Login() {
             <CardTitle className="text-2xl font-bold text-slate-900 tracking-tight flex items-center justify-center gap-1.5">
               <span>{mode === "login" ? "Masuk ke Akun" : "Daftar Akun Baru"}</span>
             </CardTitle>
-            <CardDescription className="text-xs font-medium text-slate-500 mt-0.5">
-              Pendamping Ibu Hamil &amp; Persalinan
-            </CardDescription>
+            <div className="mt-1 space-y-0.5">
+              <CardDescription className="text-xs font-bold text-emerald-800">
+                RASIH Maternal
+              </CardDescription>
+              <p className="text-[11px] font-medium text-slate-500 leading-snug">
+                Risk Assessment and Screening for Integrated Maternal Health
+              </p>
+              <p className="text-[11px] text-slate-400 italic">
+                &ldquo;Kenali Risiko, Lindungi Ibu dan Bayi&rdquo;
+              </p>
+            </div>
           </div>
         </CardHeader>
 

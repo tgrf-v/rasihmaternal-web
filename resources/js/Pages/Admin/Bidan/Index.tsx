@@ -33,7 +33,7 @@ export default function AdminBidanIndex() {
 
   return (
     <BundaSehatLayout activeNav="admin-bidan">
-      <Head title="Kelola Akun Bidan - BundaSehat" />
+      <Head title="Kelola Akun Bidan - RASIH Maternal" />
 
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-6 animate-fadeIn">
         {/* FLASH NOTIFICATION */}
