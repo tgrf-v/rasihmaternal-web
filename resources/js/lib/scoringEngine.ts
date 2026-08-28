@@ -188,17 +188,17 @@ export function evaluateScreening(input: ScreeningInput): ScreeningResult {
   let penolong = "";
 
   if (riskLevel === "Berat") {
-    tempat = "Wajib Rujukan Rumah Sakit (RS / SpOG)";
-    penolong = "Dokter Spesialis Kebidanan (Sp.OG)";
-    faskes = "Dianjurkan bersalin di Rumah Sakit dengan Dokter Spesialis Kebidanan & Kandungan (Sp.OG). Skor >=12 wajib dirujuk segera.";
+    tempat = "Rumah Sakit Rujukan";
+    penolong = "Dokter Spesialis Kandungan";
+    faskes = "Dianjurkan bersalin di Rumah Sakit bersama Dokter Kandungan dan tim medis lengkap. Skor >=12 wajib dirujuk segera.";
   } else if (riskLevel === "Sedang") {
-    tempat = "Puskesmas Rawat Inap / PONED";
-    penolong = "Bidan & Dokter Umum";
-    faskes = "Dianjurkan bersalin dengan tenaga kesehatan (Bidan / Dokter) di Puskesmas atau Rumah Sakit Type C. Skor >=6 harus ditolong nakes.";
+    tempat = "Puskesmas / Klinik";
+    penolong = "Bidan & Dokter";
+    faskes = "Dianjurkan bersalin dengan tenaga kesehatan (Bidan / Dokter) di Puskesmas atau Rumah Sakit terdekat.";
   } else {
-    tempat = "Bidan Praktik Mandiri (BPM) / Puskesmas";
-    penolong = "Bidan Wilayah";
-    faskes = "Dapat bersalin di Bidan Praktik Mandiri (BPM) atau Puskesmas Rawat Inap dengan pengawasan Bidan.";
+    tempat = "Klinik Bidan / Puskesmas";
+    penolong = "Bidan";
+    faskes = "Dapat bersalin secara normal di Klinik Bidan atau Puskesmas dengan pendampingan Bidan.";
   }
 
   const saranTerapiList: string[] = [];

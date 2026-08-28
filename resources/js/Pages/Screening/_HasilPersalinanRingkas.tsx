@@ -203,8 +203,8 @@ export function HasilPersalinanRingkas({
         </h4>
         <p className="text-xs sm:text-sm text-slate-700 font-semibold leading-relaxed">
           {isHighRisk
-            ? "Wajib segera dirujuk dan bersalin di Rumah Sakit dengan fasilitas PONEK 24 Jam bersama Dokter Spesialis Kebidanan & Kandungan (Sp.OG)."
-            : "Dianjurkan bersalin di Praktek Mandiri Bidan (PMB) atau Puskesmas PONED bersama Bidan dan Dokter Umum."}
+            ? "Perlu segera dirujuk untuk bersalin di Rumah Sakit bersama Dokter Kandungan dan tim medis lengkap."
+            : "Dapat bersalin secara normal dan nyaman di Klinik Bidan, Puskesmas, atau Rumah Sakit terdekat."}
         </p>
       </div>
 
