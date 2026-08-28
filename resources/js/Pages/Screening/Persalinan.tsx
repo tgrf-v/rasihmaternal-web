@@ -261,8 +261,8 @@ export default function PersalinanScreening() {
                     <div className="mb-3">
                       <div className="flex items-center justify-between text-[11px] sm:text-xs font-bold text-slate-600 mb-1.5">
                         <span className={currentStep >= 1 ? "text-emerald-700" : ""}>Identitas &amp; Gestasi</span>
-                        <span className={currentStep >= 2 ? "text-emerald-700" : ""}>19 Indikator Penapisan</span>
-                        <span className={currentStep >= 3 ? "text-emerald-700" : ""}>Parameter Klinis ML v2</span>
+                        <span className={currentStep >= 2 ? "text-emerald-700" : ""}>Indikator Penapisan</span>
+                        <span className={currentStep >= 3 ? "text-emerald-700" : ""}>Parameter Klinis ML</span>
                       </div>
                       <Progress value={(currentStep / 3) * 100} variant="default" className="h-2" />
                     </div>
