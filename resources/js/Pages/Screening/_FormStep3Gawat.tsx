@@ -22,7 +22,7 @@ export function FormStep3Gawat({ formData, setFormData }: FormStep3GawatProps) {
       <div className="border-b border-slate-100 pb-2">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
           <Info className="h-4 w-4 text-amber-600" />
-          <span>Langkah 3: Kondisi Gawat / Darurat</span>
+          <span>Kondisi Gawat / Darurat</span>
         </h3>
         <p className="text-[11px] text-slate-500 mt-0.5 ml-6">Kelompok III — Gawat Darurat Obstetrik (GDOB)</p>
       </div>

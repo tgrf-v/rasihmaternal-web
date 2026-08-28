@@ -73,11 +73,11 @@ export function FormPersalinanStep3({
 
   return (
     <div className="space-y-4 animate-fadeIn">
-      {/* Seksi 1: Tanda-Tanda Vital & Laboratorium */}
+      {/* Seksi: Tanda-Tanda Vital & Laboratorium */}
       <div className="space-y-3 p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80">
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
           <Activity className="h-4 w-4 text-rose-600" />
-          <span>1. Tanda-Tanda Vital &amp; Laboratorium Medis</span>
+          <span>Tanda-Tanda Vital &amp; Laboratorium Medis</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -97,7 +97,7 @@ export function FormPersalinanStep3({
               className="rounded-full bg-white text-xs h-9"
             />
             {errors.sistolik && (
-              <p className="text-[11px] text-rose-500">{errors.sistolik}</p>
+              <p className="text-[11px] text-rose-600">{errors.sistolik}</p>
             )}
           </div>
 
@@ -117,23 +117,23 @@ export function FormPersalinanStep3({
               className="rounded-full bg-white text-xs h-9"
             />
             {errors.diastolik && (
-              <p className="text-[11px] text-rose-500">{errors.diastolik}</p>
+              <p className="text-[11px] text-rose-600">{errors.diastolik}</p>
             )}
           </div>
 
-          {/* Frekuensi Nadi */}
+          {/* Nadi */}
           <div className="space-y-1">
             <Label htmlFor="nadi" className="text-xs font-semibold text-slate-700">
-              Frekuensi Nadi (x/menit)
+              Denyut Nadi Ibu (x/menit)
             </Label>
             <Input
               id="nadi"
               type="number"
               min="40"
-              max="180"
+              max="200"
               value={clinicalData.nadi || ""}
-              onChange={(e) => handleChange("nadi", parseFloat(e.target.value) || 82)}
-              placeholder="82"
+              onChange={(e) => handleChange("nadi", parseInt(e.target.value, 10) || 80)}
+              placeholder="80"
               className="rounded-full bg-white text-xs h-9"
             />
           </div>
@@ -147,26 +147,26 @@ export function FormPersalinanStep3({
               id="suhu"
               type="number"
               step="0.1"
-              min="34"
-              max="42"
+              min="30"
+              max="45"
               value={clinicalData.suhu || ""}
-              onChange={(e) => handleChange("suhu", parseFloat(e.target.value) || 36.7)}
-              placeholder="36.7"
+              onChange={(e) => handleChange("suhu", parseFloat(e.target.value) || 36.5)}
+              placeholder="36.5"
               className="rounded-full bg-white text-xs h-9"
             />
           </div>
 
-          {/* Kadar Hemoglobin */}
+          {/* Kadar Hemoglobin (Hb) */}
           <div className="space-y-1">
             <Label htmlFor="hb" className="text-xs font-semibold text-slate-700">
-              Kadar Hemoglobin (g/dL)
+              Kadar Hemoglobin / Hb (g/dL)
             </Label>
             <Input
               id="hb"
               type="number"
               step="0.1"
               min="3"
-              max="25"
+              max="20"
               value={clinicalData.hb || ""}
               onChange={(e) => handleChange("hb", parseFloat(e.target.value) || 12.0)}
               placeholder="12.0"
@@ -199,11 +199,11 @@ export function FormPersalinanStep3({
         </div>
       </div>
 
-      {/* Seksi 2: Kondisi & Kesejahteraan Janin */}
+      {/* Seksi: Kondisi & Kesejahteraan Janin */}
       <div className="space-y-3 p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80">
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
           <Stethoscope className="h-4 w-4 text-emerald-700" />
-          <span>2. Kondisi &amp; Posisi Janin</span>
+          <span>Kondisi &amp; Posisi Janin</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -286,11 +286,11 @@ export function FormPersalinanStep3({
         </div>
       </div>
 
-      {/* Seksi 3: Kemajuan Persalinan & Partograf */}
+      {/* Seksi: Kemajuan Persalinan & Partograf */}
       <div className="space-y-3 p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80">
         <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
           <Clock className="h-4 w-4 text-emerald-700" />
-          <span>3. Parameter Kemajuan Persalinan (Partograf)</span>
+          <span>Parameter Kemajuan Persalinan (Partograf)</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

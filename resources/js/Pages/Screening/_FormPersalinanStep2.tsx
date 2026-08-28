@@ -43,7 +43,7 @@ export function FormPersalinanStep2({
       <div className="border-b border-slate-100 pb-2">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
           <Baby className="h-4 w-4 text-rose-600" />
-          <span>Langkah 2: 19 Indikator Penapisan Gawat Darurat</span>
+          <span>Indikator Penapisan Gawat Darurat</span>
         </h3>
         <p className="text-[11px] text-slate-500 mt-0.5 ml-6">
           Pilih YA jika kondisi terdeteksi pada ibu bersalin.

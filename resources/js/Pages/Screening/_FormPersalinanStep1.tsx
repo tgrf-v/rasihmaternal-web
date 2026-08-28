@@ -59,7 +59,7 @@ export function FormPersalinanStep1({
       <div className="border-b border-slate-100 pb-2">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
           <User className="h-4 w-4 text-emerald-700" />
-          <span>Langkah 1: Identitas &amp; Riwayat Kehamilan</span>
+          <span>Identitas &amp; Riwayat Kehamilan</span>
         </h3>
       </div>
 

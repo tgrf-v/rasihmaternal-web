@@ -25,7 +25,7 @@ export function FormStep2Kondisi({ formData, setFormData, toggleCheckbox }: Form
       <div className="border-b border-slate-100 pb-2">
         <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
           <Baby className="h-4 w-4 text-rose-600" />
-          <span>Langkah 2: Kondisi Kehamilan Saat Ini</span>
+          <span>Kondisi Kehamilan Saat Ini</span>
         </h3>
         <p className="text-[11px] text-slate-500 mt-0.5 ml-6">Kelompok II — Ada Gawat Obstetrik (AGO)</p>
       </div>
