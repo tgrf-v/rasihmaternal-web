@@ -209,7 +209,7 @@ const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
           if (typeof children === "string") setSelectedLabel(children);
         }}
         className={cn(
-          "flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-xs md:text-sm font-medium transition-colors cursor-pointer select-none my-0.5",
+          "flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-medium transition-colors cursor-pointer select-none my-0.5",
           isSelected
             ? "bg-pink-50 text-rose-700 font-bold"
             : "text-slate-700 hover:bg-slate-50 hover:text-slate-900",
