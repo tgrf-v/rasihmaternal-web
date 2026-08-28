@@ -45,6 +45,37 @@ export function calculateMAP(sistolik: number, diastolik: number): number {
   return Number(((sistolik + 2 * diastolik) / 3).toFixed(2));
 }
 
+/**
+ * Hitung Taksiran Berat Janin (TBJ) berdasarkan Rumus Johnson-Toshach.
+ * TBJ (gram) = (TFU - N) * 155
+ * N = 13 jika station <= -2 (belum masuk PAP)
+ * N = 12 jika station -1 s.d 0 (masuk PAP)
+ * N = 11 jika station >= +1 (melewati spina / dasar panggul)
+ */
+export function calculateJohnsonTBJ(tfuCm: number, stationKepala: number = -1): {
+  tbjGram: number;
+  nConstant: number;
+  kategori: string;
+} {
+  if (!tfuCm || tfuCm <= 0) {
+    return { tbjGram: 3000, nConstant: 12, kategori: "Normal" };
+  }
+  let n = 12;
+  if (stationKepala <= -2) {
+    n = 13;
+  } else if (stationKepala >= 1) {
+    n = 11;
+  }
+  const tbj = Math.max(500, Math.round((tfuCm - n) * 155));
+  let kategori = "Normal (2.500 - 4.000 g)";
+  if (tbj < 2500) {
+    kategori = "Risiko BBLR (< 2.500 g)";
+  } else if (tbj > 4000) {
+    kategori = "Risiko Makrosomia (> 4.000 g)";
+  }
+  return { tbjGram: tbj, nConstant: n, kategori };
+}
+
 export function evaluateScreening(input: ScreeningInput): ScreeningResult {
   let score = 2;
   const komplikasi: string[] = [];

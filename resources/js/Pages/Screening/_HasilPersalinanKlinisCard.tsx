@@ -126,9 +126,9 @@ export function HasilPersalinanKlinisCard({
                 </span>
               </div>
               <div className="flex justify-between py-0.5">
-                <span className="text-slate-500">DJJ &amp; TBJ (EFW):</span>
+                <span className="text-slate-500">TFU &amp; TBJ (Johnson):</span>
                 <span className="font-semibold text-slate-800">
-                  {clinicalData.djj} dpm · {clinicalData.efw_bayi_gram} g
+                  {clinicalData.tfu_cm || 32} cm · {clinicalData.efw_bayi_gram} g
                 </span>
               </div>
             </div>

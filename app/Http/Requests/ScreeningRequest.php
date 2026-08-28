@@ -83,6 +83,7 @@ class ScreeningRequest extends FormRequest
             'djj' => ['nullable', 'numeric', 'min:50', 'max:250'],
             'jumlah_janin' => ['nullable', 'integer', 'min:1', 'max:5'],
             'presentasi_janin' => ['nullable', 'string'],
+            'tfu_cm' => ['nullable', 'numeric', 'min:10', 'max:60'],
             'efw_bayi_gram' => ['nullable', 'numeric', 'min:300', 'max:6000'],
             'uk_minggu' => ['nullable', 'integer', 'min:0', 'max:45'],
             'uk_hari' => ['nullable', 'integer', 'min:0', 'max:6'],

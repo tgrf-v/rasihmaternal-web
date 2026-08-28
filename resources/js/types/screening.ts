@@ -57,6 +57,7 @@ export interface ScreeningInput {
   djj?: number;
   jumlah_janin?: number;
   presentasi_janin?: string;
+  tfu_cm?: number;
   efw_bayi_gram?: number;
   uk_minggu?: number;
   uk_hari?: number;

@@ -9,7 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/Components/ui/select";
-import { Activity, Stethoscope, Clock, HeartPulse, ShieldAlert } from "lucide-react";
+import { Activity, Stethoscope, Clock, HeartPulse, ShieldAlert, Calculator } from "lucide-react";
+import { calculateJohnsonTBJ } from "@/lib/scoringEngine";
 
 export interface PersalinanClinicalData {
   // Tanda Vital & Laboratorium
@@ -20,9 +21,10 @@ export interface PersalinanClinicalData {
   hb: number;
   proteinuria: "Negatif" | "Trace" | "1+" | "2+" | "3+" | "4+";
 
-  // Kondisi Janin
+  // Kondisi Janin & TBJ
   presentasi_janin: "Kepala" | "Bokong/Sungsang" | "Lintang" | "Oblique";
   jumlah_janin: number;
+  tfu_cm?: number;
   efw_bayi_gram: number;
   djj: number;
 
@@ -56,6 +58,18 @@ export function FormPersalinanStep3({
       [field]: value,
     }));
   };
+
+  const tbjCalc = React.useMemo(() => {
+    const tfu = clinicalData.tfu_cm || 32;
+    const station = clinicalData.station_kepala ?? -1;
+    return calculateJohnsonTBJ(tfu, station);
+  }, [clinicalData.tfu_cm, clinicalData.station_kepala]);
+
+  React.useEffect(() => {
+    if (tbjCalc.tbjGram && clinicalData.efw_bayi_gram !== tbjCalc.tbjGram) {
+      handleChange("efw_bayi_gram", tbjCalc.tbjGram);
+    }
+  }, [tbjCalc.tbjGram]);
 
   return (
     <div className="space-y-4 animate-fadeIn">
@@ -250,21 +264,24 @@ export function FormPersalinanStep3({
             />
           </div>
 
-          {/* Taksiran Berat Janin (EFW) */}
+          {/* Tinggi Fundus Uteri (TFU) */}
           <div className="space-y-1">
-            <Label htmlFor="efw_bayi_gram" className="text-xs font-semibold text-slate-700">
-              Taksiran Berat Janin / TBJ (Gram)
+            <Label htmlFor="tfu_cm" className="text-xs font-semibold text-slate-700">
+              Tinggi Fundus Uteri / TFU (cm)
             </Label>
             <Input
-              id="efw_bayi_gram"
+              id="tfu_cm"
               type="number"
-              min="300"
-              max="6000"
-              value={clinicalData.efw_bayi_gram || ""}
-              onChange={(e) => handleChange("efw_bayi_gram", parseFloat(e.target.value) || 3000)}
-              placeholder="Contoh: 3000"
+              min="15"
+              max="50"
+              value={clinicalData.tfu_cm || 32}
+              onChange={(e) => handleChange("tfu_cm", parseFloat(e.target.value) || 0)}
+              placeholder="32"
               className="rounded-full bg-white text-xs h-9"
             />
+            <p className="text-[10px] text-slate-500 font-medium">
+              TBJ: ({clinicalData.tfu_cm || 32} - {tbjCalc.nConstant}) × 155 = {tbjCalc.tbjGram.toLocaleString("id-ID")} gram
+            </p>
           </div>
         </div>
       </div>
