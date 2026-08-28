@@ -1,6 +1,6 @@
-# Proyek BundaSehat - Workspace Rules & Behavioral Guidelines
+# Proyek RASIH Maternal - Workspace Rules & Behavioral Guidelines
 
-File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proyek **BundaSehat** (Web Screening Komplikasi Ibu Hamil & Persalinan).
+File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proyek **RASIH Maternal** (Risk Assessment and Screening for Integrated Maternal Health — Web Screening Komplikasi Ibu Hamil & Persalinan).
 
 ---
 
@@ -63,10 +63,10 @@ File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proy
 - **WAJIB** hanya mengeksekusi instruksi persis yang diminta oleh user (*Zero Assumptions & Strict Scope Lock*). Segala ide atau penambahan elemen baru **HARUS MENDAPAT IZIN / PERSETUJUAN EKSPLISIT DARI USER** terlebih dahulu sebelum boleh dibuat.
 
 ### 16. SPESIFIKASI STRUKTUR NAVBAR BERDASARKAN ROLE (STRICT SCOPE LOCK)
-- **Superadmin**: `[Logo] [Search] Beranda | Screening ▾ | Kamus Kesehatan | Tentang Kami | Admin ▾ [Avatar]`
-- **Admin / Bidan**: `[Logo] [Search] Beranda | Screening ▾ | Kamus Kesehatan | Tentang Kami [Avatar]`
+- **Superadmin**: `[Logo] [Search] Beranda | Screening ▾ | Partograf | Kamus Kesehatan | Tentang Kami | Admin ▾ [Avatar]`
+- **Admin / Bidan**: `[Logo] [Search] Beranda | Screening ▾ | Partograf | Kamus Kesehatan | Tentang Kami [Avatar]`
 - **Pasien / Guest**: Landing page header / Login trigger.
-- **DILARANG KERAS** menambah menu baru, mengubah struktur hierarki navigasi, atau mengotak-atik permission/role logic navbar tanpa instruksi eksplisit dari user.
+- **DILARANG KERAS** menambah menu baru di luar spesifikasi, mengubah struktur hierarki navigasi, atau mengotak-atik permission/role logic navbar tanpa instruksi eksplisit dari user.
 
 ### 17. ATURAN KETAT MODIFIKASI FORM SCREENING (STYLE & QUESTION LOCK)
 - **DILARANG KERAS** mengubah style, desain visual, layout split-card, warna, padding, kartu (cards), tri-color gauge, font, atau tampilan hasil screening yang sudah ada saat ini. Style dan layout antarmuka dinyatakan **BEKU (STYLE FROZEN)**.
@@ -76,14 +76,16 @@ File ini berisi seluruh panduan pengembangan, aturan ketat, dan spesifikasi proy
 
 ---
 
-## 📌 Ringkasan Spesifikasi Proyek BundaSehat
+## 📌 Ringkasan Spesifikasi Proyek RASIH Maternal
 
-- **Fokus Aplikasi**: Web Screening dan Klasifikasi Tingkat Risiko Komplikasi Ibu Hamil & Persalinan.
+- **Nama Platform**: RASIH Maternal (Risk Assessment and Screening for Integrated Maternal Health)
+- **Tagline**: *"Kenali Risiko, Lindungi Ibu dan Bayi"*
+- **Fokus Aplikasi**: Web Screening dan Klasifikasi Tingkat Risiko Komplikasi Ibu Hamil & Persalinan, serta Pemantauan Partograf Digital.
 - **Teknologi**: Laravel 12 + Inertia.js (React 19 + TypeScript) + Tailwind CSS + Shadcn UI + Lucide Icons.
 - **Inspirasi UI/UX**: Menggabungkan nuansa clean & professional ala **Halodoc** (accent Rose `#E11D48`) dengan fitur kebidanan spesifik ala **Hamilku.ID** (primary Emerald `#059669`).
 - **Pendekatan Layout**: Responsive Web Design dengan pendekatan **Mobile-First**.
 
 ### 👥 3 Peran Pengguna (Roles):
-1. **Super Admin (Bu Asih - Dosen Kebidanan)**: Manage Master Data & Kamus Kesehatan, upload & re-train dataset ML (500–10.000 data), analytics & statistik risiko.
-2. **Admin (Bidan & Nakes Wilayah)**: Riwayat hasil screening pasien wilayah, filter status risiko (KRT/KRST), input rujukan/intervensi.
-3. **Pasien (Ibu Hamil / User Umum)**: Landing page, kalkulator HPHT, form screening kehamilan & persalinan, melihat tingkat risiko (Ringan/Sedang/Berat), panduan terapi komplementer non-obat, dan rekomendasi Faskes.
+1. **Super Admin (Bu Asih / Surtiningsih - Dosen Kebidanan)**: Manage Master Data & Kamus Kesehatan, kelola bidan wilayah, analytics & statistik risiko.
+2. **Admin (Bidan & Nakes Wilayah)**: Riwayat hasil screening pasien wilayah, skrining klinis 15 parameter, partograf digital persalinan aktif, filter status risiko (KRT/KRST), input rujukan/intervensi.
+3. **Pasien (Ibu Hamil / User Umum)**: Landing page, kalkulator HPHT & usia kehamilan, form screening mandiri kehamilan & persalinan, melihat tingkat risiko (Ringan/Sedang/Berat), panduan terapi komplementer non-obat, dan rekomendasi Faskes.

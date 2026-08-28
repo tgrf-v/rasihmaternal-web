@@ -103,7 +103,7 @@ export default function TablePreview() {
 
   return (
     <BundaSehatLayout activeNav="admin-bidan">
-      <Head title="Preview Desain Tabel Minimalis - BundaSehat" />
+      <Head title="Preview Desain Tabel Minimalis - RASIH Maternal" />
 
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8 animate-fadeIn">
         
@@ -123,7 +123,7 @@ export default function TablePreview() {
               Galeri Opsi Desain Tabel Minimalis
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Pilih gaya tabel yang paling sesuai dengan preferensi estetika antarmuka BundaSehat.
+              Pilih gaya tabel yang paling sesuai dengan preferensi estetika antarmuka RASIH Maternal.
             </p>
           </div>
 

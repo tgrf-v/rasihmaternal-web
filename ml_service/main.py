@@ -9,7 +9,7 @@ import math
 from typing import Dict, Any, Optional
 
 app = FastAPI(
-    title="BundaSehat Maternal Complications ML Service",
+    title="RASIH Maternal Complications ML Service",
     description="Microservice Machine Learning XGBoost untuk Prediksi Risiko Komplikasi Kehamilan dan Persalinan",
     version="1.0.0",
 )
@@ -214,7 +214,7 @@ def build_feature_vector(req: MaternalScreeningRequest) -> np.ndarray:
 def health_check():
     return {
         "status": "healthy",
-        "service": "BundaSehat FastAPI ML Microservice",
+        "service": "RASIH Maternal FastAPI ML Microservice",
         "model_loaded": booster is not None,
         "classes": classes_list,
         "features_count": len(feature_names) if feature_names else 40,

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Favicon Logo BundaSehat (PNG) -->
+        <!-- Favicon Logo RASIH Maternal (PNG) -->
         <link rel="icon" type="image/png" href="/bundasehat-logo.png?v=4" />
         <link rel="shortcut icon" href="/bundasehat-logo.png?v=4" />
 

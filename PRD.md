@@ -1,22 +1,25 @@
-# Product Requirement Document (PRD) — BundaSehat Application
+# Product Requirement Document (PRD) — RASIH Maternal Application
 
-**Nama Proyek**: BundaSehat — Web Screening & Decision Support System Komplikasi Kehamilan & Persalinan  
+**Nama Proyek**: RASIH Maternal (Risk Assessment and Screening for Integrated Maternal Health)  
+**Tagline**: *"Kenali Risiko, Lindungi Ibu dan Bayi"*  
+**Deskripsi Sistem**: Web Screening & Decision Support System Komplikasi Kehamilan & Persalinan  
 **Arsitektur Sistem**: Full-Stack Single Page Application (Laravel 12 + Inertia.js React 19 + TypeScript) + FastAPI Machine Learning Microservice (Python XGBoost)  
 **Tema Desain UI**: Emerald Clinical (`#059669` / `emerald-700`) & Halodoc Rose Accent (`#E11D48` / `rose-600`)  
-**Lokasi File Proyek**: `c:\laragon\www\bundasehat`  
+**Lokasi File Proyek**: `c:\laragon\www\rasihmaternal`  
 **FastAPI Service Directory**: `ml_service/` (Port `8000`)
 
 ---
 
 ## 1. Ringkasan Eksekutif & Visi Sistem
 
-BundaSehat adalah platform kesehatan maternal cerdas yang menggabungkan dua pilar analitik:
+**RASIH Maternal** (*Risk Assessment and Screening for Integrated Maternal Health*) adalah platform kesehatan maternal cerdas yang menggabungkan dua pilar analitik:
 1. **Decision Support System (DSS) untuk Ibu Hamil**:
    - Skrining mandiri cepat berbasis rumus obstetri standar: **Kartu Skor Poedji Rochjati (KSPR)**, **Mean Arterial Pressure (MAP)**, dan **Rumus Naegele (HPHT & HPL)**.
    - Menyediakan rekomendasi fasilitas kesehatan (Bidan Desa, Puskesmas PONED, RS PONEK) dan panduan terapi komplementer non-obat (pijat oxytocin, yoga prenatal, aromaterapi, dll.).
 2. **Expert System (ES) untuk Bidan / Tenaga Kesehatan**:
    - Pemeriksaan medis mendalam dengan **15 Variabel Klinis & Laboratorium** sesuai dataset maternal riil (10.642 data rekam medis).
    - Terintegrasi dengan model **Machine Learning XGBoost (`xgboost_final_best.json`)** via **FastAPI** untuk memprediksi probabilitas komplikasi maternal spesifik dengan 6 kelas diagnosis.
+   - Dilengkapi modul **Partograf Digital Terintegrasi** standar WHO/Kemenkes untuk pencatatan dan pemantauan fase aktif persalinan secara real-time.
 
 ---
 
@@ -65,10 +68,11 @@ Model XGBoost menghasilkan probabilitas klasifikasi pada 6 komplikasi maternal:
 - **Analytics & Dataset**: Memantau statistik komplikasi wilayah dan histori dataset ML.
 
 ### B. Admin / Bidan (Tenaga Kesehatan Wilayah)
-- **Akses**: Panel Monitoring Bidan & Form Expert System (`/screening/...`).
+- **Akses**: Panel Monitoring Bidan & Form Expert System (`/screening/...`) serta Partograf Digital (`/partograf/...`).
 - **Input Rekam Medis**: Mengisi form 15 variabel klinis & laboratorium pasien.
 - **Eksekusi Prediksi ML**: Mengirim data ke microservice FastAPI dan menerima skor probabilitas risiko.
 - **Monitoring Pasien**: Melihat riwayat skrining pasien di wilayah binaan, memfilter status KRR/KRT/KRST, dan mencatat rujukan intervensi.
+- **Partograf Digital**: Mencatat observasi DJJ, pembukaan serviks, penurunan kepala, kontraksi, dan tanda vital.
 
 ### C. Pasien (Ibu Hamil / Pengguna Umum)
 - **Akses**: Portal Mandiri (`/` & `/screening/kehamilan`).
@@ -179,13 +183,18 @@ Model XGBoost menghasilkan probabilitas klasifikasi pada 6 komplikasi maternal:
 ### 6.4 Tabel `screenings` (Rekam Medis & Hasil Prediksi)
 - `id` (PK), `user_id` (FK), `bidan_id` (FK Nullable), `tipe_screening` (`dss` / `es`), `nama_pasien`, `nik`, `umur`, `pekerjaan`, `pendidikan`, `gravida`, `paritas`, `abortus`, `imt`, `sistolik`, `diastolik`, `letak_janin`, `umur_kehamilan`, `jenis_persalinan`, `hemoglobin`, `leukosit`, `trombosit`, `skor_kspr`, `map_value`, `kategori_risiko` (`KRR` / `KRT` / `KRST`), `hasil_prediksi_ml` (JSON), `catatan_bidan` (Text).
 
+### 6.5 Tabel `partograf_records` (Data Partograf Digital)
+- `id` (PK), `screening_id` (FK Nullable), `bidan_id` (FK), `nama_pasien`, `gravida_paritas_abortus`, `tanggal_pembukaan_lengkap`, `djj_history` (JSON), `pembukaan_history` (JSON), `tanda_vital_history` (JSON), `status` (`aktif` / `selesai` / `dirujuk`).
+
 ---
 
 ## 7. Status Eksekusi Proyek Saat Ini
 
 - [x] **Setup Modern UI/UX**: Laravel 12 + Inertia React 19 + Tailwind CSS + Lucide Icons + Shadcn UI.
+- [x] **Branding RASIH Maternal**: Logo, nama brand, tagline, dan color styling diselaraskan.
 - [x] **Kamus Publik & Side Drawer**: Non-modal side drawer standar Shadcn (`520px`) dengan spring physics animation.
 - [x] **Admin Kamus & Tiptap Rich Text Editor**: Single large writing surface untuk penyusunan konten istilah medis lengkap.
+- [x] **Partograf Digital Frontend**: Halaman interaktif Partograf aktif dengan curve plotting dan form input parameter.
 - [x] **Dataset & Model ML Analysis**: Inspeksi tuntas terhadap `DataMaternal.xlsx` (10.642 baris) & model XGBoost 40 fitur.
 - [ ] **FastAPI Microservice (`ml_service/`)**: Pembuatan service FastAPI Python untuk serving prediksi XGBoost.
 - [ ] **Expert System Bidan Form**: Implementasi form 15 variabel lengkap di frontend untuk peran Bidan.

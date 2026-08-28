@@ -1,5 +1,6 @@
-# 📋 LAPORAN HASIL PENGUJIAN & DOKUMENTASI SISTEM BUNDASEHAT
+# 📋 LAPORAN HASIL PENGUJIAN & DOKUMENTASI SISTEM RASIH MATERNAL
 
+**Nama Sistem:** RASIH Maternal (Risk Assessment and Screening for Integrated Maternal Health)  
 **Tanggal Pengujian:** 20 Agustus 2026  
 **Target Server:** [https://app.novos.co.id/](https://app.novos.co.id/)  
 **Status Keseluruhan:** ✅ **100% LULUS UJI (READY FOR PRODUCTION)**
@@ -11,7 +12,7 @@
 | Peran (Role) | Email | Password | Hak Akses Utama |
 | :--- | :--- | :--- | :--- |
 | **Super Admin (Dosen Kebidanan)** | `superadmin@bundasehat.test` | `password` | Kelola Bidan, Kelola Kamus/Video Terapi, Manajemen Dataset & Full Access |
-| **Bidan (Nakes Wilayah)** | `bidan@bundasehat.test` | `password` | Skrining Klinis (14 Variabel) + Prediksi ML XGBoost, Riwayat Pasien Wilayah |
+| **Bidan (Nakes Wilayah)** | `bidan@bundasehat.test` | `password` | Skrining Klinis (14 Variabel) + Prediksi ML XGBoost, Partograf Digital, Riwayat Pasien |
 | **Pasien (Ibu Hamil)** | `ibuhamil@bundasehat.test` | `password` | Skrining Mandiri (6 Variabel non-medis), Kamus Kesehatan, Riwayat Pribadi |
 
 ---

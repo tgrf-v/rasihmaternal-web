@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-echo "==> Starting BundaSehat Container Entrypoint..."
+echo "==> Starting RASIH Maternal Container Entrypoint..."
 
 # Create necessary runtime directories if missing
 mkdir -p /var/www/html/storage/framework/cache/data

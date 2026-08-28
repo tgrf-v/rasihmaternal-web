@@ -12,7 +12,7 @@ export default function TentangKami() {
           {/* Background Image */}
           <img
             src="/images/about-hero-bg.jpg"
-            alt="Tentang BundaSehat"
+            alt="Tentang RASIH Maternal"
             className="absolute inset-0 w-full h-full object-cover object-center"
           />
           {/* Overlay Gradient Emerald untuk Kontras Teks yang Jelas */}

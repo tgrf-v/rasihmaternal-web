@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: 'list',
   timeout: 45000,
   use: {
-    baseURL: process.env.APP_URL || 'http://bundasehat.test',
+    baseURL: process.env.APP_URL || 'http://rasihmaternal.test',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

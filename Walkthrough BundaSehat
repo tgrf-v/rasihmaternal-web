@@ -1,6 +1,8 @@
-# Walkthrough Proyek BundaSehat (Production Status)
+# Walkthrough Proyek RASIH Maternal (Production Status)
 
 ## Status Keseluruhan
+- **Nama Platform**: RASIH Maternal (Risk Assessment and Screening for Integrated Maternal Health)
+- **Tagline**: "Kenali Risiko, Lindungi Ibu dan Bayi"
 - **Live URL**: https://app.novos.co.id/
 - **Production Stack**: Laravel 12 + React 19 Inertia + FastAPI XGBoost Python 3 + Nginx + MySQL di Dokploy Docker container.
 - **Status Pengujian**: 100% Lulus Uji pada Desktop & Mobile.
@@ -9,7 +11,7 @@
 
 ## 👥 Kredensial Akun Pengujian
 
-1. **Superadmin (Dosen Kebidanan)**
+1. **Superadmin (Dosen Kebidanan - Bu Asih / Surtiningsih)**
    - Email: `superadmin@bundasehat.test`
    - Password: `password`
    - Fitur: Kelola Bidan (`/admin/bidan`), Kelola Kamus & Video Terapi (`/admin/kamus`), Full Access.
@@ -17,7 +19,7 @@
 2. **Bidan (Nakes Wilayah)**
    - Email: `bidan@bundasehat.test`
    - Password: `password`
-   - Fitur: Skrining Klinis (14 Parameter) + Prediksi ML XGBoost, Riwayat Pasien Wilayah.
+   - Fitur: Skrining Klinis (14 Parameter) + Prediksi ML XGBoost, Partograf Digital (`/partograf`), Riwayat Pasien Wilayah.
 
 3. **Ibu Hamil (Pasien Mandiri)**
    - Email: `ibuhamil@bundasehat.test`
@@ -28,4 +30,4 @@
 
 ## 📋 Detail Laporan Pengujian Lengkap
 Laporan pengujian lengkap dapat dilihat pada file:
-👉 [LAPORAN_HASIL_TESTING.md](file:///c:/laragon/www/bundasehat/LAPORAN_HASIL_TESTING.md)
+👉 [LAPORAN_HASIL_TESTING.md](file:///c:/laragon/www/rasihmaternal/LAPORAN_HASIL_TESTING.md)
