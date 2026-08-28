@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 import { GlobalSearch } from "@/Components/GlobalSearch";
+import { MobileBottomNav } from "@/Components/MobileBottomNav";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -254,74 +255,10 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 pt-16 pb-20 md:pb-0">{children}</main>
+      <main className="flex-1 pt-16 pb-24 md:pb-0">{children}</main>
 
-      {/* Mobile Bottom Navigation Bar (Solid Clean Style) */}
-      {isLoggedIn && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-100 shadow-soft-lg px-4 py-2">
-          <div className="grid grid-cols-5 gap-1 text-center">
-            <Link
-              href="/"
-              className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
-                activeNav === "beranda"
-                  ? "text-emerald-700 font-bold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <Home className="h-5 w-5 mb-0.5" />
-              <span className="text-[10px]">Beranda</span>
-            </Link>
-
-            <Link
-              href="/screening/kehamilan"
-              className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
-                activeNav === "kehamilan"
-                  ? "text-emerald-700 font-bold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <Activity className="h-5 w-5 mb-0.5" />
-              <span className="text-[10px]">Kehamilan</span>
-            </Link>
-
-            <Link
-              href="/screening/persalinan"
-              className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
-                activeNav === "persalinan"
-                  ? "text-emerald-700 font-bold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <Stethoscope className="h-5 w-5 mb-0.5" />
-              <span className="text-[10px]">Persalinan</span>
-            </Link>
-
-            <Link
-              href="/kamus"
-              className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
-                activeNav === "kamus"
-                  ? "text-emerald-700 font-bold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <BookOpen className="h-5 w-5 mb-0.5" />
-              <span className="text-[10px]">Kamus</span>
-            </Link>
-
-            <Link
-              href="/profil"
-              className={`flex flex-col items-center py-1.5 rounded-2xl transition-colors ${
-                activeNav === "profil"
-                  ? "text-emerald-700 font-bold"
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
-            >
-              <User className="h-5 w-5 mb-0.5" />
-              <span className="text-[10px]">Profil</span>
-            </Link>
-          </div>
-        </div>
-      )}
+      {/* Mobile Floating Curved Bottom Navigation Bar */}
+      {isLoggedIn && <MobileBottomNav activeNav={activeNav} />}
 
       {/* Footer Edukatif (Hanya Tampil Pada Landing Page Sebelum Login) */}
       {!isLoggedIn && (
