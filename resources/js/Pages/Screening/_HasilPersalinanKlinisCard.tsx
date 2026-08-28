@@ -57,7 +57,7 @@ export function HasilPersalinanKlinisCard({
           <span>Variabel Klinis Hasil Kalkulasi Otomatis (Derived Features)</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
           {/* MAP */}
           <div className="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs space-y-1">
             <p className="text-[11px] font-medium text-slate-500">MAP (Mean Arterial Pressure)</p>
@@ -82,6 +82,15 @@ export function HasilPersalinanKlinisCard({
             <p className="text-base font-bold text-slate-900">{calculatedImt} <span className="text-xs font-normal text-slate-500">kg/m²</span></p>
             <p className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block">
               {calculatedImt >= 30 ? "Obesitas" : calculatedImt >= 25 ? "Overweight" : calculatedImt < 18.5 ? "Underweight" : "Normal"}
+            </p>
+          </div>
+
+          {/* TBJ Johnson */}
+          <div className="p-3 rounded-2xl bg-white border border-slate-200/80 shadow-soft-xs space-y-1">
+            <p className="text-[11px] font-medium text-slate-500">Taksiran Berat Janin (TBJ)</p>
+            <p className="text-base font-bold text-slate-900">{clinicalData.efw_bayi_gram || 3000} <span className="text-xs font-normal text-slate-500">gram</span></p>
+            <p className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block">
+              {(clinicalData.efw_bayi_gram || 3000) > 4000 ? "Makrosomia (>4kg)" : (clinicalData.efw_bayi_gram || 3000) < 2500 ? "BBLR (<2.5kg)" : "Normal (2.5 - 4 kg)"}
             </p>
           </div>
         </div>

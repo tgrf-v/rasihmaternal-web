@@ -42,6 +42,18 @@ export function HasilPersalinanRingkas({
   onRescreen,
 }: HasilPersalinanRingkasProps) {
   const isHighRisk = isGawatDarurat || mlResult.risk_category === "KRST";
+  const calculatedImt = React.useMemo(() => {
+    if (formData.imt) return formData.imt;
+    const tb = formData.tinggi_badan || 155;
+    const bb = formData.berat_badan || 60;
+    if (tb > 0) {
+      const tbMeter = tb / 100;
+      return Number((bb / (tbMeter * tbMeter)).toFixed(1));
+    }
+    return 24.0;
+  }, [formData.imt, formData.tinggi_badan, formData.berat_badan]);
+
+  const efwGram = clinicalData?.efw_bayi_gram || 3000;
 
   return (
     <div className="space-y-4 animate-fadeIn">
@@ -50,12 +62,12 @@ export function HasilPersalinanRingkas({
         <div>
           <p className="text-xs font-medium text-slate-500">
             Hasil Penapisan Pasien:{" "}
-            <span className="font-semibold text-slate-700">
-              {formData.nama_pasien} ({formData.umur} thn)
+            <span className="font-semibold text-slate-800">
+              {formData.nama_pasien || "Ibu Hamil"} ({formData.umur} thn)
             </span>
           </p>
           <h2
-            className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1 ${
+            className={`text-xl sm:text-2xl font-bold mt-1 tracking-tight ${
               isHighRisk ? "text-rose-600" : "text-emerald-700"
             }`}
           >
@@ -153,19 +165,23 @@ export function HasilPersalinanRingkas({
           </div>
         </div>
 
-        {/* Variabel Terhitung Otomatis */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+        {/* Variabel Terhitung Otomatis (4 Fitur Klinis) */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
           <div className="p-2.5 rounded-2xl bg-white border border-slate-200/70 text-center">
-            <p className="text-[10px] text-slate-500 font-medium">MAP (Mean Arterial)</p>
-            <p className="text-xs font-bold text-slate-800">{mlResult.map} mmHg</p>
+            <p className="text-[10px] text-slate-500 font-medium whitespace-nowrap">MAP</p>
+            <p className="text-xs font-bold text-slate-800">{mlResult.map} <span className="text-[10px] font-normal text-slate-400">mmHg</span></p>
           </div>
           <div className="p-2.5 rounded-2xl bg-white border border-slate-200/70 text-center">
-            <p className="text-[10px] text-slate-500 font-medium">Pulse Pressure (PP)</p>
-            <p className="text-xs font-bold text-slate-800">{mlResult.pulse_pressure} mmHg</p>
+            <p className="text-[10px] text-slate-500 font-medium whitespace-nowrap">Tekanan Nadi</p>
+            <p className="text-xs font-bold text-slate-800">{mlResult.pulse_pressure} <span className="text-[10px] font-normal text-slate-400">mmHg</span></p>
           </div>
-          <div className="p-2.5 rounded-2xl bg-white border border-slate-200/70 text-center col-span-2 sm:col-span-1">
-            <p className="text-[10px] text-slate-500 font-medium">Rasio Leu / Trombo</p>
-            <p className="text-xs font-bold text-slate-800">{mlResult.leu_trombo_ratio.toFixed(4)}</p>
+          <div className="p-2.5 rounded-2xl bg-white border border-slate-200/70 text-center">
+            <p className="text-[10px] text-slate-500 font-medium whitespace-nowrap">IMT</p>
+            <p className="text-xs font-bold text-slate-800">{calculatedImt} <span className="text-[10px] font-normal text-slate-400">kg/m²</span></p>
+          </div>
+          <div className="p-2.5 rounded-2xl bg-white border border-slate-200/70 text-center">
+            <p className="text-[10px] text-slate-500 font-medium whitespace-nowrap">TBJ Janin</p>
+            <p className="text-xs font-bold text-slate-800">{efwGram} <span className="text-[10px] font-normal text-slate-400">gram</span></p>
           </div>
         </div>
       </div>
