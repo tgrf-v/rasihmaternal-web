@@ -175,10 +175,10 @@ export function FormPersalinanStep3({
               <SelectContent>
                 <SelectItem value="Negatif">Negatif (-)</SelectItem>
                 <SelectItem value="Trace">Trace (Samar)</SelectItem>
-                <SelectItem value="1+">1+ (Positif Satu)</SelectItem>
-                <SelectItem value="2+">2+ (Positif Dua)</SelectItem>
-                <SelectItem value="3+">3+ (Positif Tiga)</SelectItem>
-                <SelectItem value="4+">4+ (Positif Empat)</SelectItem>
+                <SelectItem value="1+">1+ (Positif 1)</SelectItem>
+                <SelectItem value="2+">2+ (Positif 2)</SelectItem>
+                <SelectItem value="3+">3+ (Positif 3)</SelectItem>
+                <SelectItem value="4+">4+ (Positif 4)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -206,9 +206,9 @@ export function FormPersalinanStep3({
                 <SelectValue placeholder="Pilih letak janin" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Kepala">Kepala (Belakang Kepala / Normal)</SelectItem>
-                <SelectItem value="Bokong/Sungsang">Bokong / Sungsang (Breech)</SelectItem>
-                <SelectItem value="Lintang">Lintang (Transverse)</SelectItem>
+                <SelectItem value="Kepala">Kepala (Normal)</SelectItem>
+                <SelectItem value="Bokong/Sungsang">Bokong / Sungsang</SelectItem>
+                <SelectItem value="Lintang">Lintang</SelectItem>
                 <SelectItem value="Oblique">Oblique (Serong)</SelectItem>
               </SelectContent>
             </Select>
@@ -228,7 +228,7 @@ export function FormPersalinanStep3({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="1">Tunggal (1 Janin)</SelectItem>
-                <SelectItem value="2">Kembar / Gemeli (2 Janin atau lebih)</SelectItem>
+                <SelectItem value="2">Kembar / Gemeli (2+)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -290,8 +290,8 @@ export function FormPersalinanStep3({
                 <SelectValue placeholder="Pilih status ketuban" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Utuh">Utuh (Intact)</SelectItem>
-                <SelectItem value="Pecah">Pecah (Ruptured)</SelectItem>
+                <SelectItem value="Utuh">Utuh</SelectItem>
+                <SelectItem value="Pecah">Pecah</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -345,13 +345,13 @@ export function FormPersalinanStep3({
                 <SelectValue placeholder="Pilih station kepala" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="-3">-3 (Hodge I / Di atas PAP)</SelectItem>
-                <SelectItem value="-2">-2 (Hodge I-II / Masuk PAP)</SelectItem>
-                <SelectItem value="-1">-1 (Hodge II / Spina -1)</SelectItem>
-                <SelectItem value="0">0 (Hodge III / Sejajar Spina Iskiadika)</SelectItem>
-                <SelectItem value="1">+1 (Hodge III+ / Melewati Spina)</SelectItem>
-                <SelectItem value="2">+2 (Hodge IV / Di Dasar Panggul)</SelectItem>
-                <SelectItem value="3">+3 (Hodge IV / Kepala di Vulva)</SelectItem>
+                <SelectItem value="-3">-3 (Hodge I)</SelectItem>
+                <SelectItem value="-2">-2 (Hodge I-II)</SelectItem>
+                <SelectItem value="-1">-1 (Hodge II)</SelectItem>
+                <SelectItem value="0">0 (Hodge III / Spina 0)</SelectItem>
+                <SelectItem value="1">+1 (Hodge III+)</SelectItem>
+                <SelectItem value="2">+2 (Hodge IV / Panggul)</SelectItem>
+                <SelectItem value="3">+3 (Hodge IV / Vulva)</SelectItem>
               </SelectContent>
             </Select>
           </div>
