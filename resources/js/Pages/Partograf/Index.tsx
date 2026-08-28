@@ -9,80 +9,37 @@ import {
     Plus,
     Search,
     FileText,
-    Activity,
     ChevronRight,
     Clock,
-    User,
     Calendar,
     Stethoscope,
+    AlertCircle,
 } from 'lucide-react';
 
-const MOCK_SESSIONS: PartografHeaderData[] = [
-    {
-        id: 'session-001',
-        no_register: 'REG-2026-0819',
-        no_puskesmas: 'PKM-SEHAT-01',
-        nama_ibu: 'Ny. Siti Nurhaliza',
-        umur_ibu: 27,
-        gravida: 2,
-        para: 1,
-        abortus: 0,
-        tanggal: '26 Agustus 2026',
-        jam_masuk: '08:00',
-        ketuban_pecah_sejak: '07:30 WIB',
-        mules_sejak: '03:00 WIB',
-        status: 'aktif',
-    },
-    {
-        id: 'session-002',
-        no_register: 'REG-2026-0815',
-        no_puskesmas: 'PKM-SEHAT-01',
-        nama_ibu: 'Ny. Ratna Sari Dewi',
-        umur_ibu: 31,
-        gravida: 3,
-        para: 2,
-        abortus: 0,
-        tanggal: '24 Agustus 2026',
-        jam_masuk: '14:20',
-        ketuban_pecah_sejak: '13:00 WIB',
-        mules_sejak: '09:00 WIB',
-        status: 'selesai',
-    },
-    {
-        id: 'session-003',
-        no_register: 'REG-2026-0810',
-        no_puskesmas: 'PKM-SEHAT-02',
-        nama_ibu: 'Ny. Anisa Fitriani',
-        umur_ibu: 22,
-        gravida: 1,
-        para: 0,
-        abortus: 0,
-        tanggal: '22 Agustus 2026',
-        jam_masuk: '20:15',
-        ketuban_pecah_sejak: '19:40 WIB',
-        mules_sejak: '15:00 WIB',
-        status: 'dirujuk',
-    },
-];
+interface PartografIndexProps {
+    sessions: PartografHeaderData[];
+    filters?: {
+        search?: string;
+        status?: string;
+    };
+}
 
-export default function PartografIndex() {
-    const [sessions, setSessions] = useState<PartografHeaderData[]>(MOCK_SESSIONS);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [statusFilter, setStatusFilter] = useState<'all' | 'aktif' | 'selesai' | 'dirujuk'>('all');
+export default function PartografIndex({ sessions = [], filters }: PartografIndexProps) {
+    const [searchQuery, setSearchQuery] = useState(filters?.search || '');
+    const [statusFilter, setStatusFilter] = useState<'all' | 'aktif' | 'selesai' | 'dirujuk'>(
+        (filters?.status as 'all' | 'aktif' | 'selesai' | 'dirujuk') || 'all'
+    );
     const [createModalOpen, setCreateModalOpen] = useState(false);
 
+    // Filter lokal real-time
     const filtered = sessions.filter((s) => {
         const matchQuery =
             s.nama_ibu.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            s.no_register.toLowerCase().includes(searchQuery.toLowerCase());
+            s.no_register.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (s.no_puskesmas && s.no_puskesmas.toLowerCase().includes(searchQuery.toLowerCase()));
         const matchStatus = statusFilter === 'all' || s.status === statusFilter;
         return matchQuery && matchStatus;
     });
-
-    const handleCreateSession = (newHeader: PartografHeaderData) => {
-        setSessions((prev) => [newHeader, ...prev]);
-        router.visit(`/partograf/${newHeader.id}`);
-    };
 
     return (
         <BundaSehatLayout activeNav="persalinan">
@@ -136,7 +93,13 @@ export default function PartografIndex() {
                                         : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                                 }`}
                             >
-                                {st === 'all' ? 'Semua' : st === 'aktif' ? 'Persalinan Aktif' : st === 'selesai' ? 'Selesai' : 'Dirujuk'}
+                                {st === 'all'
+                                    ? `Semua (${sessions.length})`
+                                    : st === 'aktif'
+                                    ? `Persalinan Aktif (${sessions.filter((s) => s.status === 'aktif').length})`
+                                    : st === 'selesai'
+                                    ? `Selesai (${sessions.filter((s) => s.status === 'selesai').length})`
+                                    : `Dirujuk (${sessions.filter((s) => s.status === 'dirujuk').length})`}
                             </button>
                         ))}
                     </div>
@@ -204,8 +167,17 @@ export default function PartografIndex() {
                 {filtered.length === 0 && (
                     <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500">
                         <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                        <h3 className="text-base font-bold text-slate-700">Tidak ada data partograf</h3>
-                        <p className="text-xs text-slate-400 mt-1">Belum ada data yang sesuai dengan pencarian atau filter Anda.</p>
+                        <h3 className="text-base font-bold text-slate-700">Belum ada data partograf</h3>
+                        <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+                            Klik tombol "Mulai Partograf Baru" di atas untuk mencatat lembar pemantauan kemajuan persalinan.
+                        </p>
+                        <Button
+                            onClick={() => setCreateModalOpen(true)}
+                            className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold mt-4 px-5"
+                        >
+                            <Plus className="w-4 h-4 mr-1.5" />
+                            Mulai Partograf Baru
+                        </Button>
                     </div>
                 )}
 
@@ -213,7 +185,6 @@ export default function PartografIndex() {
                 <PartografCreateModal
                     open={createModalOpen}
                     onOpenChange={setCreateModalOpen}
-                    onCreate={handleCreateSession}
                 />
             </div>
         </BundaSehatLayout>

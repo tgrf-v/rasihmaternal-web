@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { BundaSehatLayout } from '@/Layouts/BundaSehatLayout';
 import { PartografHeaderData, PartografEntryData } from '@/types/partograf';
 import { PartografHeaderInfo } from './Components/PartografHeaderInfo';
@@ -16,180 +16,68 @@ import {
     AlertTriangle,
     CheckCircle2,
     Sparkles,
+    Check,
+    Send,
 } from 'lucide-react';
 
-// Data Mock Awal Realistis (Persalinan Aktif)
-const INITIAL_HEADER: PartografHeaderData = {
-    id: 'session-001',
-    no_register: 'REG-2026-0819',
-    no_puskesmas: 'PKM-SEHAT-01',
-    nama_ibu: 'Ny. Siti Nurhaliza',
-    umur_ibu: 27,
-    gravida: 2,
-    para: 1,
-    abortus: 0,
-    tanggal: '26 Agustus 2026',
-    jam_masuk: '08:00',
-    ketuban_pecah_sejak: '07:30 WIB',
-    mules_sejak: '03:00 WIB',
-    status: 'aktif',
-};
+interface PartografShowProps {
+    id: string;
+    session: PartografHeaderData;
+    entries: PartografEntryData[];
+}
 
-const INITIAL_ENTRIES: PartografEntryData[] = [
-    {
-        id: 'e-1',
-        partograf_session_id: 'session-001',
-        waktu_observasi: '08:00',
-        jam_ke: 1,
-        kolom_idx: 0,
-        djj: 140,
-        air_ketuban: 'U',
-        penyusupan: '0',
-        pembukaan_serviks: 4,
-        penurunan_kepala: 4,
-        kontraksi_jumlah: 2,
-        kontraksi_durasi: '<20',
-        nadi: 80,
-        sistol: 120,
-        diastol: 80,
-        suhu: 36.6,
-        urin_protein: '-',
-        urin_aseton: '-',
-        urin_volume: 150,
-    },
-    {
-        id: 'e-2',
-        partograf_session_id: 'session-001',
-        waktu_observasi: '08:30',
-        jam_ke: 1,
-        kolom_idx: 1,
-        djj: 144,
-        kontraksi_jumlah: 2,
-        kontraksi_durasi: '20-40',
-        nadi: 82,
-    },
-    {
-        id: 'e-3',
-        partograf_session_id: 'session-001',
-        waktu_observasi: '09:00',
-        jam_ke: 2,
-        kolom_idx: 2,
-        djj: 138,
-        air_ketuban: 'J',
-        penyusupan: '0',
-        kontraksi_jumlah: 3,
-        kontraksi_durasi: '20-40',
-        nadi: 84,
-    },
-    {
-        id: 'e-4',
-        partograf_session_id: 'session-001',
-        waktu_observasi: '09:30',
-        jam_ke: 2,
-        kolom_idx: 3,
-        djj: 142,
-        kontraksi_jumlah: 3,
-        kontraksi_durasi: '20-40',
-        nadi: 80,
-    },
-    {
-        id: 'e-5',
-        partograf_session_id: 'session-001',
-        waktu_observasi: '10:00',
-        jam_ke: 3,
-        kolom_idx: 4,
-        djj: 136,
-        air_ketuban: 'J',
-        penyusupan: '1',
-        kontraksi_jumlah: 3,
-        kontraksi_durasi: '20-40',
-        nadi: 86,
-        sistol: 120,
-        diastol: 80,
-        suhu: 36.8,
-    },
-    {
-        id: 'e-6',
-        partograf_session_id: 'session-001',
-        waktu_observasi: '10:30',
-        jam_ke: 3,
-        kolom_idx: 5,
-        djj: 140,
-        kontraksi_jumlah: 4,
-        kontraksi_durasi: '20-40',
-        nadi: 84,
-    },
-    {
-        id: 'e-7',
-        partograf_session_id: 'session-001',
-        waktu_observasi: '11:00',
-        jam_ke: 4,
-        kolom_idx: 6,
-        djj: 144,
-        air_ketuban: 'J',
-        penyusupan: '1',
-        kontraksi_jumlah: 4,
-        kontraksi_durasi: '>40',
-        nadi: 88,
-    },
-    {
-        id: 'e-8',
-        partograf_session_id: 'session-001',
-        waktu_observasi: '11:30',
-        jam_ke: 4,
-        kolom_idx: 7,
-        djj: 140,
-        kontraksi_jumlah: 4,
-        kontraksi_durasi: '>40',
-        nadi: 86,
-    },
-    {
-        id: 'e-9',
-        partograf_session_id: 'session-001',
-        waktu_observasi: '12:00',
-        jam_ke: 5,
-        kolom_idx: 8,
-        djj: 138,
-        air_ketuban: 'J',
-        penyusupan: '1',
-        pembukaan_serviks: 7.5,
-        penurunan_kepala: 2,
-        kontraksi_jumlah: 4,
-        kontraksi_durasi: '>40',
-        nadi: 88,
-        sistol: 125,
-        diastol: 80,
-        suhu: 36.7,
-        urin_protein: '-',
-        urin_aseton: '-',
-        urin_volume: 120,
-    },
-];
-
-export default function PartografShow() {
-    const [header] = useState<PartografHeaderData>(INITIAL_HEADER);
-    const [entries, setEntries] = useState<PartografEntryData[]>(INITIAL_ENTRIES);
+export default function PartografShow({ id, session, entries = [] }: PartografShowProps) {
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
     const [selectedEntry, setSelectedEntry] = useState<PartografEntryData | null>(null);
     const [viewMode, setViewMode] = useState<'chart' | 'table'>('chart');
+    const [statusModalOpen, setStatusModalOpen] = useState(false);
 
-    // Next Kolom Index
+    // Next Kolom Index (0 s/d 31)
     const lastKolomIdx = entries.length > 0 ? Math.max(...entries.map((e) => e.kolom_idx)) : -1;
     const nextKolomIdx = Math.min(31, lastKolomIdx + 1);
 
     const handleSaveEntry = (newEntry: PartografEntryData) => {
-        setEntries((prev) => {
-            const exists = prev.some((e) => e.id === newEntry.id || e.kolom_idx === newEntry.kolom_idx);
-            if (exists) {
-                return prev.map((e) => (e.id === newEntry.id || e.kolom_idx === newEntry.kolom_idx ? newEntry : e));
+        router.post(
+            `/partograf/${session.id}/entries`,
+            {
+                ...newEntry,
+                partograf_session_id: session.id,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setDialogOpen(false);
+                    setSelectedEntry(null);
+                },
             }
-            return [...prev, newEntry];
-        });
-        setSelectedEntry(null);
+        );
     };
 
-    const handleDeleteEntry = (id: string) => {
-        setEntries((prev) => prev.filter((e) => e.id !== id));
+    const handleDeleteEntry = (entryId: string) => {
+        if (confirm('Apakah Anda yakin ingin menghapus catatan observasi ini?')) {
+            router.delete(`/partograf/${session.id}/entries/${entryId}`, {
+                preserveScroll: true,
+            });
+        }
+    };
+
+    const handleStatusChange = (newStatus: 'aktif' | 'selesai' | 'dirujuk') => {
+        const catatanPrompt = prompt(
+            `Ubah status menjadi "${newStatus}". Tambahkan catatan jika ada (opsional):`,
+            session.catatan || ''
+        );
+        if (catatanPrompt !== null) {
+            router.put(
+                `/partograf/${session.id}/status`,
+                {
+                    status: newStatus,
+                    catatan: catatanPrompt,
+                },
+                {
+                    preserveScroll: true,
+                }
+            );
+        }
     };
 
     const handleEditEntry = (entry: PartografEntryData) => {
@@ -202,15 +90,19 @@ export default function PartografShow() {
         setDialogOpen(true);
     };
 
-    // Evaluasi Status Klinis
-    const latestCervixEntry = [...entries].reverse().find((e) => e.pembukaan_serviks !== null && e.pembukaan_serviks !== undefined);
-    const latestDjjEntry = [...entries].reverse().find((e) => e.djj !== null && e.djj !== undefined);
+    // Evaluasi Status Klinis Terakhir
+    const latestCervixEntry = [...entries]
+        .reverse()
+        .find((e) => e.pembukaan_serviks !== null && e.pembukaan_serviks !== undefined);
+    const latestDjjEntry = [...entries]
+        .reverse()
+        .find((e) => e.djj !== null && e.djj !== undefined);
 
     const isDjjSafe = latestDjjEntry?.djj ? latestDjjEntry.djj >= 120 && latestDjjEntry.djj <= 160 : true;
 
     return (
         <BundaSehatLayout activeNav="persalinan">
-            <Head title={`Partograf - ${header.nama_ibu}`} />
+            <Head title={`Partograf - ${session.nama_ibu}`} />
 
             <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
                 {/* Navigation Bar / Breadcrumb */}
@@ -224,6 +116,30 @@ export default function PartografShow() {
                     </Link>
 
                     <div className="flex items-center gap-2">
+                        {/* Status Change Buttons */}
+                        {session.status === 'aktif' && (
+                            <div className="flex items-center gap-1.5 mr-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleStatusChange('selesai')}
+                                    className="rounded-full text-xs text-emerald-700 border-emerald-300 hover:bg-emerald-50 h-8"
+                                >
+                                    <Check className="w-3.5 h-3.5 mr-1" />
+                                    Selesai Partus
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleStatusChange('dirujuk')}
+                                    className="rounded-full text-xs text-rose-700 border-rose-300 hover:bg-rose-50 h-8"
+                                >
+                                    <Send className="w-3.5 h-3.5 mr-1" />
+                                    Rujuk RS
+                                </Button>
+                            </div>
+                        )}
+
                         {/* Toggle View Mode */}
                         <div className="bg-white border border-slate-200 rounded-full p-0.5 flex items-center shadow-xs">
                             <button
@@ -248,7 +164,7 @@ export default function PartografShow() {
                                 }`}
                             >
                                 <TableIcon className="w-3.5 h-3.5" />
-                                Tabel Data
+                                Tabel Data ({entries.length})
                             </button>
                         </div>
 
@@ -257,7 +173,7 @@ export default function PartografShow() {
                             variant="outline"
                             size="sm"
                             onClick={() => window.print()}
-                            className="rounded-full text-xs gap-1.5 hidden sm:inline-flex bg-white"
+                            className="rounded-full text-xs gap-1.5 hidden sm:inline-flex bg-white h-8"
                         >
                             <Printer className="w-3.5 h-3.5 text-slate-600" />
                             Cetak
@@ -266,7 +182,7 @@ export default function PartografShow() {
                         {/* Add Entry Button */}
                         <Button
                             onClick={handleAddNewClick}
-                            className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold gap-1.5 shadow-xs"
+                            className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold gap-1.5 shadow-xs h-8 px-4"
                         >
                             <Plus className="w-4 h-4" />
                             + Tambah Observasi
@@ -275,44 +191,35 @@ export default function PartografShow() {
                 </div>
 
                 {/* Header Information Pasien */}
-                <PartografHeaderInfo header={header} />
+                <PartografHeaderInfo header={session} />
 
                 {/* Alert & Clinical Indicator Banner */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    <div className="bg-emerald-50/80 border border-emerald-200/80 rounded-2xl p-3.5 flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3.5 shadow-xs">
                         <div className="text-xs">
-                            <div className="font-bold text-emerald-900">Kurva Pembukaan Sesuai Jalur</div>
-                            <p className="text-emerald-700 mt-0.5">
-                                Pembukaan saat ini {latestCervixEntry?.pembukaan_serviks || 4} cm berada di sebelah kiri garis waspada. Kemajuan persalinan normal.
+                            <div className="font-bold text-slate-900">Kurva Kemajuan Persalinan</div>
+                            <p className="text-slate-500 mt-0.5">
+                                Pembukaan serviks terakhir: {latestCervixEntry?.pembukaan_serviks ? `${latestCervixEntry.pembukaan_serviks} cm` : 'Belum dicatat'}.
                             </p>
                         </div>
                     </div>
 
-                    <div className={`border rounded-2xl p-3.5 flex items-start gap-3 ${
-                        isDjjSafe ? 'bg-blue-50/80 border-blue-200/80' : 'bg-rose-50/80 border-rose-200/80'
-                    }`}>
-                        {isDjjSafe ? (
-                            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                        ) : (
-                            <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
-                        )}
+                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3.5 shadow-xs">
                         <div className="text-xs">
-                            <div className={`font-bold ${isDjjSafe ? 'text-blue-900' : 'text-rose-900'}`}>
-                                DJJ: {latestDjjEntry?.djj || 140} x/menit ({isDjjSafe ? 'Normal' : 'Abnormal'})
+                            <div className="font-bold text-slate-900">
+                                DJJ: {latestDjjEntry?.djj ? `${latestDjjEntry.djj} x/menit` : 'Belum ada data'} ({isDjjSafe ? 'Normal' : 'Abnormal'})
                             </div>
-                            <p className={`mt-0.5 ${isDjjSafe ? 'text-blue-700' : 'text-rose-700'}`}>
-                                Rentang aman standar WHO: 120 – 160 x/menit.
+                            <p className="text-slate-500 mt-0.5">
+                                Rentang normal DJJ WHO: 120 – 160 x/menit.
                             </p>
                         </div>
                     </div>
 
-                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 flex items-start gap-3 sm:col-span-2 lg:col-span-1">
-                        <Sparkles className="w-5 h-5 text-purple-600 shrink-0 mt-0.5" />
+                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3.5 shadow-xs sm:col-span-2 lg:col-span-1">
                         <div className="text-xs">
                             <div className="font-bold text-slate-900">Petunjuk Pengisian Digital</div>
-                            <p className="text-slate-600 mt-0.5">
-                                Klik langsung pada titik grafik atau tombol observasi untuk mengupdate data berkala.
+                            <p className="text-slate-500 mt-0.5">
+                                Klik langsung pada titik kolom grafik atau tombol "+ Tambah Observasi" untuk mencatat data berkala.
                             </p>
                         </div>
                     </div>

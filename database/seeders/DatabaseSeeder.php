@@ -67,5 +67,8 @@ class DatabaseSeeder extends Seeder
 
         // 4. Kamus Kesehatan & Terapi Komplementer
         $this->call(KamusItemSeeder::class);
+
+        // 5. Partograf Digital Demo Data
+        $this->call(PartografSeeder::class);
     }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BidanController;
 use App\Http\Controllers\Admin\KamusAdminController;
 use App\Http\Controllers\KamusController;
+use App\Http\Controllers\PartografController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScreeningController;
 use App\Http\Controllers\SearchController;
@@ -85,16 +86,14 @@ Route::middleware('auth')->group(function () {
     // Kamus Kesehatan & Terapi Komplementer (Publik)
     Route::get('/kamus', [KamusController::class, 'index'])->name('kamus.index');
 
-    // Partograf Digital (Fitur Pemantauan Persalinan Mandiri)
-    Route::get('/partograf', function () {
-        return Inertia::render('Partograf/Index');
-    })->name('partograf.index');
-
-    Route::get('/partograf/{id}', function ($id) {
-        return Inertia::render('Partograf/Show', [
-            'id' => $id,
-        ]);
-    })->name('partograf.show');
+    // Partograf Digital (Fitur Pemantauan Persalinan Aktif)
+    Route::get('/partograf', [PartografController::class, 'index'])->name('partograf.index');
+    Route::post('/partograf', [PartografController::class, 'store'])->name('partograf.store');
+    Route::get('/partograf/{id}', [PartografController::class, 'show'])->name('partograf.show');
+    Route::put('/partograf/{id}/status', [PartografController::class, 'updateStatus'])->name('partograf.updateStatus');
+    Route::delete('/partograf/{id}', [PartografController::class, 'destroy'])->name('partograf.destroy');
+    Route::post('/partograf/{id}/entries', [PartografController::class, 'storeEntry'])->name('partograf.storeEntry');
+    Route::delete('/partograf/{id}/entries/{entryId}', [PartografController::class, 'destroyEntry'])->name('partograf.destroyEntry');
 
     // Global Search Endpoint
     Route::get('/api/search', [SearchController::class, 'search'])->name('api.search');
