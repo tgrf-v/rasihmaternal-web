@@ -44,6 +44,23 @@ export interface ScreeningInput {
   ada_riwayat_sc?: boolean;
   kondisi_ketuban?: string;
 
+  // ── Field Klinis & Partograf Model v2 ──
+  nadi?: number;
+  suhu?: number;
+  proteinuria?: string;
+  status_ketuban?: string;
+  lama_ketuban_pecah_jam?: number;
+  pembukaan_cm?: number;
+  station_kepala?: number;
+  kontraksi_10menit?: number;
+  durasi_kontraksi_detik?: number;
+  djj?: number;
+  jumlah_janin?: number;
+  presentasi_janin?: string;
+  efw_bayi_gram?: number;
+  uk_minggu?: number;
+  uk_hari?: number;
+
   // ── Field Poedji Rochjati (Screening Kehamilan) ──
   kehamilan_ke?: number;
   lama_menikah?: '<4' | '>=4';

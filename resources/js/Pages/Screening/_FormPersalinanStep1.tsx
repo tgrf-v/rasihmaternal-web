@@ -1,6 +1,7 @@
 import React from "react";
 import { Input } from "@/Components/ui/input";
 import { NumberStepper } from "@/Components/ui/number-stepper";
+import { DatePicker } from "@/Components/ui/date-picker";
 import { Label } from "@/Components/ui/label";
 import {
   Select,
@@ -9,14 +10,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/Components/ui/select";
-import { User } from "lucide-react";
+import { User, Calendar } from "lucide-react";
+import { calculateGestationalAge } from "@/lib/scoringEngine";
 
 export interface PersalinanFormData {
   nama_pasien: string;
   nik: string;
   umur: number;
+  hpht?: string;
   pekerjaan: string;
   pendidikan: string;
+  tinggi_badan?: number;
+  berat_badan?: number;
+  imt?: number;
   gravida: number;
   paritas: number;
   abortus: number;
@@ -33,6 +39,21 @@ export function FormPersalinanStep1({
   setFormData,
   errors,
 }: FormPersalinanStep1Props) {
+  const gestationalInfo = React.useMemo(
+    () => calculateGestationalAge(formData.hpht),
+    [formData.hpht]
+  );
+
+  const calculatedImt = React.useMemo(() => {
+    const tb = formData.tinggi_badan || 155;
+    const bb = formData.berat_badan || 60;
+    if (tb > 0) {
+      const tbMeter = tb / 100;
+      return Number((bb / (tbMeter * tbMeter)).toFixed(1));
+    }
+    return 24.0;
+  }, [formData.tinggi_badan, formData.berat_badan]);
+
   return (
     <div className="space-y-4 animate-fadeIn">
       <div className="border-b border-slate-100 pb-2">
@@ -59,7 +80,7 @@ export function FormPersalinanStep1({
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <Label htmlFor="umur">
               Usia Bunda (Tahun) <span className="text-rose-600">*</span>
@@ -75,6 +96,33 @@ export function FormPersalinanStep1({
               className="mt-1"
             />
           </div>
+
+          <div>
+            <Label htmlFor="hpht">
+              Tanggal HPHT <span className="text-rose-600">*</span>
+            </Label>
+            <DatePicker
+              id="hpht"
+              value={formData.hpht}
+              onChange={(val) => setFormData({ ...formData, hpht: val })}
+              placeholder="Pilih Tanggal HPHT"
+              error={errors.hpht}
+              className="mt-1"
+            />
+          </div>
+        </div>
+
+        {(gestationalInfo.weeks > 0 || gestationalInfo.days > 0) && (
+          <div className="p-2.5 rounded-xl bg-emerald-50/80 border border-emerald-200/70 text-xs text-emerald-900 font-semibold flex items-center gap-1.5">
+            <Calendar className="h-3.5 w-3.5 text-emerald-700 shrink-0" />
+            <span>
+              Estimasi Usia Gestasi: <strong className="text-emerald-950 font-bold">{gestationalInfo.formattedAge}</strong>
+              {gestationalInfo.dueDate ? ` · Taksiran Persalinan (HPL): ${gestationalInfo.dueDate}` : ""}
+            </span>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <Label htmlFor="pekerjaan">Status Pekerjaan</Label>
             <Select
@@ -93,34 +141,62 @@ export function FormPersalinanStep1({
                 <SelectItem value="PNS">PNS / ASN</SelectItem>
                 <SelectItem value="Wiraswasta">Wiraswasta / Usaha</SelectItem>
                 <SelectItem value="Petani/Buruh">Buruh / Petani</SelectItem>
-                <SelectItem value="Pelajar/Mahasiswa">
-                  Pelajar / Mahasiswa
-                </SelectItem>
+                <SelectItem value="Pelajar/Mahasiswa">Pelajar / Mahasiswa</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <Label htmlFor="pendidikan">Pendidikan Terakhir</Label>
+            <Select
+              value={formData.pendidikan || "SLTA"}
+              onValueChange={(val) =>
+                setFormData({ ...formData, pendidikan: val })
+              }
+            >
+              <SelectTrigger id="pendidikan" className="mt-1">
+                <SelectValue placeholder="Pilih pendidikan" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="SD">SD / Sederajat</SelectItem>
+                <SelectItem value="SLTP">SLTP / SMP</SelectItem>
+                <SelectItem value="SLTA">SLTA / SMA / SMK</SelectItem>
+                <SelectItem value="DIPLOMA">Diploma (D3 / D4)</SelectItem>
+                <SelectItem value="SARJANA">Sarjana (S1)</SelectItem>
+                <SelectItem value="MAGISTER">Magister (S2 / S3)</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="pendidikan">Pendidikan Terakhir</Label>
-          <Select
-            value={formData.pendidikan || "SLTA"}
-            onValueChange={(val) =>
-              setFormData({ ...formData, pendidikan: val })
-            }
-          >
-            <SelectTrigger id="pendidikan" className="mt-1">
-              <SelectValue placeholder="Pilih pendidikan" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="SD">SD / Sederajat</SelectItem>
-              <SelectItem value="SLTP">SLTP / SMP</SelectItem>
-              <SelectItem value="SLTA">SLTA / SMA / SMK</SelectItem>
-              <SelectItem value="DIPLOMA">Diploma (D3 / D4)</SelectItem>
-              <SelectItem value="SARJANA">Sarjana (S1)</SelectItem>
-              <SelectItem value="MAGISTER">Magister (S2 / S3)</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <Label htmlFor="tinggi_badan">Tinggi Badan (cm)</Label>
+            <NumberStepper
+              id="tinggi_badan"
+              min={100}
+              max={220}
+              placeholder="155"
+              value={formData.tinggi_badan || 155}
+              onChange={(val) => setFormData({ ...formData, tinggi_badan: val, imt: calculatedImt })}
+              suffix="cm"
+              className="mt-1"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="berat_badan">Berat Badan (kg)</Label>
+            <NumberStepper
+              id="berat_badan"
+              min={30}
+              max={200}
+              placeholder="60"
+              value={formData.berat_badan || 60}
+              onChange={(val) => setFormData({ ...formData, berat_badan: val, imt: calculatedImt })}
+              suffix="kg"
+              className="mt-1"
+            />
+          </div>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
