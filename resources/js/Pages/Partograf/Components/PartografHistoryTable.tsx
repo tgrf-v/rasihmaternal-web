@@ -17,7 +17,7 @@ export const PartografHistoryTable: React.FC<PartografHistoryTableProps> = ({ en
         return (
             <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center text-slate-500">
                 <p className="text-sm font-medium">Belum ada data observasi yang dicatat.</p>
-                <p className="text-xs text-slate-400 mt-1">Klik tombol &quot;+ Tambah Observasi&quot; untuk mencatat pemantauan.</p>
+                <p className="text-xs text-slate-400 mt-1">Klik tombol &quot;Tambah Observasi&quot; untuk mencatat pemantauan.</p>
             </div>
         );
     }

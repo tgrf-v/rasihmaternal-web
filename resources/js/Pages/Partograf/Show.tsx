@@ -140,31 +140,33 @@ export default function PartografShow({ id, session, entries = [] }: PartografSh
                             </div>
                         )}
 
-                        {/* Toggle View Mode */}
-                        <div className="bg-white border border-slate-200 rounded-full p-0.5 flex items-center shadow-xs">
+                        {/* Toggle View Mode (Icon-Only Compact Toggle) */}
+                        <div className="bg-slate-100/90 border border-slate-200/80 rounded-full p-1 flex items-center shadow-xs">
                             <button
                                 type="button"
                                 onClick={() => setViewMode('chart')}
-                                className={`px-3 py-1 text-xs font-bold rounded-full flex items-center gap-1.5 transition-all ${
+                                title="Grafik Partograf"
+                                aria-label="Grafik Partograf"
+                                className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
                                     viewMode === 'chart'
                                         ? 'bg-emerald-600 text-white shadow-xs'
-                                        : 'text-slate-600 hover:text-slate-900'
+                                        : 'text-slate-500 hover:text-slate-800'
                                 }`}
                             >
                                 <BarChart3 className="w-3.5 h-3.5" />
-                                Grafik Partograf
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setViewMode('table')}
-                                className={`px-3 py-1 text-xs font-bold rounded-full flex items-center gap-1.5 transition-all ${
+                                title={`Tabel Data (${entries.length} entri)`}
+                                aria-label="Tabel Data"
+                                className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
                                     viewMode === 'table'
                                         ? 'bg-emerald-600 text-white shadow-xs'
-                                        : 'text-slate-600 hover:text-slate-900'
+                                        : 'text-slate-500 hover:text-slate-800'
                                 }`}
                             >
                                 <TableIcon className="w-3.5 h-3.5" />
-                                Tabel Data ({entries.length})
                             </button>
                         </div>
 
@@ -185,7 +187,7 @@ export default function PartografShow({ id, session, entries = [] }: PartografSh
                             className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold gap-1.5 shadow-xs h-8 px-4"
                         >
                             <Plus className="w-4 h-4" />
-                            + Tambah Observasi
+                            Tambah Observasi
                         </Button>
                     </div>
                 </div>
@@ -195,7 +197,7 @@ export default function PartografShow({ id, session, entries = [] }: PartografSh
 
                 {/* Alert & Clinical Indicator Banner */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3.5 shadow-xs">
+                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3.5 shadow-xs flex flex-col items-center justify-center text-center">
                         <div className="text-xs">
                             <div className="font-bold text-slate-900">Kurva Kemajuan Persalinan</div>
                             <p className="text-slate-500 mt-0.5">
@@ -204,7 +206,7 @@ export default function PartografShow({ id, session, entries = [] }: PartografSh
                         </div>
                     </div>
 
-                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3.5 shadow-xs">
+                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3.5 shadow-xs flex flex-col items-center justify-center text-center">
                         <div className="text-xs">
                             <div className="font-bold text-slate-900">
                                 DJJ: {latestDjjEntry?.djj ? `${latestDjjEntry.djj} x/menit` : 'Belum ada data'} ({isDjjSafe ? 'Normal' : 'Abnormal'})
@@ -215,11 +217,11 @@ export default function PartografShow({ id, session, entries = [] }: PartografSh
                         </div>
                     </div>
 
-                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3.5 shadow-xs sm:col-span-2 lg:col-span-1">
+                    <div className="bg-white border border-slate-200/90 rounded-2xl p-3.5 shadow-xs sm:col-span-2 lg:col-span-1 flex flex-col items-center justify-center text-center">
                         <div className="text-xs">
                             <div className="font-bold text-slate-900">Petunjuk Pengisian Digital</div>
                             <p className="text-slate-500 mt-0.5">
-                                Klik langsung pada titik kolom grafik atau tombol "+ Tambah Observasi" untuk mencatat data berkala.
+                                Klik langsung pada titik kolom grafik atau tombol "Tambah Observasi" untuk mencatat data berkala.
                             </p>
                         </div>
                     </div>
