@@ -25,10 +25,10 @@ export function HasilDetail({
 
   const risikoLabel =
     screeningResult.kategori_risiko === "KRR"
-      ? "Risiko Rendah / Ringan"
+      ? "Kehamilan Risiko Rendah"
       : screeningResult.kategori_risiko === "KRT"
-      ? "Risiko Tinggi / Sedang"
-      : "Risiko Sangat Tinggi / Berat";
+      ? "Kehamilan Risiko Tinggi"
+      : "Kehamilan Risiko Sangat Tinggi";
 
   const risikoColor =
     screeningResult.kategori_risiko === "KRR"
@@ -55,7 +55,7 @@ export function HasilDetail({
           <p className="text-xs font-medium text-slate-500">
             Level risiko Ibu Hamil, <span className="font-semibold text-slate-700">{formData.umur || 27} thn</span>
           </p>
-          <h2 className={`text-2xl font-bold tracking-tight mt-1 ${risikoColor}`}>
+          <h2 className={`text-2xl sm:text-3xl font-bold tracking-tight mt-1.5 ${risikoColor}`}>
             {risikoLabel}
           </h2>
         </div>

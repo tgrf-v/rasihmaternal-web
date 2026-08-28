@@ -60,12 +60,16 @@ export function HasilPersalinanDetail({
             className={`text-xl sm:text-2xl font-bold tracking-tight mt-1 ${
               isGawatDarurat || mlResult.risk_category === "KRST"
                 ? "text-rose-600"
+                : mlResult.risk_category === "KRT"
+                ? "text-amber-600"
                 : "text-emerald-700"
             }`}
           >
-            {isGawatDarurat
-              ? "Komplikasi Gawat Darurat Terdeteksi"
-              : "Persalinan Fisiologis Normal"}
+            {isGawatDarurat || mlResult.risk_category === "KRST"
+              ? "Risiko Sangat Tinggi"
+              : mlResult.risk_category === "KRT"
+              ? "Risiko Tinggi"
+              : "Risiko Rendah"}
           </h2>
         </div>
 

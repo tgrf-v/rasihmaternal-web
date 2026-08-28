@@ -55,6 +55,34 @@ export function HasilPersalinanRingkas({
 
   const efwGram = clinicalData?.efw_bayi_gram || 3000;
 
+  const effectiveRiskCategory: "KRR" | "KRT" | "KRST" =
+    isGawatDarurat || mlResult.risk_category === "KRST"
+      ? "KRST"
+      : mlResult.risk_category === "KRT"
+      ? "KRT"
+      : "KRR";
+
+  const riskTitle =
+    effectiveRiskCategory === "KRST"
+      ? "Risiko Sangat Tinggi"
+      : effectiveRiskCategory === "KRT"
+      ? "Risiko Tinggi"
+      : "Risiko Rendah";
+
+  const riskTitleColor =
+    effectiveRiskCategory === "KRST"
+      ? "text-rose-600"
+      : effectiveRiskCategory === "KRT"
+      ? "text-amber-600"
+      : "text-emerald-700";
+
+  const pointerBadgeText =
+    effectiveRiskCategory === "KRST"
+      ? "Wajib Rujuk"
+      : effectiveRiskCategory === "KRT"
+      ? "Risiko Tinggi"
+      : "Risiko Rendah";
+
   return (
     <div className="space-y-4 animate-fadeIn">
       {/* Card 1: Hasil Penapisan & Status */}
@@ -67,13 +95,9 @@ export function HasilPersalinanRingkas({
             </span>
           </p>
           <h2
-            className={`text-xl sm:text-2xl font-bold mt-1 tracking-tight ${
-              isHighRisk ? "text-rose-600" : "text-emerald-700"
-            }`}
+            className={`text-2xl sm:text-3xl lg:text-4xl font-bold mt-1.5 tracking-tight ${riskTitleColor}`}
           >
-            {isHighRisk
-              ? "Komplikasi Gawat Darurat"
-              : "Persalinan Fisiologis (Normal)"}
+            {riskTitle}
           </h2>
         </div>
 
@@ -88,16 +112,16 @@ export function HasilPersalinanRingkas({
             className="absolute bottom-0 -translate-x-1/2 flex flex-col items-center transition-all duration-500 ease-out z-10"
             style={{
               left:
-                mlResult.risk_category === "KRST" || isGawatDarurat
+                effectiveRiskCategory === "KRST"
                   ? "85%"
-                  : mlResult.risk_category === "KRT"
+                  : effectiveRiskCategory === "KRT"
                   ? "50%"
                   : "15%",
             }}
           >
             <div className="w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-b-[6px] border-b-black -mb-0.5" />
             <div className="bg-black text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap">
-              {isHighRisk ? "Wajib Rujuk" : mlResult.risk_category === "KRT" ? "Risiko Tinggi" : "Normal"}
+              {pointerBadgeText}
             </div>
           </div>
         </div>

@@ -102,7 +102,7 @@ test.describe('RASIH Maternal - Real E2E Playwright Test Suite', () => {
     await page.click('label[for="preeklampsia_berat-no"]');
     await page.click('button:has-text("Selesai & Lihat Hasil")');
 
-    await expect(page.locator('text=Risiko Rendah / Ringan').first()).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('text=Kehamilan Risiko Rendah').first()).toBeVisible({ timeout: 15000 });
   });
 
   test('06. Screening Kehamilan - Kondisi 2: Primigravida Usia Muda <16 Tahun (KRT Skor 6)', async ({ page }) => {
@@ -139,7 +139,7 @@ test.describe('RASIH Maternal - Real E2E Playwright Test Suite', () => {
     await page.click('label[for="preeklampsia_berat-no"]');
     await page.click('button:has-text("Selesai & Lihat Hasil")');
 
-    await expect(page.locator('text=Risiko Tinggi / Sedang').first()).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('text=Kehamilan Risiko Tinggi').first()).toBeVisible({ timeout: 15000 });
   });
 
   test('07. Screening Kehamilan - Kondisi 3: Riwayat Bekas Operasi Sesar (KRT Skor 10)', async ({ page }) => {
@@ -176,7 +176,7 @@ test.describe('RASIH Maternal - Real E2E Playwright Test Suite', () => {
     await page.click('label[for="preeklampsia_berat-no"]');
     await page.click('button:has-text("Selesai & Lihat Hasil")');
 
-    await expect(page.locator('text=Risiko Tinggi / Sedang').first()).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('text=Kehamilan Risiko Tinggi').first()).toBeVisible({ timeout: 15000 });
   });
 
   test('08. Screening Kehamilan - Kondisi 4: Preeklamsia Berat / Eklamsia (KRST Skor >= 12)', async ({ page }) => {
@@ -213,7 +213,7 @@ test.describe('RASIH Maternal - Real E2E Playwright Test Suite', () => {
     await page.click('label[for="preeklampsia_berat-yes"]'); // PEB Ya
     await page.click('button:has-text("Selesai & Lihat Hasil")');
 
-    await expect(page.locator('text=Risiko Sangat Tinggi / Berat').first()).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('text=Kehamilan Risiko Sangat Tinggi').first()).toBeVisible({ timeout: 15000 });
   });
 
   // ═══════════════════════════════════════════════════════════════
@@ -237,7 +237,7 @@ test.describe('RASIH Maternal - Real E2E Playwright Test Suite', () => {
     await page.fill('#hb', '12.5');
     await page.click('button:has-text("Selesai & Lihat Hasil")');
 
-    await expect(page.locator('h2:has-text("Persalinan Fisiologis (Normal)")')).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('h2:has-text("Risiko Rendah")')).toBeVisible({ timeout: 15000 });
   });
 
   test('10. Screening Persalinan - Kondisi 6: Preeklamsia Berat dalam Persalinan (KRST)', async ({ page }) => {
@@ -257,7 +257,7 @@ test.describe('RASIH Maternal - Real E2E Playwright Test Suite', () => {
     await page.fill('#hb', '12.0');
     await page.click('button:has-text("Selesai & Lihat Hasil")');
 
-    await expect(page.locator('h2:has-text("Komplikasi Gawat Darurat")')).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('h2:has-text("Risiko Sangat Tinggi")')).toBeVisible({ timeout: 15000 });
   });
 
   // ═══════════════════════════════════════════════════════════════
