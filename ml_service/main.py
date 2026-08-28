@@ -133,7 +133,8 @@ class MaternalScreeningRequestV2(BaseModel):
     bb_kg: Optional[float] = Field(default=60.0, ge=30.0, le=250.0)
     imt: Optional[float] = Field(default=None, ge=10.0, le=65.0)
 
-    # Riwayat Obstetri
+    # Riwayat Obstetri & Gestasi
+    hpht: Optional[str] = Field(default=None, description="Tanggal HPHT format YYYY-MM-DD")
     gravida: Optional[int] = Field(default=1, ge=1, le=20)
     para: Optional[int] = Field(default=0, ge=0, le=20)
     abortus: Optional[int] = Field(default=0, ge=0, le=15)
@@ -265,6 +266,21 @@ def preprocess_v2(req: MaternalScreeningRequestV2) -> np.ndarray:
     for cat in CAT_MAP_V2['STATUS_KETUBAN']:
         cat_vector.append(1.0 if ketuban_clean == cat else 0.0)
 
+    # Gestational Age derivation from HPHT if available
+    uk_minggu_val = float(req.uk_minggu if req.uk_minggu is not None else 38.0)
+    uk_hari_val = float(req.uk_hari if req.uk_hari is not None else 0.0)
+    if req.hpht:
+        try:
+            from datetime import datetime, date
+            hpht_clean = str(req.hpht).strip().split("T")[0]
+            hpht_d = datetime.strptime(hpht_clean, "%Y-%m-%d").date()
+            diff_days = (date.today() - hpht_d).days
+            if diff_days >= 0:
+                uk_minggu_val = float(diff_days // 7)
+                uk_hari_val = float(diff_days % 7)
+        except Exception:
+            pass
+
     # 4. Build Numeric Vector (25 features in strict order)
     num_vector = [
         float(req.usia_tahun),
@@ -274,8 +290,8 @@ def preprocess_v2(req: MaternalScreeningRequestV2) -> np.ndarray:
         float(req.gravida if req.gravida is not None else 1.0),
         float(req.para if req.para is not None else 0.0),
         float(req.abortus if req.abortus is not None else 0.0),
-        float(req.uk_minggu if req.uk_minggu is not None else 38.0),
-        float(req.uk_hari if req.uk_hari is not None else 0.0),
+        uk_minggu_val,
+        uk_hari_val,
         float(req.jumlah_janin if req.jumlah_janin is not None else 1.0),
         float(req.efw_bayi_gram if req.efw_bayi_gram is not None else 3000.0),
         sistolik,

@@ -75,8 +75,12 @@ class ScreeningController extends Controller
         // Parameter Klinis Model v2
         $tb = (float) ($validated['tinggi_badan'] ?? 155.0);
         $bb = (float) ($validated['berat_badan'] ?? 60.0);
-        $ukMinggu = isset($validated['uk_minggu']) ? (int) $validated['uk_minggu'] : (isset($scoringResult['detail_skor']['usia_kehamilan_minggu']) ? (int) $scoringResult['detail_skor']['usia_kehamilan_minggu'] : 38);
-        $ukHari = (int) ($validated['uk_hari'] ?? 0);
+
+        // Otomatis hitung usia kehamilan (Minggu & Hari) dari HPHT
+        $gestational = $this->scoringService->calculateGestationalAge($validated['hpht'] ?? null);
+        $ukMinggu = $gestational['weeks'] > 0 ? (int) $gestational['weeks'] : (isset($validated['uk_minggu']) ? (int) $validated['uk_minggu'] : 38);
+        $ukHari = $gestational['weeks'] > 0 ? (int) $gestational['days'] : (int) ($validated['uk_hari'] ?? 0);
+
         $jumlahJanin = (int) ($validated['jumlah_janin'] ?? 1);
         $presentasiJanin = $validated['presentasi_janin'] ?? (isset($validated['posisi_janin']) && in_array($validated['posisi_janin'], ['sungsang', 'lintang']) ? ($validated['posisi_janin'] === 'sungsang' ? 'Bokong/Sungsang' : 'Lintang') : 'Kepala');
         $efwBayiGram = (float) ($validated['efw_bayi_gram'] ?? 3000.0);
