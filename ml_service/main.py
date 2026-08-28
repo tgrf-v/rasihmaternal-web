@@ -6,12 +6,12 @@ import numpy as np
 import json
 import os
 import math
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 app = FastAPI(
     title="RASIH Maternal Complications ML Service",
-    description="Microservice Machine Learning XGBoost untuk Prediksi Risiko Komplikasi Kehamilan dan Persalinan",
-    version="1.0.0",
+    description="Microservice Machine Learning XGBoost untuk Prediksi Risiko Komplikasi Kehamilan dan Persalinan (Model v2 - 7 Kelas & Model v1 Legacy)",
+    version="2.0.0",
 )
 
 app.add_middleware(
@@ -22,17 +22,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Base directories and models loading
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODELS_DIR = os.path.join(BASE_DIR, "models")
 
-MODEL_PATH = os.path.join(MODELS_DIR, "xgboost_final_best.json")
-CLASSES_PATH = os.path.join(MODELS_DIR, "classes.json")
-FEATURE_NAMES_PATH = os.path.join(MODELS_DIR, "feature_names.json")
+# Paths for Model v2 (7 Classes, 30 Features -> 42 Transformed)
+MODELS_V2_DIR = os.path.join(BASE_DIR, "models_v2")
+MODEL_V2_PATH = os.path.join(MODELS_V2_DIR, "xgboost_final_model.json")
 
-# Global variables for loaded model artifacts
-booster = None
-classes_list = [
+# Paths for Model v1 (Legacy 6 Classes, 15 Features -> 40 Transformed)
+MODELS_V1_DIR = os.path.join(BASE_DIR, "models")
+MODEL_V1_PATH = os.path.join(MODELS_V1_DIR, "xgboost_final_best.json")
+
+# Global model state
+booster_v2: Optional[xgb.Booster] = None
+booster_v1: Optional[xgb.Booster] = None
+
+CLASSES_V2 = [
+    "Hipertensi",
+    "Infeksi",
+    "Ketuban Pecah Dini",
+    "Perdarahan",
+    "Persalinan Lama",
+    "Preeklamsia",
+    "Tanpa Komplikasi"
+]
+
+CLASSES_V1 = [
     "Hipertensi",
     "Infeksi",
     "Ketuban Pecah Dini",
@@ -40,258 +54,347 @@ classes_list = [
     "Persalinan Lama",
     "Preeklamsia"
 ]
-feature_names = []
 
-@app.on_event("startup")
-def load_ml_artifacts():
-    global booster, classes_list, feature_names
-    try:
-        if os.path.exists(MODEL_PATH):
-            booster = xgb.Booster()
-            booster.load_model(MODEL_PATH)
-            print(f"[ML Service] Model XGBoost successfully loaded from {MODEL_PATH}")
+# Categorical mapping for Model v2 (17 binary features)
+CAT_MAP_V2 = {
+    'PENDIDIKAN': ['Dasar', 'Menengah', 'Tinggi'],
+    'PEKERJAAN': ['Bekerja', 'Ibu Rumah Tangga'],
+    'PRESENTASI_JANIN': ['Bokong/Sungsang', 'Kepala', 'Lintang', 'Oblique'],
+    'PROTEINURIA': ['1+', '2+', '3+', '4+', 'Negatif', 'Trace'],
+    'STATUS_KETUBAN': ['Pecah', 'Utuh']
+}
 
-        if os.path.exists(CLASSES_PATH):
-            with open(CLASSES_PATH, "r", encoding="utf-8") as f:
-                classes_list = json.load(f)
-            print(f"[ML Service] Classes list loaded: {classes_list}")
+# Numeric default medians for Model v2 (25 numeric features)
+NUM_MEDIANS_V2 = {
+    'USIA_TAHUN': 30.0,
+    'TINGGI_BADAN_CM': 154.0,
+    'BB_KG': 65.0,
+    'IMT': 27.3,
+    'GRAVIDA': 2.0,
+    'PARA': 1.0,
+    'ABORTUS': 0.0,
+    'UK_MINGGU': 37.0,
+    'UK_HARI': 4.0,
+    'JUMLAH_JANIN': 1.0,
+    'EFW_BAYI_GRAM': 2775.0,
+    'SBP_MMHG': 120.0,
+    'DBP_MMHG': 78.0,
+    'NADI_XMENIT': 85.0,
+    'SUHU_C': 36.7,
+    'HEMOGLOBIN_GDL': 11.5,
+    'LAMA_KETUBAN_PECAH_JAM': 0.0,
+    'PEMBUKAAN_CM': 5.0,
+    'STATION_KEPALA': -1.0,
+    'KONTRAKSI_10MENIT': 3.0,
+    'DURASI_KONTRAKSI_DETIK': 41.0,
+    'DJJ': 141.0,
+    'MAP': 92.0,
+    'PP': 43.0,
+    'HB_ANEMIA': 0.0
+}
 
-        if os.path.exists(FEATURE_NAMES_PATH):
-            with open(FEATURE_NAMES_PATH, "r", encoding="utf-8") as f:
-                feature_names = json.load(f)
-            print(f"[ML Service] Feature Names loaded ({len(feature_names)} features)")
-    except Exception as e:
-        print(f"[ML Service ERROR] Failed to load model artifacts: {e}")
 
-class MaternalScreeningRequest(BaseModel):
-    # 15 Parameter Klinis Sesuai Dataset Maternal
-    usia: int = Field(..., ge=12, le=60, description="Usia Ibu Hamil (Tahun)")
-    pekerjaan: str = Field("Ibu Rumah Tangga", description="Ibu Rumah Tangga / Bekerja (PNS, Swasta, Wiraswasta, Petani, dll)")
-    pendidikan: str = Field("SLTA", description="SD, SLTP, SLTA, DIPLOMA, SARJANA, MAGISTER")
-    gravida: int = Field(1, ge=1, le=20, description="Jumlah Kehamilan (G)")
-    para: int = Field(0, ge=0, le=20, description="Jumlah Persalinan/Kelahiran (P)")
-    abortus: int = Field(0, ge=0, le=15, description="Jumlah Keguguran (A)")
-    imt: float = Field(22.0, ge=10.0, le=60.0, description="Indeks Massa Tubuh (kg/m2)")
-    sistolik: int = Field(120, ge=60, le=260, description="Tekanan Darah Sistol (mmHg)")
-    diastolik: int = Field(80, ge=40, le=160, description="Tekanan Darah Diastol (mmHg)")
-    letak_janin: str = Field("Memanjang", description="Memanjang, Melintang, Obliq, Gemeli")
-    umur_kehamilan: str = Field("Aterm", description="Preterm (<37 mg), Aterm (37-41 mg), Postterm (>=42 mg)")
-    jenis_persalinan: str = Field("Persalinan Pervaginam", description="Persalinan Pervaginam, Sectio Sesarea")
-    hemoglobin: float = Field(12.0, ge=3.0, le=22.0, description="Kadar Hemoglobin (g/dL)")
-    leukosit: int = Field(9000, ge=500, le=75000, description="Jumlah Sel Leukosit (/uL)")
-    trombosit: int = Field(250000, ge=10000, le=1000000, description="Jumlah Sel Trombosit (/uL)")
-
-def build_feature_vector(req: MaternalScreeningRequest) -> np.ndarray:
-    """Transform 15 clinical parameters into the 40-dimensional feature vector required by XGBoost."""
-    # Clinical calculated features
-    map_val = (req.sistolik + 2 * req.diastolik) / 3.0
-    pulse_pressure = float(req.sistolik - req.diastolik)
-    
-    tromb_safe = max(req.trombosit, 1)
-    leu_trombo_ratio = float(req.leukosit) / float(tromb_safe)
-    hb_trombo_ratio = float(req.hemoglobin) / float(tromb_safe)
-    
-    hb_anemia = 1.0 if req.hemoglobin < 11.0 else 0.0
-    leu_flag = 1.0 if req.leukosit > 11000 else 0.0
-    trombo_flag = 1.0 if req.trombosit < 150000 else 0.0
-
-    # Ordinal mappings
-    uk_lower = req.umur_kehamilan.lower()
-    if "preterm" in uk_lower:
-        kehamilan_ord = 0.0
-    elif "postterm" in uk_lower:
-        kehamilan_ord = 2.0
-    else:
-        kehamilan_ord = 1.0
-
-    pend_upper = req.pendidikan.upper().strip()
-    if "SD" in pend_upper:
-        pendidikan_lev = 1.0
-    elif "SLTP" in pend_upper or "SMP" in pend_upper:
-        pendidikan_lev = 2.0
-    elif "SLTA" in pend_upper or "SMA" in pend_upper or "SMK" in pend_upper:
-        pendidikan_lev = 3.0
-    elif "DIPLOMA" in pend_upper or "D3" in pend_upper or "D4" in pend_upper:
-        pendidikan_lev = 4.0
-    elif "SARJANA" in pend_upper or "S1" in pend_upper:
-        pendidikan_lev = 5.0
-    elif "MAGISTER" in pend_upper or "S2" in pend_upper or "DOKTOR" in pend_upper or "S3" in pend_upper:
-        pendidikan_lev = 6.0
-    else:
-        pendidikan_lev = 3.0
-
-    # IMT Categories
-    imt_underweight = 1.0 if req.imt < 18.5 else 0.0
-    imt_normal = 1.0 if (18.5 <= req.imt < 25.0) else 0.0
-    imt_overweight = 1.0 if (25.0 <= req.imt < 30.0) else 0.0
-    imt_obese = 1.0 if req.imt >= 30.0 else 0.0
-
-    # Pekerjaan One-Hot
-    pek_lower = req.pekerjaan.lower()
-    is_irt = 1.0 if ("rumah tangga" in pek_lower or "irt" in pek_lower) else 0.0
-    is_bekerja = 0.0 if is_irt == 1.0 else 1.0
-
-    # Letak Janin One-Hot
-    lj_lower = req.letak_janin.lower()
-    lj_memanjang = 1.0 if ("memanjang" in lj_lower or "preskep" in lj_lower or "kepala" in lj_lower) else 0.0
-    lj_melintang = 1.0 if ("melintang" in lj_lower or "lintang" in lj_lower) else 0.0
-    lj_obliq = 1.0 if ("obliq" in lj_lower or "serong" in lj_lower) else 0.0
-    lj_gemeli = 1.0 if ("gemeli" in lj_lower or "kembar" in lj_lower) else 0.0
-
-    # Jenis Persalinan One-Hot
-    jp_lower = req.jenis_persalinan.lower()
-    jp_sc = 1.0 if ("sectio" in jp_lower or "sesarea" in jp_lower or "sc" in jp_lower) else 0.0
-    jp_pervaginam = 1.0 if (jp_sc == 0.0) else 0.0
-
-    features_dict = {
-        'GRAVIDA': float(req.gravida),
-        'PARA': float(req.para),
-        'ABORTUS': float(req.abortus),
-        'IMT': float(req.imt),
-        'HEMOGLOBIN (g/dL)': float(req.hemoglobin),
-        'LEOKOSIT (uL)': float(req.leukosit),
-        'TROMBOSIT (uL)': float(req.trombosit),
-        'TEKANAN DARAH: Sistol': float(req.sistolik),
-        'TEKANAN DARAH: Diastol': float(req.diastolik),
-        'KEHAMILAN_ORD': kehamilan_ord,
-        'PENDIDIKAN_LEV': pendidikan_lev,
-        'MAP': float(map_val),
-        'PP': float(pulse_pressure),
-        'LEU_TROMBO_RATIO': float(leu_trombo_ratio),
-        'HB_TROMBO_RATIO': float(hb_trombo_ratio),
-        'HB_ANEMIA': hb_anemia,
-        'LEU_FLAG': leu_flag,
-        'TROMBO_FLAG': trombo_flag,
-        'PEKERJAAN_Bekerja': is_bekerja,
-        'PEKERJAAN_Ibu Rumah Tangga': is_irt,
-        'PEKERJAAN_MISSING': 0.0,
-        'LETAK JANIN_Gemeli': lj_gemeli,
-        'LETAK JANIN_MEANJANG': 0.0,
-        'LETAK JANIN_MEMAJANG': 0.0,
-        'LETAK JANIN_MISSING': 0.0,
-        'LETAK JANIN_Melintang': lj_melintang,
-        'LETAK JANIN_Memanjang': lj_memanjang,
-        'LETAK JANIN_Obliq': lj_obliq,
-        'LETAK JANIN_Preterm': 0.0,
-        'LETAK JANIN_memanjang': lj_memanjang,
-        'LETAK JANIN_preskep': lj_memanjang,
-        'JENIS PERSALINAN_MISSING': 0.0,
-        'JENIS PERSALINAN_PERSALINAN LAMA': 0.0,
-        'JENIS PERSALINAN_Persalinan Pervaginam': jp_pervaginam,
-        'JENIS PERSALINAN_Sectio Sesarea': jp_sc,
-        'JENIS PERSALINAN_Sectio Sesarea (OP GABUNGAN)': 0.0,
-        'IMT_CAT_Normal': imt_normal,
-        'IMT_CAT_Obese': imt_obese,
-        'IMT_CAT_Overweight': imt_overweight,
-        'IMT_CAT_Underweight': imt_underweight,
-    }
-
-    SCALER_PATH = os.path.join(MODELS_DIR, "feature_scaler.json")
-    scaler_dict = {}
-    if os.path.exists(SCALER_PATH):
+def load_ml_artifacts_v2():
+    global booster_v2
+    if os.path.exists(MODEL_V2_PATH):
         try:
-            with open(SCALER_PATH, "r") as sf:
-                scaler_dict = json.load(sf)
-        except Exception:
-            scaler_dict = {}
+            b = xgb.Booster()
+            b.load_model(MODEL_V2_PATH)
+            booster_v2 = b
+            print(f"[RASIH ML] Model v2 loaded successfully ({b.num_features()} features, 7 classes)")
+        except Exception as e:
+            print(f"[RASIH ML] Error loading Model v2: {e}")
+    else:
+        print(f"[RASIH ML] Warning: Model v2 not found at {MODEL_V2_PATH}")
 
-    # Construct the array in the exact order of feature_names and scale numerical features
-    row = []
-    target_names = feature_names if feature_names and len(feature_names) == 40 else list(features_dict.keys())
-    for fn in target_names:
-        raw_v = features_dict.get(fn, 0.0)
-        if fn in scaler_dict:
-            m = scaler_dict[fn].get("mean", 0.0)
-            s = scaler_dict[fn].get("std", 1.0)
-            scaled_v = (raw_v - m) / s if s > 1e-6 else raw_v
-            row.append(scaled_v)
-        else:
-            row.append(raw_v)
 
-    return np.array([row], dtype=np.float32)
+def load_ml_artifacts_v1():
+    global booster_v1
+    if os.path.exists(MODEL_V1_PATH):
+        try:
+            b = xgb.Booster()
+            b.load_model(MODEL_V1_PATH)
+            booster_v1 = b
+            print("[RASIH ML] Model v1 legacy loaded successfully")
+        except Exception as e:
+            print(f"[RASIH ML] Error loading Model v1: {e}")
+
+
+# Load on startup
+load_ml_artifacts_v2()
+
+
+class MaternalScreeningRequestV2(BaseModel):
+    # Demografi & Antropometri
+    usia_tahun: int = Field(default=28, ge=10, le=60, description="Usia ibu dalam tahun")
+    pendidikan: str = Field(default="Menengah", description="Dasar, Menengah, Tinggi")
+    pekerjaan: str = Field(default="Ibu Rumah Tangga", description="Bekerja atau Ibu Rumah Tangga")
+    tinggi_badan_cm: Optional[float] = Field(default=155.0, ge=100.0, le=250.0)
+    bb_kg: Optional[float] = Field(default=60.0, ge=30.0, le=250.0)
+    imt: Optional[float] = Field(default=None, ge=10.0, le=65.0)
+
+    # Riwayat Obstetri
+    gravida: Optional[int] = Field(default=1, ge=1, le=20)
+    para: Optional[int] = Field(default=0, ge=0, le=20)
+    abortus: Optional[int] = Field(default=0, ge=0, le=15)
+    uk_minggu: Optional[int] = Field(default=38, ge=0, le=45)
+    uk_hari: Optional[int] = Field(default=0, ge=0, le=6)
+    jumlah_janin: Optional[int] = Field(default=1, ge=1, le=5)
+    presentasi_janin: Optional[str] = Field(default="Kepala", description="Bokong/Sungsang, Kepala, Lintang, Oblique")
+    efw_bayi_gram: Optional[float] = Field(default=3000.0, ge=300.0, le=6000.0)
+
+    # Tanda Vital & Laboratorium
+    sbp_mmhg: Optional[int] = Field(default=120, ge=50, le=260, description="Tekanan Darah Sistol")
+    dbp_mmhg: Optional[int] = Field(default=80, ge=30, le=160, description="Tekanan Darah Diastol")
+    nadi_xmenit: Optional[float] = Field(default=82.0, ge=40.0, le=180.0)
+    suhu_c: Optional[float] = Field(default=36.7, ge=34.0, le=42.0)
+    proteinuria: Optional[str] = Field(default="Negatif", description="1+, 2+, 3+, 4+, Negatif, Trace")
+    hemoglobin_gdl: Optional[float] = Field(default=12.0, ge=3.0, le=22.0)
+
+    # Intrapartum / Persalinan (Bidan / Partograf)
+    status_ketuban: Optional[str] = Field(default="Utuh", description="Pecah atau Utuh")
+    lama_ketuban_pecah_jam: Optional[float] = Field(default=0.0, ge=0.0, le=120.0)
+    pembukaan_cm: Optional[float] = Field(default=4.0, ge=0.0, le=10.0)
+    station_kepala: Optional[float] = Field(default=-1.0, ge=-5.0, le=5.0)
+    kontraksi_10menit: Optional[float] = Field(default=3.0, ge=0.0, le=10.0)
+    durasi_kontraksi_detik: Optional[float] = Field(default=35.0, ge=0.0, le=120.0)
+    djj: Optional[float] = Field(default=140.0, ge=60.0, le=220.0)
+
+    # Parameter Tambahan (Opsional Override)
+    map: Optional[float] = Field(default=None)
+    pp: Optional[float] = Field(default=None)
+    hb_anemia: Optional[int] = Field(default=None)
+
+
+def normalize_category(val: Optional[str], default: str, valid_choices: List[str]) -> str:
+    if not val:
+        return default
+    cleaned = str(val).strip()
+    # Direct match
+    for choice in valid_choices:
+        if cleaned.lower() == choice.lower():
+            return choice
+    # Education mapping
+    if "sd" in cleaned.lower() or "sltp" in cleaned.lower() or "smp" in cleaned.lower() or "dasar" in cleaned.lower():
+        return "Dasar"
+    if "slta" in cleaned.lower() or "sma" in cleaned.lower() or "smk" in cleaned.lower() or "menengah" in cleaned.lower():
+        return "Menengah"
+    if "diploma" in cleaned.lower() or "sarjana" in cleaned.lower() or "s1" in cleaned.lower() or "s2" in cleaned.lower() or "tinggi" in cleaned.lower():
+        return "Tinggi"
+    # Job mapping
+    if "rumah tangga" in cleaned.lower() or "irt" in cleaned.lower():
+        return "Ibu Rumah Tangga"
+    if "kerja" in cleaned.lower() or "pns" in cleaned.lower() or "swasta" in cleaned.lower() or "wiraswasta" in cleaned.lower() or "petani" in cleaned.lower() or "buruh" in cleaned.lower():
+        return "Bekerja"
+    # Presentasi Janin mapping
+    if "sungsang" in cleaned.lower() or "bokong" in cleaned.lower():
+        return "Bokong/Sungsang"
+    if "kepala" in cleaned.lower() or "memanjang" in cleaned.lower() or "vertex" in cleaned.lower():
+        return "Kepala"
+    if "lintang" in cleaned.lower() or "melintang" in cleaned.lower():
+        return "Lintang"
+    if "obliq" in cleaned.lower() or "oblique" in cleaned.lower():
+        return "Oblique"
+    # Proteinuria mapping
+    if "+" in cleaned:
+        if "4+" in cleaned or "++++" in cleaned:
+            return "4+"
+        if "3+" in cleaned or "+++" in cleaned:
+            return "3+"
+        if "2+" in cleaned or "++" in cleaned:
+            return "2+"
+        if "1+" in cleaned or "+" in cleaned:
+            return "1+"
+    if "trace" in cleaned.lower() or "samar" in cleaned.lower():
+        return "Trace"
+    if "negatif" in cleaned.lower() or "0" in cleaned or "tidak" in cleaned.lower():
+        return "Negatif"
+    # Status Ketuban mapping
+    if "pecah" in cleaned.lower() or "kpd" in cleaned.lower():
+        return "Pecah"
+    if "utuh" in cleaned.lower() or "jernih" in cleaned.lower():
+        return "Utuh"
+
+    return default
+
+
+def preprocess_v2(req: MaternalScreeningRequestV2) -> np.ndarray:
+    # 1. Normalize Categories
+    pendidikan_clean = normalize_category(req.pendidikan, "Menengah", CAT_MAP_V2['PENDIDIKAN'])
+    pekerjaan_clean = normalize_category(req.pekerjaan, "Ibu Rumah Tangga", CAT_MAP_V2['PEKERJAAN'])
+    presentasi_clean = normalize_category(req.presentasi_janin, "Kepala", CAT_MAP_V2['PRESENTASI_JANIN'])
+    proteinuria_clean = normalize_category(req.proteinuria, "Negatif", CAT_MAP_V2['PROTEINURIA'])
+    ketuban_clean = normalize_category(req.status_ketuban, "Utuh", CAT_MAP_V2['STATUS_KETUBAN'])
+
+    # 2. Calculated values
+    sistolik = float(req.sbp_mmhg if req.sbp_mmhg is not None else 120.0)
+    diastolik = float(req.dbp_mmhg if req.dbp_mmhg is not None else 80.0)
+    
+    # MAP & Pulse Pressure
+    map_val = req.map if req.map is not None else (sistolik + 2.0 * diastolik) / 3.0
+    pp_val = req.pp if req.pp is not None else (sistolik - diastolik)
+
+    # IMT Calculation if not provided
+    tb = req.tinggi_badan_cm if req.tinggi_badan_cm is not None else 155.0
+    bb = req.bb_kg if req.bb_kg is not None else 60.0
+    if req.imt is not None:
+        imt_val = float(req.imt)
+    else:
+        tb_meter = tb / 100.0
+        imt_val = bb / (tb_meter * tb_meter) if tb_meter > 0 else 24.0
+
+    # Hemoglobin & Anemia flag
+    hb = float(req.hemoglobin_gdl if req.hemoglobin_gdl is not None else 12.0)
+    hb_anemia = req.hb_anemia if req.hb_anemia is not None else (1.0 if hb < 11.0 else 0.0)
+
+    # 3. Build Categorical Vector (17 features)
+    cat_vector = []
+    # PENDIDIKAN (3)
+    for cat in CAT_MAP_V2['PENDIDIKAN']:
+        cat_vector.append(1.0 if pendidikan_clean == cat else 0.0)
+    # PEKERJAAN (2)
+    for cat in CAT_MAP_V2['PEKERJAAN']:
+        cat_vector.append(1.0 if pekerjaan_clean == cat else 0.0)
+    # PRESENTASI_JANIN (4)
+    for cat in CAT_MAP_V2['PRESENTASI_JANIN']:
+        cat_vector.append(1.0 if presentasi_clean == cat else 0.0)
+    # PROTEINURIA (6)
+    for cat in CAT_MAP_V2['PROTEINURIA']:
+        cat_vector.append(1.0 if proteinuria_clean == cat else 0.0)
+    # STATUS_KETUBAN (2)
+    for cat in CAT_MAP_V2['STATUS_KETUBAN']:
+        cat_vector.append(1.0 if ketuban_clean == cat else 0.0)
+
+    # 4. Build Numeric Vector (25 features in strict order)
+    num_vector = [
+        float(req.usia_tahun),
+        float(tb),
+        float(bb),
+        float(imt_val),
+        float(req.gravida if req.gravida is not None else 1.0),
+        float(req.para if req.para is not None else 0.0),
+        float(req.abortus if req.abortus is not None else 0.0),
+        float(req.uk_minggu if req.uk_minggu is not None else 38.0),
+        float(req.uk_hari if req.uk_hari is not None else 0.0),
+        float(req.jumlah_janin if req.jumlah_janin is not None else 1.0),
+        float(req.efw_bayi_gram if req.efw_bayi_gram is not None else 3000.0),
+        sistolik,
+        diastolik,
+        float(req.nadi_xmenit if req.nadi_xmenit is not None else 82.0),
+        float(req.suhu_c if req.suhu_c is not None else 36.7),
+        hb,
+        float(req.lama_ketuban_pecah_jam if req.lama_ketuban_pecah_jam is not None else 0.0),
+        float(req.pembukaan_cm if req.pembukaan_cm is not None else 4.0),
+        float(req.station_kepala if req.station_kepala is not None else -1.0),
+        float(req.kontraksi_10menit if req.kontraksi_10menit is not None else 3.0),
+        float(req.durasi_kontraksi_detik if req.durasi_kontraksi_detik is not None else 35.0),
+        float(req.djj if req.djj is not None else 140.0),
+        float(map_val),
+        float(pp_val),
+        float(hb_anemia)
+    ]
+
+    full_vector = np.array(cat_vector + num_vector, dtype=np.float32)
+    return full_vector.reshape(1, -1)
+
 
 @app.get("/health")
 def health_check():
+    global booster_v2, booster_v1
     return {
         "status": "healthy",
         "service": "RASIH Maternal FastAPI ML Microservice",
-        "model_loaded": booster is not None,
-        "classes": classes_list,
-        "features_count": len(feature_names) if feature_names else 40,
-        "version": "1.0.0"
+        "model_loaded_v2": booster_v2 is not None,
+        "classes_v2": CLASSES_V2,
+        "classes_count_v2": len(CLASSES_V2),
+        "features_count_v2": 42,
+        "model_loaded_v1": booster_v1 is not None,
+        "version": "2.0.0"
     }
 
-@app.post("/predict")
-def predict_maternal_complication(request: MaternalScreeningRequest):
-    global booster, classes_list, feature_names
 
-    if booster is None:
-        load_ml_artifacts()
-        if booster is None:
-            raise HTTPException(status_code=503, detail="Model Machine Learning belum siap / gagal dimuat.")
+@app.post("/predict")
+def predict_maternal_complications_v2(request: MaternalScreeningRequestV2):
+    global booster_v2
+
+    if booster_v2 is None:
+        load_ml_artifacts_v2()
+        if booster_v2 is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Model ML v2 belum berhasil dimuat. Pastikan berkas xgboost_final_model.json ada di ml_service/models_v2/"
+            )
 
     try:
-        feat_matrix = build_feature_vector(request)
-        dmat = xgb.DMatrix(feat_matrix, feature_names=feature_names if feature_names else None)
-        raw_preds = booster.predict(dmat)[0]
+        # Preprocess request into (1, 42) matrix
+        X_matrix = preprocess_v2(request)
+        dmatrix = xgb.DMatrix(X_matrix)
 
-        # Format probability distribution
-        prob_dict: Dict[str, float] = {}
-        for idx, cls_name in enumerate(classes_list):
-            val = float(raw_preds[idx]) if idx < len(raw_preds) else 0.0
-            prob_dict[cls_name] = round(val, 4)
+        raw_probs = booster_v2.predict(dmatrix)[0]
 
-        # Primary predicted diagnosis
-        top_idx = int(np.argmax(raw_preds))
-        primary_diag = classes_list[top_idx] if top_idx < len(classes_list) else "Hipertensi"
-        confidence = float(raw_preds[top_idx])
+        # Map to 7 classes
+        probabilities: Dict[str, float] = {}
+        for cls_name, prob_val in zip(CLASSES_V2, raw_probs):
+            probabilities[cls_name] = round(float(prob_val), 4)
 
-        # Clinical Indicators Calculation
-        map_val = round((request.sistolik + 2 * request.diastolik) / 3.0, 2)
-        is_hypertension = request.sistolik >= 140 or request.diastolik >= 90
-        is_anemia = request.hemoglobin < 11.0
-        is_leukocytosis = request.leukosit > 11000
-        is_thrombocytopenia = request.trombosit < 150000
+        top_index = int(np.argmax(raw_probs))
+        primary_diag = CLASSES_V2[top_index]
+        confidence = round(float(raw_probs[top_index]), 4)
 
-        # Determine Risk Level Category
-        if primary_diag in ["Preeklamsia", "Perdarahan"] or map_val >= 105.0 or (request.sistolik >= 160 or request.diastolik >= 110):
-            risk_category = "KRST"
-            risk_label = "Kehamilan Risiko Sangat Tinggi (KRST)"
-            faskes_rujukan = "Rumah Sakit PONEK / Dokter Spesialis Sp.OG"
-            rekomendasi = "Segera lakukan rujukan terencana ke Rumah Sakit dengan fasilitas PONEK 24 Jam. Lakukan stabilisasi hemodinamik dan observasi ketat."
-        elif primary_diag in ["Hipertensi", "Ketuban Pecah Dini", "Persalinan Lama", "Infeksi"] or map_val >= 90.0 or is_hypertension or is_anemia:
-            risk_category = "KRT"
-            risk_label = "Kehamilan Risiko Tinggi (KRT)"
-            faskes_rujukan = "Puskesmas PONED / Bidan Desa & Dokter"
-            rekomendasi = "Pendampingan intensif oleh Bidan Wilayah, kontrol tensi berkala, pemeriksaan lab ulang, dan antisipasi rujukan PONED."
-        else:
+        # Calculate clinical indicators
+        sistol = request.sbp_mmhg or 120
+        diastol = request.dbp_mmhg or 80
+        map_val = round((sistol + 2 * diastol) / 3.0, 1)
+        hb_val = request.hemoglobin_gdl or 12.0
+
+        # Clinical Risk Level & Recommendation Rules
+        if primary_diag == "Tanpa Komplikasi":
             risk_category = "KRR"
-            risk_label = "Kehamilan Risiko Rendah (KRR)"
-            faskes_rujukan = "Praktek Mandiri Bidan (PMB) / Puskesmas"
-            rekomendasi = "Kondisi kehamilan stabil dan terpantau baik. Lanjutkan asuhan antenatal rutin (ANC), konsumsi vitamin & Tablet Tambah Darah (TTD), serta senam hamil mandiri."
+            rec_level = "Rendah"
+            rec_faskes = "Bidan Praktik Mandiri (BPM) / Poskesdes / Puskesmas"
+            rec_intervensi = "Kondisi kehamilan terpantau fisiologis dan sehat. Lanjutkan pemeriksaan antenatal rutin (ANC) teratur, nutrisi seimbang, serta konsumsi tablet tambah darah."
+        elif primary_diag in ["Preeklamsia", "Perdarahan"]:
+            risk_category = "KRST"
+            rec_level = "Sangat Tinggi"
+            rec_faskes = "Rumah Sakit PONEK 24 Jam / Dokter Spesialis Obstetri & Ginekologi (SpOG)"
+            if primary_diag == "Preeklamsia":
+                rec_intervensi = f"Indikasi preeklamsia terdeteksi (MAP {map_val} mmHg). Lakukan pemantauan tensi ketat, tes protein urin serial, tirah baring miring kiri, dan siapkan rujukan emergensi PONEK."
+            else:
+                rec_intervensi = "Waspadai tanda perdarahan aktif. Lakukan pemeriksaan inspekulo, observasi tanda syok hipovolemik, pasang infus dua jalur, dan rujuk segera ke RS PONEK."
+        else:
+            risk_category = "KRT"
+            rec_level = "Tinggi"
+            rec_faskes = "Puskesmas PONED / Rumah Sakit Tipe C"
+            if primary_diag == "Hipertensi":
+                rec_intervensi = f"Hipertensi gestasional (TD {sistol}/{diastol} mmHg). Konseling diet rendah garam, istirahat cukup, dan pemantauan berkala tanda preeklamsia."
+            elif primary_diag == "Ketuban Pecah Dini":
+                rec_intervensi = "Ketuban pecah sebelum fase aktif. Hindari periksa dalam berulang, berikan profilaksis antibiotik sesuai advis dokter, dan lakukan observasi DJJ."
+            elif primary_diag == "Infeksi":
+                rec_intervensi = "Tanda infeksi intrauterin/maternal. Pantau suhu tubuh, hitung leukosit serial, dan konsultasikan pemberian antibiotik adekuat."
+            elif primary_diag == "Persalinan Lama":
+                rec_intervensi = "Kemungkinan kemajuan persalinan terhambat. Evaluasi kurva Partograf (garis waspada/bertindak), pantau his dan DJJ secara ketat."
+            else:
+                rec_intervensi = "Konsultasikan hasil skrining dengan dokter spesialis atau bidan koordinator untuk penanganan preventif."
 
         return {
             "status": "success",
+            "version": "2.0.0",
             "primary_diagnosis": primary_diag,
-            "confidence_score": round(confidence, 4),
             "risk_category": risk_category,
-            "risk_label": risk_label,
-            "probabilities": prob_dict,
+            "confidence_score": confidence,
+            "probabilities": probabilities,
             "clinical_indicators": {
                 "map": map_val,
-                "is_hypertension": is_hypertension,
-                "is_anemia": is_anemia,
-                "is_leukocytosis": is_leukocytosis,
-                "is_thrombocytopenia": is_thrombocytopenia,
+                "pulse_pressure": sistol - diastol,
+                "is_hypertension": sistol >= 140 or diastol >= 90,
+                "is_anemia": hb_val < 11.0,
+                "is_preeclampsia_suspect": primary_diag == "Preeklamsia" or (sistol >= 140 and request.proteinuria not in ["Negatif", "Trace", None])
             },
             "recommendations": {
-                "faskes": faskes_rujukan,
-                "tindakan": rekomendasi,
+                "level": rec_level,
+                "faskes": rec_faskes,
+                "intervensi": rec_intervensi
             }
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Terjadi kesalahan saat memproses inferensi model: {str(e)}")
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+        raise HTTPException(status_code=500, detail=f"Gagal melakukan inferensi ML v2: {str(e)}")

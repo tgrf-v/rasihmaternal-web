@@ -72,29 +72,61 @@ class ScreeningController extends Controller
         $leokosit = (int) ($validated['leokosit'] ?? 9000);
         $trombosit = (int) ($validated['trombosit'] ?? 250000);
 
-        // Call FastAPI Microservice (XGBoost)
+        // Parameter Klinis Model v2
+        $tb = (float) ($validated['tinggi_badan'] ?? 155.0);
+        $bb = (float) ($validated['berat_badan'] ?? 60.0);
+        $ukMinggu = isset($validated['uk_minggu']) ? (int) $validated['uk_minggu'] : (isset($scoringResult['detail_skor']['usia_kehamilan_minggu']) ? (int) $scoringResult['detail_skor']['usia_kehamilan_minggu'] : 38);
+        $ukHari = (int) ($validated['uk_hari'] ?? 0);
+        $jumlahJanin = (int) ($validated['jumlah_janin'] ?? 1);
+        $presentasiJanin = $validated['presentasi_janin'] ?? (isset($validated['posisi_janin']) && in_array($validated['posisi_janin'], ['sungsang', 'lintang']) ? ($validated['posisi_janin'] === 'sungsang' ? 'Bokong/Sungsang' : 'Lintang') : 'Kepala');
+        $efwBayiGram = (float) ($validated['efw_bayi_gram'] ?? 3000.0);
+        $nadi = (float) ($validated['nadi'] ?? 82.0);
+        $suhu = (float) ($validated['suhu'] ?? 36.7);
+        $proteinuria = $validated['proteinuria'] ?? 'Negatif';
+        $statusKetuban = $validated['status_ketuban'] ?? (isset($validated['kondisi_ketuban']) && $validated['kondisi_ketuban'] === 'pecah' ? 'Pecah' : 'Utuh');
+        $lamaKetubanPecah = (float) ($validated['lama_ketuban_pecah_jam'] ?? 0.0);
+        $pembukaanCm = (float) ($validated['pembukaan_cm'] ?? 4.0);
+        $stationKepala = (float) ($validated['station_kepala'] ?? -1.0);
+        $kontraksi10Menit = (float) ($validated['kontraksi_10menit'] ?? 3.0);
+        $durasiKontraksiDetik = (float) ($validated['durasi_kontraksi_detik'] ?? 35.0);
+        $djj = (float) ($validated['djj'] ?? 140.0);
+
+        // Call FastAPI Microservice (XGBoost Model v2 - 7 Classes)
         $diagnosaMl = null;
         $kategoriMl = null;
         $skorRisikoMl = null;
         $probabilitasMl = null;
 
         try {
-            $mlResponse = \Illuminate\Support\Facades\Http::timeout(3)->post('http://127.0.0.1:8000/predict', [
-                'usia' => (int) $validated['umur'],
+            $mlUrl = config('services.ml.url', 'http://127.0.0.1:8000/predict');
+            $mlResponse = \Illuminate\Support\Facades\Http::timeout(3)->post($mlUrl, [
+                'usia_tahun' => (int) $validated['umur'],
                 'pekerjaan' => $pekerjaan,
                 'pendidikan' => $pendidikan,
+                'tinggi_badan_cm' => $tb,
+                'bb_kg' => $bb,
+                'imt' => $calculatedImt,
                 'gravida' => $gravida,
                 'para' => $para,
                 'abortus' => $abortus,
-                'imt' => $calculatedImt,
-                'sistolik' => $sistolik,
-                'diastolik' => $diastolik,
-                'letak_janin' => $letakJanin,
-                'umur_kehamilan' => $umurKehamilan,
-                'jenis_persalinan' => $jenisPersalinan,
-                'hemoglobin' => $hb,
-                'leukosit' => $leokosit,
-                'trombosit' => $trombosit,
+                'uk_minggu' => $ukMinggu,
+                'uk_hari' => $ukHari,
+                'jumlah_janin' => $jumlahJanin,
+                'presentasi_janin' => $presentasiJanin,
+                'efw_bayi_gram' => $efwBayiGram,
+                'sbp_mmhg' => $sistolik,
+                'dbp_mmhg' => $diastolik,
+                'nadi_xmenit' => $nadi,
+                'suhu_c' => $suhu,
+                'proteinuria' => $proteinuria,
+                'hemoglobin_gdl' => $hb,
+                'status_ketuban' => $statusKetuban,
+                'lama_ketuban_pecah_jam' => $lamaKetubanPecah,
+                'pembukaan_cm' => $pembukaanCm,
+                'station_kepala' => $stationKepala,
+                'kontraksi_10menit' => $kontraksi10Menit,
+                'durasi_kontraksi_detik' => $durasiKontraksiDetik,
+                'djj' => $djj,
             ]);
 
             if ($mlResponse->successful()) {
@@ -114,7 +146,7 @@ class ScreeningController extends Controller
             'bidan_id' => null,
             'tipe_screening' => $tipeDb,
 
-            // Input data (15 variabel dataset maternal)
+            // Input data demografi & obstetri
             'nama_pasien' => $validated['nama_pasien'],
             'nik' => $validated['nik'] ?? null,
             'pekerjaan' => $pekerjaan,
@@ -123,28 +155,45 @@ class ScreeningController extends Controller
             'gravida' => $gravida,
             'paritas' => $para,
             'abortus' => $abortus,
+            'tinggi_badan' => $tb,
+            'berat_badan' => $bb,
             'imt' => $calculatedImt,
             'hpht' => $validated['hpht'] ?? null,
             'sistolik' => $sistolik,
             'diastolik' => $diastolik,
+            'nadi' => $nadi,
+            'suhu' => $suhu,
+            'proteinuria' => $proteinuria,
             'letak_janin' => $letakJanin,
+            'presentasi_janin' => $presentasiJanin,
             'umur_kehamilan' => $umurKehamilan,
+            'uk_minggu' => $ukMinggu,
+            'uk_hari' => $ukHari,
+            'jumlah_janin' => $jumlahJanin,
+            'efw_bayi_gram' => $efwBayiGram,
             'jenis_persalinan' => $jenisPersalinan,
             'hb' => $hb,
             'leokosit' => $leokosit,
             'trombosit' => $trombosit,
+            'status_ketuban' => $statusKetuban,
+            'lama_ketuban_pecah_jam' => $lamaKetubanPecah,
+            'pembukaan_cm' => $pembukaanCm,
+            'station_kepala' => $stationKepala,
+            'kontraksi_10menit' => $kontraksi10Menit,
+            'durasi_kontraksi_detik' => $durasiKontraksiDetik,
+            'djj' => $djj,
             'edema_level' => $validated['edema_level'] ?? 'none',
             'keluhan_spesifik' => $keluhanSpesifik,
             'sudah_dapat_treatment' => $validated['sudah_dapat_treatment'] ?? false,
             'detail_treatment' => $validated['detail_treatment'] ?? null,
             'wilayah_puskesmas' => $validated['wilayah_puskesmas'] ?? null,
 
-            // Persalinan-specific
+            // Persalinan-specific legacy
             'posisi_janin' => $validated['posisi_janin'] ?? null,
             'ada_riwayat_sc' => $validated['ada_riwayat_sc'] ?? false,
             'kondisi_ketuban' => $validated['kondisi_ketuban'] ?? null,
 
-            // Output kalkulasi
+            // Output kalkulasi KSPR & MAP
             'kode_screening' => $scoringResult['kode_screening'],
             'skor_kspr' => $scoringResult['skor_kspr'],
             'map_value' => $scoringResult['map_value'],
@@ -159,7 +208,7 @@ class ScreeningController extends Controller
             'detail_skor' => $scoringResult['detail_skor'],
             'taksiran_hpl' => $scoringResult['taksiran_hpl'],
 
-            // Output Machine Learning
+            // Output Machine Learning (Model v2 - 7 Classes)
             'diagnosa_ml' => $diagnosaMl,
             'kategori_ml' => $kategoriMl,
             'skor_risiko_ml' => $skorRisikoMl,

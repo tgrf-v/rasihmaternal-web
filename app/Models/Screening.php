@@ -68,6 +68,25 @@ class Screening extends Model
         'kategori_ml',
         'skor_risiko_ml',
         'probabilitas_ml',
+
+        // Clinical Model v2 Fields
+        'tinggi_badan',
+        'berat_badan',
+        'uk_minggu',
+        'uk_hari',
+        'jumlah_janin',
+        'presentasi_janin',
+        'efw_bayi_gram',
+        'nadi',
+        'suhu',
+        'proteinuria',
+        'status_ketuban',
+        'lama_ketuban_pecah_jam',
+        'pembukaan_cm',
+        'station_kepala',
+        'kontraksi_10menit',
+        'durasi_kontraksi_detik',
+        'djj',
     ];
 
     /**
@@ -86,6 +105,13 @@ class Screening extends Model
             'map_value' => 'decimal:2',
             'imt' => 'decimal:2',
             'hb' => 'decimal:2',
+            'tinggi_badan' => 'decimal:2',
+            'berat_badan' => 'decimal:2',
+            'suhu' => 'decimal:2',
+            'efw_bayi_gram' => 'decimal:2',
+            'lama_ketuban_pecah_jam' => 'decimal:2',
+            'pembukaan_cm' => 'decimal:2',
+            'station_kepala' => 'decimal:1',
             'skor_risiko_ml' => 'decimal:2',
         ];
     }
