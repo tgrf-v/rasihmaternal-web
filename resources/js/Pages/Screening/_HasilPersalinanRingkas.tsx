@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/Components/ui/accordion";
-import { RefreshCw, Heart, Sparkles, Activity } from "lucide-react";
+import { RefreshCw, Heart, Activity } from "lucide-react";
 import { PersalinanFormData } from "./_FormPersalinanStep1";
 import { PenapisanItem } from "./_FormPersalinanStep2";
 import { PersalinanClinicalData } from "./_FormPersalinanStep3";
@@ -158,22 +158,8 @@ export function HasilPersalinanRingkas({
 
       {/* Card 2: Hasil Prediksi Machine Learning */}
       <div className="p-4 sm:p-5 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-soft-xs space-y-2.5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
-            <Sparkles className="h-4 w-4 text-emerald-700" />
-            <span>Prediksi Komplikasi Machine Learning (ML)</span>
-          </div>
-          <span
-            className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-              mlResult.risk_category === "KRST"
-                ? "bg-rose-100 text-rose-800 border border-rose-200"
-                : mlResult.risk_category === "KRT"
-                ? "bg-amber-100 text-amber-800 border border-amber-200"
-                : "bg-emerald-100 text-emerald-800 border border-emerald-200"
-            }`}
-          >
-            {mlResult.risk_category}
-          </span>
+        <div className="text-xs font-bold text-slate-800">
+          <span>Prediksi Komplikasi Machine Learning (ML)</span>
         </div>
 
         <div className="flex items-center justify-between bg-white p-3 rounded-2xl border border-slate-200/80">

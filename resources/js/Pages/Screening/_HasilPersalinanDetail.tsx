@@ -7,7 +7,6 @@ import {
   AlertTriangle,
   ShieldCheck,
   RefreshCw,
-  Sparkles,
 } from "lucide-react";
 import { PersalinanFormData } from "./_FormPersalinanStep1";
 import { PenapisanItem, PENAPISAN_PERSALINAN_LIST } from "./_FormPersalinanStep2";
@@ -103,8 +102,7 @@ export function HasilPersalinanDetail({
 
       {/* Probabilitas Komplikasi Machine Learning */}
       <div className="space-y-2.5 p-4 sm:p-5 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-soft-xs">
-        <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
-          <Sparkles className="h-4 w-4 text-emerald-700" />
+        <div className="text-xs font-bold text-slate-900">
           <span>Probabilitas Prediksi Komplikasi (Machine Learning)</span>
         </div>
 
