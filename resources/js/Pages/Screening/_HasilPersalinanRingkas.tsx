@@ -168,7 +168,7 @@ export function HasilPersalinanRingkas({
             <p className="text-sm font-bold text-slate-900">{mlResult.primary_diagnosis}</p>
           </div>
           <div className="text-right">
-            <p className="text-[11px] text-slate-500 font-medium">Tingkat Keyakinan</p>
+            <p className="text-[11px] text-slate-500 font-medium">Akurasi Prediksi</p>
             <p className="text-sm font-bold text-emerald-700">
               {Math.round(mlResult.confidence_score * 100)}%
             </p>
