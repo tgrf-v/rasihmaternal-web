@@ -229,8 +229,7 @@ export default function PersalinanScreening() {
   const isGawatDarurat = positiveFactors.length > 0;
 
   return (
-    <BundaSehatLayout activeNav="persalinan">
-      <div className="max-w-[1240px] mx-auto px-0 sm:px-6 lg:px-8 py-0 min-h-[calc(100vh-144px)] lg:h-[calc(100vh-65px)] flex flex-col justify-center">
+    <div className="max-w-[1240px] mx-auto px-0 sm:px-6 lg:px-8 py-0 min-h-[calc(100vh-144px)] lg:h-[calc(100vh-65px)] flex flex-col justify-center">
         <div className="w-full mx-auto bg-white sm:border border-slate-200 overflow-hidden h-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
             {/* Image Col */}
@@ -317,6 +316,7 @@ export default function PersalinanScreening() {
           </div>
         </div>
       </div>
-    </BundaSehatLayout>
   );
 }
+
+PersalinanScreening.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="persalinan">{page}</BundaSehatLayout>;

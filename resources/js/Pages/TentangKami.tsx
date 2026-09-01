@@ -4,8 +4,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function TentangKami() {
   return (
-    <BundaSehatLayout activeNav="tentang-kami">
-      <div className="w-full">
+    <div className="w-full">
 
         {/* HERO HEADER DENGAN BACKGROUND GAMBAR (KOTAK RATA) */}
         <section className="w-full relative overflow-hidden text-white pt-16 pb-12 sm:pt-20 sm:pb-16 bg-emerald-950 shadow-soft-sm">
@@ -127,8 +126,8 @@ export default function TentangKami() {
             </div>
           </div>
         </section>
-
       </div>
-    </BundaSehatLayout>
   );
 }
+
+TentangKami.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="tentang-kami">{page}</BundaSehatLayout>;

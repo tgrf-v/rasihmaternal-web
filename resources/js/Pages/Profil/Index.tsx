@@ -80,54 +80,54 @@ export default function ProfilIndex() {
   };
 
   return (
-    <BundaSehatLayout activeNav="profil">
-      <div className="max-w-2xl mx-auto px-4 py-6 sm:py-8 space-y-6 animate-fadeIn">
-        {activeView === "menu" && (
-          <ProfilMenuUtama
-            user={user}
-            onNavigate={(view) => setActiveView(view)}
-            onOpenLogoutModal={() => setIsLogoutModalOpen(true)}
-          />
-        )}
-
-        {activeView === "edit_profil" && (
-          <ProfilEditForm
-            data={form.data}
-            setData={form.setData}
-            errors={form.errors}
-            processing={form.processing}
-            isSaved={isSaved}
-            initialPhoto={user.foto_profil}
-            onSubmit={handleSaveProfile}
-            onBack={() => setActiveView("menu")}
-          />
-        )}
-
-        {activeView === "riwayat" && (
-          <ProfilRiwayatTable
-            screenings={screenings}
-            onBack={() => setActiveView("menu")}
-          />
-        )}
-
-        {activeView === "syarat" && (
-          <ProfilSyaratKetentuan onBack={() => setActiveView("menu")} />
-        )}
-
-        {activeView === "privasi" && (
-          <ProfilKebijakanPrivasi onBack={() => setActiveView("menu")} />
-        )}
-
-        {activeView === "bantuan" && (
-          <ProfilBantuan onBack={() => setActiveView("menu")} />
-        )}
-
-        <ProfilLogoutModal
-          isOpen={isLogoutModalOpen}
-          onClose={() => setIsLogoutModalOpen(false)}
-          onConfirm={handleLogoutConfirm}
+    <div className="max-w-2xl mx-auto px-4 py-6 sm:py-8 space-y-6 animate-fadeIn">
+      {activeView === "menu" && (
+        <ProfilMenuUtama
+          user={user}
+          onNavigate={(view) => setActiveView(view)}
+          onOpenLogoutModal={() => setIsLogoutModalOpen(true)}
         />
-      </div>
-    </BundaSehatLayout>
+      )}
+
+      {activeView === "edit_profil" && (
+        <ProfilEditForm
+          data={form.data}
+          setData={form.setData}
+          errors={form.errors}
+          processing={form.processing}
+          isSaved={isSaved}
+          initialPhoto={user.foto_profil}
+          onSubmit={handleSaveProfile}
+          onBack={() => setActiveView("menu")}
+        />
+      )}
+
+      {activeView === "riwayat" && (
+        <ProfilRiwayatTable
+          screenings={screenings}
+          onBack={() => setActiveView("menu")}
+        />
+      )}
+
+      {activeView === "syarat" && (
+        <ProfilSyaratKetentuan onBack={() => setActiveView("menu")} />
+      )}
+
+      {activeView === "privasi" && (
+        <ProfilKebijakanPrivasi onBack={() => setActiveView("menu")} />
+      )}
+
+      {activeView === "bantuan" && (
+        <ProfilBantuan onBack={() => setActiveView("menu")} />
+      )}
+
+      <ProfilLogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleLogoutConfirm}
+      />
+    </div>
   );
 }
+
+ProfilIndex.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="profil">{page}</BundaSehatLayout>;

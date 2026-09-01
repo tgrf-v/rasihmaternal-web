@@ -14,14 +14,14 @@ export default function Beranda() {
   const { latestScreening } = usePage<BerandaPageProps>().props;
 
   return (
-    <BundaSehatLayout activeNav="beranda">
-      <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8">
-        {/* SECTION 1: LAYANAN UTAMA (HALODOC SIDE-BY-SIDE STYLE) */}
-        <BerandaLayananSection />
+    <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8">
+      {/* SECTION 1: LAYANAN UTAMA (HALODOC SIDE-BY-SIDE STYLE) */}
+      <BerandaLayananSection />
 
-        {/* SECTION 2: DATA PROGRESS ATAU HASIL SCREENING TERAKHIR */}
-        <BerandaScreeningBanner screeningResult={latestScreening} />
-      </div>
-    </BundaSehatLayout>
+      {/* SECTION 2: DATA PROGRESS ATAU HASIL SCREENING TERAKHIR */}
+      <BerandaScreeningBanner screeningResult={latestScreening} />
+    </div>
   );
 }
+
+Beranda.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="beranda">{page}</BundaSehatLayout>;

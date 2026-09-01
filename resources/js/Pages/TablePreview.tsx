@@ -102,7 +102,7 @@ export default function TablePreview() {
   });
 
   return (
-    <BundaSehatLayout activeNav="admin-bidan">
+    <>
       <Head title="Preview Desain Tabel Minimalis - RASIH Maternal" />
 
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-8 animate-fadeIn">
@@ -716,6 +716,8 @@ export default function TablePreview() {
         )}
 
       </div>
-    </BundaSehatLayout>
+    </>
   );
 }
+
+TablePreview.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="admin-bidan">{page}</BundaSehatLayout>;

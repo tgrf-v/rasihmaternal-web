@@ -48,7 +48,7 @@ export default function AdminKamusIndex() {
   } | null>(null);
 
   return (
-    <BundaSehatLayout activeNav="admin-kamus">
+    <>
       <Head title="Kelola Kamus Kesehatan & Edukasi - RASIH Maternal" />
 
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-6 animate-fadeIn">
@@ -195,6 +195,8 @@ export default function AdminKamusIndex() {
         target={deleteTarget}
         onClose={() => setDeleteTarget(null)}
       />
-    </BundaSehatLayout>
+    </>
   );
 }
+
+AdminKamusIndex.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="admin-kamus">{page}</BundaSehatLayout>;

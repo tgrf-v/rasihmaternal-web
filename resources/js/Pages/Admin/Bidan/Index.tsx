@@ -32,7 +32,7 @@ export default function AdminBidanIndex() {
   };
 
   return (
-    <BundaSehatLayout activeNav="admin-bidan">
+    <>
       <Head title="Kelola Akun Bidan - RASIH Maternal" />
 
       <div className="max-w-5xl mx-auto px-4 py-6 md:py-8 space-y-6 animate-fadeIn">
@@ -96,6 +96,8 @@ export default function AdminBidanIndex() {
         bidan={deletingBidan}
         onClose={() => setDeletingBidan(null)}
       />
-    </BundaSehatLayout>
+    </>
   );
 }
+
+AdminBidanIndex.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="admin-bidan">{page}</BundaSehatLayout>;

@@ -35,13 +35,30 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
   activeNav = "beranda",
 }) => {
   const { auth } = usePage<PageProps>().props;
+  const { url } = usePage();
 
   const user = auth?.user;
   const isLoggedIn = Boolean(user);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const [language, setLanguage] = useState<"ID" | "EN">("ID");
 
-  const isScreeningActive = activeNav === "kehamilan" || activeNav === "persalinan";
+  const getEffectiveNav = (currentUrl: string, propNav?: string) => {
+    if (propNav) return propNav;
+    if (currentUrl.startsWith('/screening/kehamilan')) return 'kehamilan';
+    if (currentUrl.startsWith('/screening/persalinan')) return 'persalinan';
+    if (currentUrl.startsWith('/screening/hasil')) return 'kehamilan';
+    if (currentUrl.startsWith('/partograf')) return 'partograf';
+    if (currentUrl.startsWith('/kamus')) return 'kamus';
+    if (currentUrl.startsWith('/profil')) return 'profil';
+    if (currentUrl.startsWith('/tentang-kami')) return 'tentang-kami';
+    if (currentUrl.startsWith('/admin/bidan')) return 'admin-bidan';
+    if (currentUrl.startsWith('/admin/kamus')) return 'admin-kamus';
+    if (currentUrl === '/' || currentUrl === '') return 'beranda';
+    return 'beranda';
+  };
+
+  const currentNav = getEffectiveNav(url, activeNav);
+  const isScreeningActive = currentNav === "kehamilan" || currentNav === "persalinan";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,7 +95,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
           
           {/* Ujung Kiri (Anchor): Logo Brand */}
           <div className="flex items-center shrink-0">
-            <Link href={isLoggedIn ? "/" : "/login"} className="flex items-center gap-2.5 group shrink-0">
+            <Link href={isLoggedIn ? "/" : "/login"} prefetch className="flex items-center gap-2.5 group shrink-0">
               <ApplicationLogo
                 variant={!isLoggedIn && !isScrolled ? "white" : "color"}
                 className="h-8 w-8 group-hover:scale-105 transition-transform"
@@ -105,8 +122,9 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
               <nav className="flex items-center gap-1">
                 <Link
                   href="/"
+                  prefetch
                   className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
-                    activeNav === "beranda"
+                    currentNav === "beranda"
                       ? "text-emerald-700 font-bold"
                       : "text-slate-600 font-medium hover:text-slate-900"
                   }`}
@@ -155,8 +173,9 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
 
                 <Link
                   href="/partograf"
+                  prefetch
                   className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
-                    activeNav === "partograf"
+                    currentNav === "partograf"
                       ? "text-emerald-700 font-bold"
                       : "text-slate-600 font-medium hover:text-slate-900"
                   }`}
@@ -166,8 +185,9 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
 
                 <Link
                   href="/kamus"
+                  prefetch
                   className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
-                    activeNav === "kamus"
+                    currentNav === "kamus"
                       ? "text-emerald-700 font-bold"
                       : "text-slate-600 font-medium hover:text-slate-900"
                   }`}
@@ -176,8 +196,9 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                 </Link>
                 <Link
                   href="/tentang-kami"
+                  prefetch
                   className={`px-3 py-1.5 text-sm transition-colors rounded-full ${
-                    activeNav === "tentang-kami"
+                    currentNav === "tentang-kami"
                       ? "text-emerald-700 font-bold"
                       : "text-slate-600 font-medium hover:text-slate-900"
                   }`}
@@ -190,7 +211,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
                   <DropdownMenu>
                     <DropdownMenuTrigger
                       className={`px-3 py-1.5 text-sm transition-colors rounded-full inline-flex items-center gap-1 cursor-pointer ${
-                        activeNav === "admin-bidan" || activeNav === "admin-kamus"
+                        currentNav === "admin-bidan" || currentNav === "admin-kamus"
                           ? "text-emerald-700 font-bold"
                           : "text-slate-600 font-medium hover:text-slate-900"
                       }`}
@@ -234,6 +255,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
             <div className="hidden md:flex items-center justify-end shrink-0">
               <Link
                 href="/profil"
+                prefetch
                 className="relative group p-0.5 rounded-full bg-slate-100 hover:bg-slate-200 transition-all shadow-soft-xs flex items-center justify-center"
                 title={`Profil Saya (${user?.name || "User"})`}
               >
@@ -258,7 +280,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
       <main className="flex-1 pt-16 pb-24 md:pb-0 print:p-0 print:pt-0">{children}</main>
 
       {/* Mobile Floating Curved Bottom Navigation Bar */}
-      {isLoggedIn && <MobileBottomNav activeNav={activeNav} />}
+      {isLoggedIn && <MobileBottomNav activeNav={currentNav} />}
 
       {/* Footer Edukatif (Hanya Tampil Pada Landing Page Sebelum Login) */}
       {!isLoggedIn && (

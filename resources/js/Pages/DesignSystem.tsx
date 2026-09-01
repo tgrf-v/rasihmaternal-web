@@ -53,8 +53,7 @@ export default function DesignSystem() {
   };
 
   return (
-    <BundaSehatLayout activeNav="beranda">
-      <div className="max-w-6xl mx-auto px-4 py-8 space-y-12">
+    <div className="max-w-6xl mx-auto px-4 py-8 space-y-12">
         
         {/* Page Header */}
         <div className="border-b border-slate-200/80 pb-6 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-4">
@@ -419,8 +418,8 @@ export default function DesignSystem() {
             </div>
           </div>
         </Dialog>
-
       </div>
-    </BundaSehatLayout>
   );
 }
+
+DesignSystem.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="beranda">{page}</BundaSehatLayout>;

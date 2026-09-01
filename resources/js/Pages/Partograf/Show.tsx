@@ -108,7 +108,7 @@ export default function PartografShow({ id, session, entries = [] }: PartografSh
     const isDjjSafe = latestDjjEntry?.djj ? latestDjjEntry.djj >= 120 && latestDjjEntry.djj <= 160 : true;
 
     return (
-        <BundaSehatLayout activeNav="persalinan">
+        <>
             <Head title={`Partograf - ${session.nama_ibu}`} />
 
             <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
@@ -292,6 +292,8 @@ export default function PartografShow({ id, session, entries = [] }: PartografSh
                     defaultKolomIdx={nextKolomIdx}
                 />
             </div>
-        </BundaSehatLayout>
+        </>
     );
 }
+
+PartografShow.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="persalinan">{page}</BundaSehatLayout>;

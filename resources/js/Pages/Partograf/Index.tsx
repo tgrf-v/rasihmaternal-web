@@ -42,7 +42,7 @@ export default function PartografIndex({ sessions = [], filters }: PartografInde
     });
 
     return (
-        <BundaSehatLayout activeNav="persalinan">
+        <>
             <Head title="Partograf Digital - Pemantauan Persalinan" />
 
             <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
@@ -187,6 +187,8 @@ export default function PartografIndex({ sessions = [], filters }: PartografInde
                     onOpenChange={setCreateModalOpen}
                 />
             </div>
-        </BundaSehatLayout>
+        </>
     );
 }
+
+PartografIndex.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="persalinan">{page}</BundaSehatLayout>;

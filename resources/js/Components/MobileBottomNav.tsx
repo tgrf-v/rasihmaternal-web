@@ -75,6 +75,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeNav = 'b
                             {isActive ? (
                                 <Link
                                     href={item.href}
+                                    prefetch
                                     className="flex flex-col items-center justify-end w-full group relative focus:outline-none"
                                 >
                                     {/* Curved Notch Cutout Background (SVG Wings) */}
@@ -103,6 +104,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeNav = 'b
                             ) : (
                                 <Link
                                     href={item.href}
+                                    prefetch
                                     className="flex flex-col items-center justify-center w-full py-1 text-slate-400 hover:text-slate-700 transition-colors group focus:outline-none"
                                 >
                                     <Icon className="w-5 h-5 mb-1 transition-transform group-hover:scale-110" />

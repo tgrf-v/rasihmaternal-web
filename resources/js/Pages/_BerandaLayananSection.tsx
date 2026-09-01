@@ -26,6 +26,7 @@ export function BerandaLayananSection() {
         {/* Shortcut 1: Screening Kehamilan */}
         <Link
           href="/screening/kehamilan"
+          prefetch
           className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all flex items-center justify-between group"
         >
           <div className="flex items-center gap-3.5 min-w-0">
@@ -47,6 +48,7 @@ export function BerandaLayananSection() {
         {/* Shortcut 2: Screening Persalinan */}
         <Link
           href="/screening/persalinan"
+          prefetch
           className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all flex items-center justify-between group"
         >
           <div className="flex items-center gap-3.5 min-w-0">
@@ -68,6 +70,7 @@ export function BerandaLayananSection() {
         {/* Shortcut 3: Kamus Kesehatan */}
         <Link
           href="/kamus"
+          prefetch
           className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all flex items-center justify-between group"
         >
           <div className="flex items-center gap-3.5 min-w-0">
@@ -89,6 +92,7 @@ export function BerandaLayananSection() {
         {/* Shortcut 4: Profil Saya */}
         <Link
           href="/profil"
+          prefetch
           className="p-3.5 pl-4 pr-5 md:p-4 md:pl-5 md:pr-6 rounded-full bg-white border border-slate-100/90 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.09)] transition-all flex items-center justify-between group"
         >
           <div className="flex items-center gap-3.5 min-w-0">
