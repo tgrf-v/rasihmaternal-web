@@ -59,7 +59,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans relative overflow-x-clip lg:overflow-y-hidden">
 
       {/* Background Soft Natural Tint matching Design Preview */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 print:hidden">
         {/* Soft Warm Rose Ambient on Top Right */}
         <div className="absolute -right-20 -top-20 w-[600px] h-[600px] bg-gradient-to-br from-rose-100/40 via-pink-50/25 to-transparent rounded-full blur-3xl pointer-events-none" />
         {/* Subtle Soft Tint on Left Bottom */}
@@ -68,7 +68,7 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
 
       {/* Main Header Desktop (Fixed Top Navbar) */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 print:hidden ${
           !isLoggedIn && !isScrolled
             ? "bg-transparent border-transparent shadow-none text-white"
             : "bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-soft-xs text-slate-900"
@@ -255,14 +255,14 @@ export const BundaSehatLayout: React.FC<LayoutProps> = ({
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 pt-16 pb-24 md:pb-0">{children}</main>
+      <main className="flex-1 pt-16 pb-24 md:pb-0 print:p-0 print:pt-0">{children}</main>
 
       {/* Mobile Floating Curved Bottom Navigation Bar */}
       {isLoggedIn && <MobileBottomNav activeNav={activeNav} />}
 
       {/* Footer Edukatif (Hanya Tampil Pada Landing Page Sebelum Login) */}
       {!isLoggedIn && (
-        <footer className="bg-white border-t border-slate-100 py-8 px-4 mt-auto hidden md:block">
+        <footer className="bg-white border-t border-slate-100 py-8 px-4 mt-auto hidden md:block print:hidden">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
             <div className="flex items-center gap-2">
               <ApplicationLogo className="h-5 w-5" />

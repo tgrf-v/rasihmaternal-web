@@ -63,7 +63,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeNav = 'b
     return (
         <nav
             aria-label="Navigasi Seluler"
-            className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-100/90 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]"
+            className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-100/90 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] print:hidden"
         >
             <div className="grid grid-cols-5 max-w-md mx-auto relative px-1">
                 {NAV_ITEMS.map((item) => {
