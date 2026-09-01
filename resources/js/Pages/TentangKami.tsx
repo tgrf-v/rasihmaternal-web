@@ -34,8 +34,8 @@ export default function TentangKami() {
 
               {/* Left Image Box */}
               <div className="md:col-span-5 flex justify-center">
-                <div className="w-full h-56 sm:h-72 rounded-3xl bg-slate-100/80 p-6 sm:p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
-                  <ApplicationLogo className="h-20 sm:h-24 w-20 sm:w-24 mb-2" />
+                <div className="w-full h-auto py-8 sm:h-80 rounded-3xl bg-slate-100/80 p-6 sm:p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
+                  <ApplicationLogo className="h-28 sm:h-36 w-28 sm:w-36 mb-3" />
                   <span className="font-bold text-lg sm:text-xl text-slate-800 tracking-wide">
                     RASIH Maternal
                   </span>
@@ -96,7 +96,7 @@ export default function TentangKami() {
 
               {/* Left Text Content */}
               <div className="md:col-span-7 space-y-3.5 text-slate-700 order-2 md:order-1">
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight text-center">
                   Landasan &amp; Keahlian
                 </h2>
 
@@ -113,14 +113,9 @@ export default function TentangKami() {
                 </p>
               </div>
 
-              {/* Right Image Box */}
-              <div className="md:col-span-5 flex justify-center order-1 md:order-2">
-                <div className="w-full h-56 sm:h-72 rounded-3xl bg-slate-100/80 p-6 sm:p-8 flex flex-col items-center justify-center border border-slate-200 shadow-soft-sm">
-                  <ApplicationLogo className="h-16 sm:h-20 w-16 sm:w-20 mb-2" />
-                  <span className="font-bold text-lg sm:text-xl text-slate-800 tracking-wide">
-                    Logo
-                  </span>
-                </div>
+              {/* Right Logo Column */}
+              <div className="md:col-span-5 flex items-center justify-center order-1 md:order-2 py-4">
+                <ApplicationLogo className="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 drop-shadow-sm" />
               </div>
 
             </div>
