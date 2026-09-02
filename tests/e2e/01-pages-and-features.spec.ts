@@ -38,7 +38,7 @@ test.describe('Suite 1: Verifikasi Semua Halaman & Kombinasi Perilaku Fitur', ()
 
   test('Login - Kombinasi 2: Login Berhasil sebagai Bidan Wilayah', async ({ page }) => {
     await page.goto('/login');
-    await page.fill('#email_input', 'bidan@bundasehat.test');
+    await page.fill('#email_input', 'bidan@rasihmaternal.test');
     await page.fill('#password_input', 'password');
     await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
     await page.waitForURL((url: URL) => !url.pathname.includes('/login'), { timeout: 15000 });
@@ -62,7 +62,7 @@ test.describe('Suite 1: Verifikasi Semua Halaman & Kombinasi Perilaku Fitur', ()
   // ─────────────────────────────────────────────────────────────
   test('Kamus - Kombinasi 1: Navigasi Daftar Artikel & Pencarian', async ({ page }) => {
     await page.goto('/login');
-    await page.fill('#email_input', 'ibuhamil@bundasehat.test');
+    await page.fill('#email_input', 'ibuhamil@rasihmaternal.test');
     await page.fill('#password_input', 'password');
     await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
     await page.waitForURL((url: URL) => !url.pathname.includes('/login'), { timeout: 15000 });
@@ -73,7 +73,7 @@ test.describe('Suite 1: Verifikasi Semua Halaman & Kombinasi Perilaku Fitur', ()
 
   test('Kamus - Kombinasi 2: Tab Video Edukasi & Interaksi', async ({ page }) => {
     await page.goto('/login');
-    await page.fill('#email_input', 'ibuhamil@bundasehat.test');
+    await page.fill('#email_input', 'ibuhamil@rasihmaternal.test');
     await page.fill('#password_input', 'password');
     await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
     await page.waitForURL((url: URL) => !url.pathname.includes('/login'), { timeout: 15000 });
@@ -90,7 +90,7 @@ test.describe('Suite 1: Verifikasi Semua Halaman & Kombinasi Perilaku Fitur', ()
   // ─────────────────────────────────────────────────────────────
   test('Profil - Kombinasi 1: Tampilan Profil & Riwayat Pasien', async ({ page }) => {
     await page.goto('/login');
-    await page.fill('#email_input', 'ibuhamil@bundasehat.test');
+    await page.fill('#email_input', 'ibuhamil@rasihmaternal.test');
     await page.fill('#password_input', 'password');
     await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
     await page.waitForURL((url: URL) => !url.pathname.includes('/login'), { timeout: 15000 });
@@ -102,7 +102,7 @@ test.describe('Suite 1: Verifikasi Semua Halaman & Kombinasi Perilaku Fitur', ()
 
   test('Profil - Kombinasi 2: Menu Profil & Dialog Edit Profil', async ({ page }) => {
     await page.goto('/login');
-    await page.fill('#email_input', 'ibuhamil@bundasehat.test');
+    await page.fill('#email_input', 'ibuhamil@rasihmaternal.test');
     await page.fill('#password_input', 'password');
     await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
     await page.waitForURL((url: URL) => !url.pathname.includes('/login'), { timeout: 15000 });

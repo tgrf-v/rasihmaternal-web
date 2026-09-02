@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 async function loginAsIbuHamil(page: any) {
   await page.goto('/login');
   await expect(page.locator('#email_input')).toBeVisible({ timeout: 10000 });
-  await page.fill('#email_input', 'ibuhamil@bundasehat.test');
+  await page.fill('#email_input', 'ibuhamil@rasihmaternal.test');
   await page.fill('#password_input', 'password');
   await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
   await page.waitForURL((url: URL) => !url.pathname.includes('/login'), { timeout: 15000 });
@@ -12,7 +12,7 @@ async function loginAsIbuHamil(page: any) {
 async function loginAsBidan(page: any) {
   await page.goto('/login');
   await expect(page.locator('#email_input')).toBeVisible({ timeout: 10000 });
-  await page.fill('#email_input', 'bidan@bundasehat.test');
+  await page.fill('#email_input', 'bidan@rasihmaternal.test');
   await page.fill('#password_input', 'password');
   await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
   await page.waitForURL((url: URL) => !url.pathname.includes('/login'), { timeout: 15000 });
@@ -37,7 +37,7 @@ test.describe('RASIH Maternal - Real E2E Playwright Test Suite', () => {
     await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
     await expect(page).toHaveURL(/.*\/login/);
 
-    await page.fill('#email_input', 'ibuhamil@bundasehat.test');
+    await page.fill('#email_input', 'ibuhamil@rasihmaternal.test');
     await page.fill('#password_input', 'password');
     await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
     await page.waitForURL((url: URL) => !url.pathname.includes('/login'), { timeout: 15000 });

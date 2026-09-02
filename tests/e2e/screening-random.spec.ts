@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 async function loginAsIbuHamil(page: any) {
   await page.goto('/login');
   await expect(page.locator('#email_input')).toBeVisible();
-  await page.fill('#email_input', 'ibuhamil@bundasehat.test');
+  await page.fill('#email_input', 'ibuhamil@rasihmaternal.test');
   await page.fill('#password_input', 'password');
   await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
   await page.waitForURL((url: URL) => !url.pathname.includes('/login'), { timeout: 15000 });

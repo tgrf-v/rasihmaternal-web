@@ -11,9 +11,9 @@
 
 | Peran (Role) | Email | Password | Hak Akses Utama |
 | :--- | :--- | :--- | :--- |
-| **Super Admin (Dosen Kebidanan)** | `superadmin@bundasehat.test` | `password` | Kelola Bidan, Kelola Kamus/Video Terapi, Manajemen Dataset & Full Access |
-| **Bidan (Nakes Wilayah)** | `bidan@bundasehat.test` | `password` | Skrining Klinis (14 Variabel) + Prediksi ML XGBoost, Partograf Digital, Riwayat Pasien |
-| **Pasien (Ibu Hamil)** | `ibuhamil@bundasehat.test` | `password` | Skrining Mandiri (6 Variabel non-medis), Kamus Kesehatan, Riwayat Pribadi |
+| **Super Admin (Dosen Kebidanan)** | `superadmin@rasihmaternal.test` | `password` | Kelola Bidan, Kelola Kamus/Video Terapi, Manajemen Dataset & Full Access |
+| **Bidan (Nakes Wilayah)** | `bidan@rasihmaternal.test` | `password` | Skrining Klinis (14 Variabel) + Prediksi ML XGBoost, Partograf Digital, Riwayat Pasien |
+| **Pasien (Ibu Hamil)** | `ibuhamil@rasihmaternal.test` | `password` | Skrining Mandiri (6 Variabel non-medis), Kamus Kesehatan, Riwayat Pribadi |
 
 ---
 

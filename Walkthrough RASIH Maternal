@@ -9,25 +9,25 @@
 
 ---
 
-## 👥 Kredensial Akun Pengujian
+## Kredensial Akun Pengujian
 
 1. **Superadmin (Dosen Kebidanan - Bu Asih / Surtiningsih)**
-   - Email: `superadmin@bundasehat.test`
+   - Email: `superadmin@rasihmaternal.test`
    - Password: `password`
    - Fitur: Kelola Bidan (`/admin/bidan`), Kelola Kamus & Video Terapi (`/admin/kamus`), Full Access.
 
 2. **Bidan (Nakes Wilayah)**
-   - Email: `bidan@bundasehat.test`
+   - Email: `bidan@rasihmaternal.test`
    - Password: `password`
    - Fitur: Skrining Klinis (14 Parameter) + Prediksi ML XGBoost, Partograf Digital (`/partograf`), Riwayat Pasien Wilayah.
 
 3. **Ibu Hamil (Pasien Mandiri)**
-   - Email: `ibuhamil@bundasehat.test`
+   - Email: `ibuhamil@rasihmaternal.test`
    - Password: `password`
    - Fitur: Skrining Mandiri (6 Parameter Non-Medis), Kamus Kesehatan, Video Terapi Komplementer, Riwayat Pribadi.
 
 ---
 
-## 📋 Detail Laporan Pengujian Lengkap
+## Detail Laporan Pengujian Lengkap
 Laporan pengujian lengkap dapat dilihat pada file:
-👉 [LAPORAN_HASIL_TESTING.md](file:///c:/laragon/www/rasihmaternal/LAPORAN_HASIL_TESTING.md)
+[LAPORAN_HASIL_TESTING.md](file:///c:/laragon/www/rasihmaternal/LAPORAN_HASIL_TESTING.md)

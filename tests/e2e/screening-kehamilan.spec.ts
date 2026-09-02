@@ -7,7 +7,7 @@ async function loginAsIbuHamil(page: any) {
   // Tunggu form login muncul
   await expect(page.locator('#email_input')).toBeVisible();
   
-  await page.fill('#email_input', 'ibuhamil@bundasehat.test');
+  await page.fill('#email_input', 'ibuhamil@rasihmaternal.test');
   await page.fill('#password_input', 'password');
   await page.click('button[type="submit"]:has-text("Masuk Sekarang")');
   
