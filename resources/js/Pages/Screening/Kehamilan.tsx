@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { router, usePage } from "@inertiajs/react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import { Button } from "@/Components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/Components/ui/alert";
 import { AlertTriangle, ChevronRight, ChevronLeft, ArrowLeft } from "lucide-react";
@@ -334,4 +334,4 @@ export default function KehamilanScreening() {
   );
 }
 
-KehamilanScreening.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="kehamilan">{page}</BundaSehatLayout>;
+KehamilanScreening.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="kehamilan">{page}</RasihMaternalLayout>;

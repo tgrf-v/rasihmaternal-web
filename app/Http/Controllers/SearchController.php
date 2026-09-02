@@ -63,7 +63,7 @@ class SearchController extends Controller
                 'id' => 'nav-tentang',
                 'title' => 'Tentang Kami',
                 'category' => 'Fitur Navigasi',
-                'description' => 'Informasi platform BundaSehat dan tim pengembang kebidanan',
+                'description' => 'Informasi platform RASIH Maternal dan tim pengembang kebidanan',
                 'url' => '/tentang-kami',
             ],
             [

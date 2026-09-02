@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { BundaSehatLayout } from '@/Layouts/BundaSehatLayout';
+import { RasihMaternalLayout } from '@/Layouts/RasihMaternalLayout';
 import { PartografHeaderData } from '@/types/partograf';
 import { PartografCreateModal } from './Components/PartografCreateModal';
 import { Button } from '@/Components/ui/button';
@@ -191,4 +191,4 @@ export default function PartografIndex({ sessions = [], filters }: PartografInde
     );
 }
 
-PartografIndex.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="persalinan">{page}</BundaSehatLayout>;
+PartografIndex.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="persalinan">{page}</RasihMaternalLayout>;

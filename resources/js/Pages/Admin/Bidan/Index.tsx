@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Head, router, usePage } from "@inertiajs/react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import { Button } from "@/Components/ui/button";
 import { Plus, CheckCircle2 } from "lucide-react";
 import { PageProps } from "@/types";
@@ -100,4 +100,4 @@ export default function AdminBidanIndex() {
   );
 }
 
-AdminBidanIndex.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="admin-bidan">{page}</BundaSehatLayout>;
+AdminBidanIndex.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="admin-bidan">{page}</RasihMaternalLayout>;

@@ -40,7 +40,7 @@ class KamusController extends Controller
                     'title' => $item->title,
                     'badge' => $item->video_badge ?? 'EDUKASI',
                     'category' => $item->category,
-                    'instructor' => $item->instructor ?? 'Bidan BundaSehat',
+                    'instructor' => $item->instructor ?? 'Bidan RASIH Maternal',
                     'youtubeId' => $item->youtube_id ?? 'dQw4w9WgXcQ',
                     'duration' => $item->duration ?? '05:00',
                     'description' => $item->description ?? '',

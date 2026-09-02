@@ -1,6 +1,6 @@
 import React from "react";
 import { usePage } from "@inertiajs/react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import { ScreeningResult } from "@/types/screening";
 import { PageProps } from "@/types";
 import { BerandaLayananSection } from "./_BerandaLayananSection";
@@ -24,4 +24,4 @@ export default function Beranda() {
   );
 }
 
-Beranda.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="beranda">{page}</BundaSehatLayout>;
+Beranda.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="beranda">{page}</RasihMaternalLayout>;

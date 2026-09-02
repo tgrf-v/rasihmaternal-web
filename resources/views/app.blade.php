@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Favicon Logo RASIH Maternal (PNG) -->
-        <link rel="icon" type="image/png" href="/bundasehat-logo.png?v=4" />
-        <link rel="shortcut icon" href="/bundasehat-logo.png?v=4" />
+        <link rel="icon" type="image/png" href="/images/logo.png" />
+        <link rel="shortcut icon" href="/images/logo.png" />
 
         <title inertia>{{ config('app.name', 'RASIH Maternal - Sistem Prediksi Risiko Komplikasi Kehamilan dan Persalinan') }}</title>
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { router, usePage } from "@inertiajs/react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import { ScreeningResult, ScreeningInput } from "@/types/screening";
 import { PageProps } from "@/types";
 import { HasilRingkas } from "./_HasilRingkas";
@@ -101,4 +101,4 @@ export default function HasilScreening() {
   );
 }
 
-HasilScreening.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="kehamilan">{page}</BundaSehatLayout>;
+HasilScreening.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="kehamilan">{page}</RasihMaternalLayout>;

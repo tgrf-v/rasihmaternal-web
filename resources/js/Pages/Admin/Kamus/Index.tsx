@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Head, usePage } from "@inertiajs/react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Tabs } from "@/Components/ui/tabs";
@@ -199,4 +199,4 @@ export default function AdminKamusIndex() {
   );
 }
 
-AdminKamusIndex.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="admin-kamus">{page}</BundaSehatLayout>;
+AdminKamusIndex.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="admin-kamus">{page}</RasihMaternalLayout>;

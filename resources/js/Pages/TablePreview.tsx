@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Head, Link } from "@inertiajs/react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import { Button } from "@/Components/ui/button";
 import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
@@ -720,4 +720,4 @@ export default function TablePreview() {
   );
 }
 
-TablePreview.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="admin-bidan">{page}</BundaSehatLayout>;
+TablePreview.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="admin-bidan">{page}</RasihMaternalLayout>;

@@ -1,5 +1,5 @@
 import React from "react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function TentangKami() {
@@ -125,4 +125,4 @@ export default function TentangKami() {
   );
 }
 
-TentangKami.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="tentang-kami">{page}</BundaSehatLayout>;
+TentangKami.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="tentang-kami">{page}</RasihMaternalLayout>;

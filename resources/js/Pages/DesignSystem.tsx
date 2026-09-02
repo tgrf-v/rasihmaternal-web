@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { Badge } from "@/Components/ui/badge";
@@ -422,4 +422,4 @@ export default function DesignSystem() {
   );
 }
 
-DesignSystem.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="beranda">{page}</BundaSehatLayout>;
+DesignSystem.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="beranda">{page}</RasihMaternalLayout>;

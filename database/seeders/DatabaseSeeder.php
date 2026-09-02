@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         );
 
         User::firstOrCreate(
-            ['email' => 'superadmin@bundasehat.test'],
+            ['email' => 'superadmin@rasihmaternal.test'],
             [
                 'name' => 'Bu Asih (Superadmin)',
                 'password' => Hash::make('password'),
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
 
         // 2. Bidan (Bidan Wilayah Demo)
         $bidan = User::firstOrCreate(
-            ['email' => 'bidan@bundasehat.test'],
+            ['email' => 'bidan@rasihmaternal.test'],
             [
                 'name' => 'Bidan Sari',
                 'password' => Hash::make('password'),
@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
 
         // 3. Ibu Hamil (Pasien Demo)
         User::firstOrCreate(
-            ['email' => 'ibuhamil@bundasehat.test'],
+            ['email' => 'ibuhamil@rasihmaternal.test'],
             [
                 'name' => 'Ibu Rahma Rahayu',
                 'password' => Hash::make('password'),

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { router, useForm, usePage } from "@inertiajs/react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import { ScreeningResult } from "@/types/screening";
 import { PageProps } from "@/types";
 import { ProfileFormData } from "./types";
@@ -130,4 +130,4 @@ export default function ProfilIndex() {
   );
 }
 
-ProfilIndex.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="profil">{page}</BundaSehatLayout>;
+ProfilIndex.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="profil">{page}</RasihMaternalLayout>;

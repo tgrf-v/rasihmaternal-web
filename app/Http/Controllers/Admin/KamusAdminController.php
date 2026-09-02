@@ -44,7 +44,7 @@ class KamusAdminController extends Controller
                     'title' => $item->title,
                     'category' => $item->category,
                     'video_badge' => $item->video_badge ?? 'EDUKASI',
-                    'instructor' => $item->instructor ?? 'Bidan BundaSehat',
+                    'instructor' => $item->instructor ?? 'Bidan RASIH Maternal',
                     'youtube_id' => $item->youtube_id ?? '',
                     'duration' => $item->duration ?? '05:00',
                     'description' => $item->description ?? '',

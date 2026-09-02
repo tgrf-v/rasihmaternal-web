@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { BundaSehatLayout } from '@/Layouts/BundaSehatLayout';
+import { RasihMaternalLayout } from '@/Layouts/RasihMaternalLayout';
 import { PartografHeaderData, PartografEntryData } from '@/types/partograf';
 import { PartografHeaderInfo } from './Components/PartografHeaderInfo';
 import { PartografChartSheet } from './Components/PartografChartSheet';
@@ -296,4 +296,4 @@ export default function PartografShow({ id, session, entries = [] }: PartografSh
     );
 }
 
-PartografShow.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="persalinan">{page}</BundaSehatLayout>;
+PartografShow.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="persalinan">{page}</RasihMaternalLayout>;

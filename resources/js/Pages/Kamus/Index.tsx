@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import { Tabs } from "@/Components/ui/tabs";
 import { FileText, Video } from "lucide-react";
 import { ArticleItem, VideoItem } from "./types";
@@ -75,4 +75,4 @@ export default function KamusIndex({
   );
 }
 
-KamusIndex.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="kamus">{page}</BundaSehatLayout>;
+KamusIndex.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="kamus">{page}</RasihMaternalLayout>;

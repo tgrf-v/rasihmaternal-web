@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { usePage } from "@inertiajs/react";
-import { BundaSehatLayout } from "@/Layouts/BundaSehatLayout";
+import { RasihMaternalLayout } from "@/Layouts/RasihMaternalLayout";
 import { Button } from "@/Components/ui/button";
 import { Progress } from "@/Components/ui/progress";
 import { Alert, AlertTitle, AlertDescription } from "@/Components/ui/alert";
@@ -319,4 +319,4 @@ export default function PersalinanScreening() {
   );
 }
 
-PersalinanScreening.layout = (page: React.ReactNode) => <BundaSehatLayout activeNav="persalinan">{page}</BundaSehatLayout>;
+PersalinanScreening.layout = (page: React.ReactNode) => <RasihMaternalLayout activeNav="persalinan">{page}</RasihMaternalLayout>;
