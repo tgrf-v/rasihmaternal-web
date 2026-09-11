@@ -7,6 +7,7 @@ import { ProfileFormData } from "./types";
 
 import { ProfilMenuUtama } from "./_ProfilMenuUtama";
 import { ProfilEditForm } from "./_ProfilEditForm";
+import { ProfilPasswordForm } from "./_ProfilPasswordForm";
 import { ProfilRiwayatTable } from "./_ProfilRiwayatTable";
 import { ProfilSyaratKetentuan } from "./_ProfilSyaratKetentuan";
 import { ProfilKebijakanPrivasi } from "./_ProfilKebijakanPrivasi";
@@ -22,7 +23,7 @@ export default function ProfilIndex() {
   const user = auth.user;
 
   const [activeView, setActiveView] = useState<
-    "menu" | "edit_profil" | "riwayat" | "syarat" | "privasi" | "bantuan"
+    "menu" | "edit_profil" | "ganti_password" | "riwayat" | "syarat" | "privasi" | "bantuan"
   >("menu");
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
@@ -100,6 +101,10 @@ export default function ProfilIndex() {
           onSubmit={handleSaveProfile}
           onBack={() => setActiveView("menu")}
         />
+      )}
+
+      {activeView === "ganti_password" && (
+        <ProfilPasswordForm onBack={() => setActiveView("menu")} />
       )}
 
       {activeView === "riwayat" && (

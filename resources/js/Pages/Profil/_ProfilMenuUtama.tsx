@@ -11,12 +11,13 @@ import {
   FileText,
   HelpCircle,
   LogOut,
+  Lock,
 } from "lucide-react";
 import { User } from "@/types";
 
 interface ProfilMenuUtamaProps {
   user: User;
-  onNavigate: (view: "edit_profil" | "riwayat" | "syarat" | "privasi" | "bantuan") => void;
+  onNavigate: (view: "edit_profil" | "riwayat" | "syarat" | "privasi" | "bantuan" | "ganti_password") => void;
   onOpenLogoutModal: () => void;
 }
 
@@ -145,7 +146,28 @@ export function ProfilMenuUtama({
 
       {/* Menu 2: Grouped Menu Box Card */}
       <Card className="rounded-3xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.06)] divide-y divide-slate-100 overflow-hidden space-y-0">
-        {/* Row 1: Tentang Kami */}
+        {/* Row 1: Ubah Kata Sandi */}
+        <div
+          onClick={() => onNavigate("ganti_password")}
+          className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"
+        >
+          <div className="flex items-center gap-3.5">
+            <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <Lock className="h-5 w-5 text-emerald-600" />
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="font-bold text-slate-800 text-sm sm:text-base group-hover:text-emerald-700 transition-colors">
+                Ubah Kata Sandi
+              </span>
+              <span className="text-[11px] text-slate-500 font-medium">
+                Ganti kata sandi demi keamanan akun
+              </span>
+            </div>
+          </div>
+          <ChevronRight className="h-5 w-5 text-slate-400 group-hover:text-emerald-700 group-hover:translate-x-1 transition-all" />
+        </div>
+
+        {/* Row 2: Tentang Kami */}
         <Link
           href="/tentang-kami"
           className="p-4 sm:p-5 hover:bg-slate-50/70 transition-colors cursor-pointer flex items-center justify-between group"

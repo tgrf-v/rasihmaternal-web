@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { router, useForm } from "@inertiajs/react";
+import { Link, router, useForm } from "@inertiajs/react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
@@ -161,7 +161,7 @@ export default function Login() {
                 </div>
               </div>
 
-              {/* Remember Me */}
+              {/* Remember Me & Forgot Password */}
               <div className="flex items-center justify-between pt-1">
                 <div className="flex items-center gap-2">
                   <Checkbox
@@ -173,6 +173,13 @@ export default function Login() {
                     Ingat saya
                   </Label>
                 </div>
+
+                <Link
+                  href={route("password.request")}
+                  className="text-xs font-semibold text-emerald-700 hover:text-emerald-800 hover:underline transition-colors"
+                >
+                  Lupa kata sandi?
+                </Link>
               </div>
 
               {/* Submit Button */}
